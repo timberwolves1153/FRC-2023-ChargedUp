@@ -1,33 +1,16 @@
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-
-import edu.wpi.first.math.controller.HolonomicDriveController;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.autos.TestAuto;
+import frc.robot.autos.exampleAuto;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Swerve;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -40,11 +23,7 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(0);
 
     private SwerveDriveKinematics swerveKinematics;
-    private String testAutoPath = "pathplanner/generatedJSON/TestPathSwerve.wpilib.json";
 
-    private SequentialCommandGroup testAutoGroup;
-
-    //private Trajectory testTrajectory;  
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -72,9 +51,6 @@ public class RobotContainer {
         );
 
         // Configure the button bindings
-
-        generateTrajectory();
-        generateCommandGroups();
         configureButtonBindings();
     }
 
@@ -89,54 +65,6 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
 
-
-    public void generateTrajectory() {
-        TrajectoryConfig config =
-            new TrajectoryConfig(
-                    Constants.AutoConstants.kMaxSpeedMetersPerSecond,
-                    Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                .setKinematics(Constants.Swerve.swerveKinematics);
-
-        /*try{
-            testTrajectory = generateTrajectoryFromJSON(testAutoPath);
-        } catch(IOException e) {
-            System.out.println("Could Not Read Trajectory Files");
-        } */
-    }
-
-    public Trajectory generateTrajectoryFromJSON(String trajectoryPath) throws IOException {
-        Path path = Filesystem.getDeployDirectory().toPath().resolve(trajectoryPath);
-        Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(path);
-
-        return trajectory;
-    }
-
-    public Command generateSwerveCommandFromTrajectory(Trajectory trajectory) {
-
-        var thetaController =
-            new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        PIDController xController = new PIDController(Constants.AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(Constants.AutoConstants.kPYController, 0, 0);
-
-        HolonomicDriveController controller = new HolonomicDriveController(xController, yController, thetaController);
-
-        return new SwerveControllerCommand(
-            trajectory, 
-            s_Swerve::getPose, 
-            swerveKinematics, 
-            controller, 
-            s_Swerve::setModuleStates, 
-            s_Swerve);
-    }
-    
-
-    private void generateCommandGroups() {
-    //    testAutoGroup = new TestAuto(testTrajectory, () -> generateSwerveCommandFromTrajectory(testTrajectory), s_Swerve);
-    }
-
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
@@ -146,6 +74,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         //return new TestAuto(testTrajectory, , s_Swerve);
         //return null;
-        return new exampleAuto(s_Swerve);
+        return new TestAuto(s_Swerve);
     }
 }
