@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.autos.BalanceAuto;
+import frc.robot.autos.LoopAuto;
 import frc.robot.autos.TestAuto;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.TeleopSwerve;
@@ -74,6 +76,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         //return new TestAuto(testTrajectory, , s_Swerve);
         //return null;
-        return new TestAuto(s_Swerve);
+        return new BalanceAuto(s_Swerve);
     }
 }
