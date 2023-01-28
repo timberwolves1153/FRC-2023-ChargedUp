@@ -7,10 +7,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.autos.AutoBalanceAuto;
 import frc.robot.autos.BalanceAuto;
 import frc.robot.autos.LoopAuto;
 import frc.robot.autos.TestAuto;
 import frc.robot.autos.exampleAuto;
+import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 
@@ -33,12 +35,13 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton yButton = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-
+    private final AutoBalanceWithRoll autoBalanceWithRoll; 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -51,6 +54,9 @@ public class RobotContainer {
                 () -> robotCentric.getAsBoolean()
             )
         );
+        
+        autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
+
 
         // Configure the button bindings
         configureButtonBindings();
@@ -65,6 +71,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        yButton.whileTrue(autoBalanceWithRoll);
+        yButton.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
     }
 
     /**
@@ -76,6 +84,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         //return new TestAuto(testTrajectory, , s_Swerve);
         //return null;
-        return new BalanceAuto(s_Swerve);
+        return new AutoBalanceAuto(s_Swerve);
     }
 }

@@ -10,7 +10,7 @@ public class Collector {
 
     public Collector(){
         
-        collector = new WPI_TalonSRX(10);
+        collector = new WPI_TalonSRX(70);
 
     }
 
