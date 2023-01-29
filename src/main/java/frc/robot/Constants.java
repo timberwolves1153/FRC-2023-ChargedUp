@@ -151,4 +151,31 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class ArmConstants {
+        public static final int leftPivotMotor = 60;
+        public static final int rightPivotMotor = 61;
+
+        //Arm PID values
+        public static final double kP = 1;
+        public static final double kI = 0;
+        public static final double kD = 0;
+
+
+        public static final double kSVolts = 1; //sysid
+        public static final double kGVolts = 1; //gravity constant
+        public static final double kVVoltSecondPerRad = 0.5; //velocity
+        public static final double kAVoltSecondSquaredPerRad = 0.1; //acceleration
+
+        public static final double kMaxVelocityRadPerSecond = 3;
+        public static final double kMaxAccelerationRadPerSecSquared = 10;
+
+        // Offset of the arm from the horizontal in neutral position
+        // measured from the horizontal
+        public static final double kArmOffsetRads = 0.5;
+
+
+
+
+    }
 }

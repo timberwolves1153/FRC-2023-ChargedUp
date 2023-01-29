@@ -14,6 +14,7 @@ import frc.robot.autos.TestAuto;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Swerve;
 
 /**
@@ -25,6 +26,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick operator = new Joystick(1);
 
     private SwerveDriveKinematics swerveKinematics;
 
@@ -38,24 +40,27 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton yButton = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton xButton = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton opAButton = new JoystickButton(operator, XboxController.Button.kA.value);
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
-    private final AutoBalanceWithRoll autoBalanceWithRoll; 
+    //private final Swerve s_Swerve = new Swerve();
+    //private final AutoBalanceWithRoll autoBalanceWithRoll; 
+    private final Arm arm = new Arm();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
-            )
-        );
+        // s_Swerve.setDefaultCommand(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> -driver.getRawAxis(translationAxis), 
+        //         () -> -driver.getRawAxis(strafeAxis), 
+        //         () -> -driver.getRawAxis(rotationAxis), 
+        //         () -> robotCentric.getAsBoolean()
+        //     )
+        // );
         
-        autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
+       // autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
 
 
         // Configure the button bindings
@@ -69,10 +74,18 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        xButton.whileTrue(new InstantCommand(() -> arm.armPivotFoward()));
+        xButton.onFalse(new InstantCommand(() -> arm.armPivotStop()));
+
+        opAButton.whileTrue(new InstantCommand(() -> arm.armPivotReverse()));
+        opAButton.onFalse(new InstantCommand(() -> arm.armPivotStop()));
+
+
+
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        yButton.whileTrue(autoBalanceWithRoll);
-        yButton.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
+        //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        //yButton.whileTrue(autoBalanceWithRoll);
+        //yButton.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
     }
 
     /**
@@ -84,6 +97,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         //return new TestAuto(testTrajectory, , s_Swerve);
         //return null;
-        return new AutoBalanceAuto(s_Swerve);
+        return null;//new AutoBalanceAuto(s_Swerve);
     }
 }
