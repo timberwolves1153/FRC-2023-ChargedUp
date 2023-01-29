@@ -22,12 +22,12 @@ public final class Constants {
             COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L1);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(21.75); //TODO: This must be tuned to specific robot
-        public static final double wheelBase = Units.inchesToMeters(21.75); //TODO: This must be tuned to specific robot
+        public static final double trackWidth = Units.inchesToMeters(19.0); //TODO: This must be tuned to specific robot
+        public static final double wheelBase = Units.inchesToMeters(19.0); //TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
-        public static final double mod0Offset = 308.14 + 180;
-        public static final double mod1Offset = 176.84 + 180;
+        public static final double mod1Offset = 86.74 + 180;
+        public static final double mod0Offset = 38.76 + 180;
         public static final double mod2Offset = 326.51 + 180;
         public static final double mod3Offset = 344.17 + 180;
 
@@ -97,20 +97,20 @@ public final class Constants {
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class Mod0 { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 10;
-            public static final int angleMotorID = 11;
-            public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod0Offset);
+            public static final int driveMotorID = 20;
+            public static final int angleMotorID = 21;
+            public static final int canCoderID = 22;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod1Offset);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 { //TODO: This must be tuned to specific robot
-            public static final int driveMotorID = 20;
-            public static final int angleMotorID = 21;
-            public static final int canCoderID = 22;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod1Offset);
+            public static final int driveMotorID = 10;
+            public static final int angleMotorID = 11;
+            public static final int canCoderID = 12;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(mod0Offset);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
