@@ -15,6 +15,7 @@ import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmDemo;
 import frc.robot.subsystems.Swerve;
 
 /**
@@ -46,7 +47,7 @@ public class RobotContainer {
     /* Subsystems */
     //private final Swerve s_Swerve = new Swerve();
     //private final AutoBalanceWithRoll autoBalanceWithRoll; 
-    private final Arm arm = new Arm();
+    private final ArmDemo arm = new ArmDemo();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -74,11 +75,11 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        xButton.whileTrue(new InstantCommand(() -> arm.armPivotFoward()));
-        xButton.onFalse(new InstantCommand(() -> arm.armPivotStop()));
+        //xButton.whileTrue(new InstantCommand(() -> arm.armPivotFoward()));
+        //xButton.onFalse(new InstantCommand(() -> arm.armPivotStop()));
 
-        opAButton.whileTrue(new InstantCommand(() -> arm.armPivotReverse()));
-        opAButton.onFalse(new InstantCommand(() -> arm.armPivotStop()));
+        //opAButton.whileTrue(new InstantCommand(() -> arm.armPivotReverse()));
+        //opAButton.onFalse(new InstantCommand(() -> arm.armPivotStop()));
 
 
 
