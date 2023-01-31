@@ -14,6 +14,7 @@ import frc.robot.autos.TestAuto;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Swerve;
 
 /**
@@ -25,6 +26,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick operator = new Joystick(1);
 
     private SwerveDriveKinematics swerveKinematics;
 
@@ -35,12 +37,15 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kLeftStick.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton yButton = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton opStart = new JoystickButton(operator, XboxController.Button.kStart.value);
+    private final JoystickButton opYButton = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton opAButton = new JoystickButton(operator, XboxController.Button.kA.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Pivot pivot = new Pivot();
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -71,8 +76,21 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        yButton.whileTrue(autoBalanceWithRoll);
-        yButton.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
+
+        /* Operator Buttons */
+
+        opYButton.whileTrue(new InstantCommand(() -> pivot.pivotUp()));
+        opYButton.onFalse(new InstantCommand(() -> pivot.pivotStop()));
+
+        opAButton.whileTrue(new InstantCommand(() -> pivot.pivotDown()));
+        opAButton.onFalse(new InstantCommand(() -> pivot.pivotStop()));
+
+        opStart.whileTrue(autoBalanceWithRoll);
+        opStart.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
+
+
+
+
     }
 
     /**
