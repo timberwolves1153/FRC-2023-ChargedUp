@@ -14,6 +14,7 @@ import frc.robot.autos.TestAuto;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Extender;
 import frc.robot.subsystems.Swerve;
 
 /**
@@ -25,6 +26,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick operator = new Joystick(1);
 
     private SwerveDriveKinematics swerveKinematics;
 
@@ -38,9 +40,12 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton yButton = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton xButton = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton bButton = new JoystickButton(operator, XboxController.Button.kB.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Extender extender = new Extender();
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -73,6 +78,11 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         yButton.whileTrue(autoBalanceWithRoll);
         yButton.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
+
+        xButton.whileTrue(new InstantCommand(() -> extender.extendIn()));
+        xButton.onFalse(new InstantCommand(() -> extender.stop()));
+        bButton.whileTrue(new InstantCommand(() -> extender.extendOut()));
+        bButton.onFalse(new InstantCommand(() -> extender.stop()));
     }
 
     /**
