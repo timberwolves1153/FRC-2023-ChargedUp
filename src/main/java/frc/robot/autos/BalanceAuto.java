@@ -15,13 +15,13 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class TestAuto extends SequentialCommandGroup {
+public class BalanceAuto extends SequentialCommandGroup {
     
     //Swerve s_Swerve;
-    private final String TEST_AUTO_PATH = "pathplanner/generatedJSON/TestPathSwerve.wpilib.json";
+    private final String BALANCE_AUTO_PATH = "pathplanner/generatedJSON/BalancePath.wpilib.json";
     Trajectory trajectory;
 
-    public TestAuto(Swerve swerve) {
+    public BalanceAuto(Swerve swerve) {
         
         TrajectoryConfig config =
             new TrajectoryConfig(
@@ -29,7 +29,7 @@ public class TestAuto extends SequentialCommandGroup {
                     Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(Constants.Swerve.swerveKinematics);
 
-        Path path = Filesystem.getDeployDirectory().toPath().resolve(TEST_AUTO_PATH);
+        Path path = Filesystem.getDeployDirectory().toPath().resolve(BALANCE_AUTO_PATH);
         try {
             trajectory = TrajectoryUtil.fromPathweaverJson(path);
         } catch (IOException e) {
