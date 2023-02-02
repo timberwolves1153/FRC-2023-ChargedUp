@@ -16,7 +16,7 @@ public class Collector {
 
     public Collector(){
         
-        collector = new WPI_TalonSRX(70);
+        collector = new WPI_TalonSRX(59);
 
         config();
 

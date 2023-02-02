@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.PubSub;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -18,6 +19,8 @@ public class Pivot extends SubsystemBase{
     private CANSparkMax leftPivotMotor;
     private CANSparkMax rightPivotMotor;
     private MotorControllerGroup pivotGroup;
+    private DigitalInput topLimitSwitch;
+    private DigitalInput bottomLimitSwitch;
 
     private DutyCycleEncoder pivotEncoder;
 
@@ -31,6 +34,8 @@ public class Pivot extends SubsystemBase{
         
         pivotEncoder = new DutyCycleEncoder(2);
 
+        topLimitSwitch = new DigitalInput(1);
+        bottomLimitSwitch = new DigitalInput(2);
 
         config();
     }
@@ -46,7 +51,6 @@ public class Pivot extends SubsystemBase{
         rightPivotMotor.setIdleMode(IdleMode.kBrake);
         rightPivotMotor.setInverted(true);
         
-
     }
 
     public void set(double speed) {
@@ -67,6 +71,14 @@ public class Pivot extends SubsystemBase{
 
     public double getPivotPosition() {
         return pivotEncoder.getAbsolutePosition(); 
+    }
+
+    public boolean getTopSwitch(){
+        return topLimitSwitch.get();
+    }
+
+    public boolean getBottomSwitch(){
+        return bottomLimitSwitch.get();
     }
 
     @Override

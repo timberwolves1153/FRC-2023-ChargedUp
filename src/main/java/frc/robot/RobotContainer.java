@@ -13,6 +13,9 @@ import frc.robot.autos.LoopAuto;
 import frc.robot.autos.TestAuto;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
+import frc.robot.commands.ExtendIn;
+import frc.robot.commands.ExtendOut;
+import frc.robot.commands.ExtendToDistance;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Extender;
@@ -53,6 +56,8 @@ public class RobotContainer {
     private final Pivot pivot = new Pivot();
     private final Extender extender = new Extender();
 
+    private final ExtendIn extendIn;
+    private final ExtendOut extendOut;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -68,6 +73,8 @@ public class RobotContainer {
         );
         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
+        extendIn = new ExtendIn(extender);
+        extendOut = new ExtendOut(extender);
 
 
         // Configure the button bindings
@@ -94,10 +101,10 @@ public class RobotContainer {
         opAButton.whileTrue(new InstantCommand(() -> pivot.pivotDown()));
         opAButton.onFalse(new InstantCommand(() -> pivot.pivotStop()));
         
-        opXButton.whileTrue(new InstantCommand(() -> extender.extendIn()));
+        opXButton.whileTrue(extendIn);
         opXButton.onFalse(new InstantCommand(() -> extender.stop()));
         
-        opBButton.whileTrue(new InstantCommand(() -> extender.extendOut()));
+        opBButton.whileTrue(extendOut);
         opBButton.onFalse(new InstantCommand(() -> extender.stop())); 
     }
 
