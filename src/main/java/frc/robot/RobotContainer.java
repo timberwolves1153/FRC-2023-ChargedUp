@@ -1,5 +1,7 @@
 package frc.robot;
 
+import org.opencv.video.KalmanFilter;
+
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -18,6 +20,7 @@ import frc.robot.commands.ExtendOut;
 import frc.robot.commands.ExtendToDistance;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Extender;
 import frc.robot.subsystems.Swerve;
 
@@ -50,11 +53,14 @@ public class RobotContainer {
     private final JoystickButton opAButton = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton opXButton = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton opBButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final JoystickButton opLeftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton opRightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Pivot pivot = new Pivot();
     private final Extender extender = new Extender();
+    private final Collector collector = new Collector();
 
     private final ExtendIn extendIn;
     private final ExtendOut extendOut;
@@ -101,11 +107,17 @@ public class RobotContainer {
         opAButton.whileTrue(new InstantCommand(() -> pivot.pivotDown()));
         opAButton.onFalse(new InstantCommand(() -> pivot.pivotStop()));
         
-        opXButton.whileTrue(extendIn);
+        opXButton.whileTrue(new InstantCommand(() -> extender.extendIn()));
         opXButton.onFalse(new InstantCommand(() -> extender.stop()));
         
-        opBButton.whileTrue(extendOut);
+        opBButton.whileTrue(new InstantCommand(() -> extender.extendOut()));
         opBButton.onFalse(new InstantCommand(() -> extender.stop())); 
+
+        opLeftBumper.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
+        opLeftBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
+
+        opRightBumper.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
+        opRightBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
     }
 
     /**

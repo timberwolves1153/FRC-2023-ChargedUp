@@ -31,11 +31,11 @@ public class Collector {
         collector.set(speed);
     }
     public void collectorIntake(){
-        collector.set(-0.5);
+        collector.set(-0.8);
     }
 
     public void collectorOuttake(){
-        collector.set(-0.5);
+        collector.set(0.8);
     }
 
     public void collectorStop(){

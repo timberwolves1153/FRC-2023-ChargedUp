@@ -105,11 +105,11 @@ public class Extender extends SubsystemBase{
     }
 
     public void extendOut(){
-        extenderMotor.set(0.3);
+        extenderMotor.set(-0.5);
     }
 
     public void extendIn(){
-        extenderMotor.set(-0.3);
+        extenderMotor.set(0.5);
     }
 
     public void stop(){
