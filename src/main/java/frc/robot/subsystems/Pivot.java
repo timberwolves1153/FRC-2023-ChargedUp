@@ -19,8 +19,8 @@ public class Pivot extends SubsystemBase{
     private CANSparkMax leftPivotMotor;
     private CANSparkMax rightPivotMotor;
     private MotorControllerGroup pivotGroup;
-    private DigitalInput topLimitSwitch;
-    private DigitalInput bottomLimitSwitch;
+   // private DigitalInput topLimitSwitch;
+   // private DigitalInput bottomLimitSwitch;
 
     private DutyCycleEncoder pivotEncoder;
 
@@ -28,16 +28,16 @@ public class Pivot extends SubsystemBase{
         // Sets CAN ID numbers
         leftPivotMotor = new CANSparkMax(60, MotorType.kBrushless);
         rightPivotMotor = new CANSparkMax(61, MotorType.kBrushless);
-
+        config();
         
         pivotGroup = new MotorControllerGroup(leftPivotMotor, rightPivotMotor);
         
         pivotEncoder = new DutyCycleEncoder(2);
 
-        topLimitSwitch = new DigitalInput(1);
-        bottomLimitSwitch = new DigitalInput(2);
+      //  topLimitSwitch = new DigitalInput(1);
+      //  bottomLimitSwitch = new DigitalInput(2);
 
-        config();
+        
     }
 
     public void config() {
@@ -49,7 +49,7 @@ public class Pivot extends SubsystemBase{
         rightPivotMotor.restoreFactoryDefaults();
         rightPivotMotor.burnFlash();
         rightPivotMotor.setIdleMode(IdleMode.kBrake);
-        rightPivotMotor.setInverted(true);
+        
         
     }
 
@@ -58,11 +58,16 @@ public class Pivot extends SubsystemBase{
     }
 
     public void pivotUp() {
-        pivotGroup.set(0.5);
+
+        leftPivotMotor.set(-.5);
+        rightPivotMotor.set(.5);
+        //.set(0.5);
     }
 
     public void pivotDown() {
-        pivotGroup.set(-0.5);
+        leftPivotMotor.set(.5);
+        rightPivotMotor.set(-.5);
+        //pivotGroup.set(-0.5);
     }
 
     public void pivotStop() {
@@ -73,13 +78,13 @@ public class Pivot extends SubsystemBase{
         return pivotEncoder.getAbsolutePosition(); 
     }
 
-    public boolean getTopSwitch(){
-        return topLimitSwitch.get();
-    }
+    // public boolean getTopSwitch(){
+    //     return topLimitSwitch.get();
+    // }
 
-    public boolean getBottomSwitch(){
-        return bottomLimitSwitch.get();
-    }
+    // public boolean getBottomSwitch(){
+    //     return bottomLimitSwitch.get();
+    // }
 
     @Override
     public void periodic(){
