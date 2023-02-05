@@ -27,18 +27,15 @@ public class Collector {
         collector.setNeutralMode(NeutralMode.Brake);
     }
 
-    public void set(double speed){
-        collector.set(speed);
-    }
     public void collectorIntake(){
-        collector.set(-0.8);
+        collector.setVoltage(-7.0);
     }
 
     public void collectorOuttake(){
-        collector.set(0.8);
+        collector.setVoltage(4);
     }
 
     public void collectorStop(){
-        collector.set(0.0);
+        collector.setVoltage(0.0);
     }
 }

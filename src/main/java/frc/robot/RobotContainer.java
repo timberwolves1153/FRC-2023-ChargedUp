@@ -15,9 +15,9 @@ import frc.robot.autos.LoopAuto;
 import frc.robot.autos.TestAuto;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
-import frc.robot.commands.ExtendIn;
-import frc.robot.commands.ExtendOut;
-import frc.robot.commands.ExtendToDistance;
+// import frc.robot.commands.ExtendIn;
+// import frc.robot.commands.ExtendOut;
+// import frc.robot.commands.ExtendToDistance;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Collector;
@@ -62,8 +62,8 @@ public class RobotContainer {
     private final Extender extender = new Extender();
     private final Collector collector = new Collector();
 
-    private final ExtendIn extendIn;
-    private final ExtendOut extendOut;
+    //private final ExtendIn extendIn;
+    //private final ExtendOut extendOut;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -79,8 +79,8 @@ public class RobotContainer {
         );
         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
-        extendIn = new ExtendIn(extender);
-        extendOut = new ExtendOut(extender);
+        //extendIn = new ExtendIn(extender);
+        //extendOut = new ExtendOut(extender);
 
 
         // Configure the button bindings
@@ -128,7 +128,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         //return new TestAuto(testTrajectory, , s_Swerve);
-        //return null;
-        return new AutoBalanceAuto(s_Swerve);
+        return null;
+       // return new AutoBalanceAuto(s_Swerve);
     }
 }

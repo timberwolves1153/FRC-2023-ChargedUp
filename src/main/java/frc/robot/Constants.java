@@ -151,4 +151,13 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class ArmConstants {
+        public static final double DUTY_CYCLE_MIN = 1.0/1025.0;
+        public static final double DUTY_CYCLE_MAX = 1024.0/1025.0;
+        public static final int FREQUENCY = 976;
+        public static final double PERIOD = 1025;
+        public static final double ENCODER_DISTANCE_PER_PULSE = (2.0 * Math.PI / 8192);
+        
+    }
 }

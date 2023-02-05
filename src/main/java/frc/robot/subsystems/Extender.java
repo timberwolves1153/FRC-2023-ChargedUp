@@ -100,20 +100,17 @@ public class Extender extends SubsystemBase{
         
     }
 
-    public void set(double speed){
-        extenderMotor.set(speed);
-    }
 
     public void extendOut(){
-        extenderMotor.set(-0.5);
+        extenderMotor.setVoltage(-6.0);
     }
 
     public void extendIn(){
-        extenderMotor.set(0.5);
+        extenderMotor.setVoltage(6.0);
     }
 
     public void stop(){
-        extenderMotor.set(0.0);
+        extenderMotor.setVoltage(0.0);
     }
 
     public boolean getExtenderSwitch(){
