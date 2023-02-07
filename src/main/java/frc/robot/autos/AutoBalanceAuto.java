@@ -16,15 +16,20 @@ import frc.robot.Constants;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.subsystems.Swerve;
 
-public class AutoBalanceAuto extends SequentialCommandGroup {
+public class AutoBalanceAuto extends AutoBase {
     
     //Swerve s_Swerve;
     private final String BALANCE_AUTO_PATH1 = "pathplanner/generatedJSON/ScoreAndBalancePath1.wpilib.json";
     private final String BALANCE_AUTO_PATH2 = "pathplanner/generatedJSON/ScoreAndBalancePath2.wpilib.json";
     Trajectory trajectory;
+    Trajectory trajectory2;
+
+    SwerveControllerCommand TrajectoryPath1 = WPIbaseSwerveCommand(trajectory);
+    SwerveControllerCommand TrajectoryPath2 = WPIbaseSwerveCommand(trajectory2);
+    
 
     public AutoBalanceAuto(Swerve swerve) {
-        
+        super(swerve);
         TrajectoryConfig config =
             new TrajectoryConfig(
                     Constants.AutoConstants.kMaxSpeedMetersPerSecond,
@@ -32,8 +37,10 @@ public class AutoBalanceAuto extends SequentialCommandGroup {
                 .setKinematics(Constants.Swerve.swerveKinematics);
 
         Path path = Filesystem.getDeployDirectory().toPath().resolve(BALANCE_AUTO_PATH1);
+        Path path2 = Filesystem.getDeployDirectory().toPath().resolve(BALANCE_AUTO_PATH2);
         try {
             trajectory = TrajectoryUtil.fromPathweaverJson(path);
+            trajectory2 = TrajectoryUtil.fromPathweaverJson(path2);
         } catch (IOException e) {
             trajectory = null;
             System.err.println(e.getMessage());
@@ -57,7 +64,8 @@ public class AutoBalanceAuto extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())),
-            swerveControllerCommand,
+            WPIbaseSwerveCommand(trajectory),
+            WPIbaseSwerveCommand(trajectory2),
             new AutoBalanceWithRoll(swerve, () -> true));
     }
     
