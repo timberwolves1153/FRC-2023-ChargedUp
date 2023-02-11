@@ -1,39 +1,36 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ExternalFollower;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.PubSub;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.ArmConstants;
 
-public class Pivot extends SubsystemBase{
+public class Pivot extends SubsystemBase {
 
     private CANSparkMax leftPivotMotor;
     private CANSparkMax rightPivotMotor;
-    // private MotorControllerGroup pivotGroup;
-   // private DigitalInput topLimitSwitch;
-   // private DigitalInput bottomLimitSwitch;
+    private DigitalInput upperLimitSwitch;
+    private DigitalInput lowerLimitSwitch;
 
     private DutyCycleEncoder pivotEncoder;
 
-    private double pivotVolts;
-
     private Rotation2d angleOffset;
 
+    private PIDController pivotController;
+
+   
+
     public Pivot() {
+        // super(new PIDController(0, 0, 0));
         // Sets CAN ID numbers
         leftPivotMotor = new CANSparkMax(60, MotorType.kBrushless);
         rightPivotMotor = new CANSparkMax(61, MotorType.kBrushless);
@@ -43,29 +40,44 @@ public class Pivot extends SubsystemBase{
         
         //pivotGroup = new MotorControllerGroup(leftPivotMotor, rightPivotMotor);
         
-        pivotEncoder = new DutyCycleEncoder(2);
+        pivotEncoder = new DutyCycleEncoder(0);
 
        leftPivotMotor.restoreFactoryDefaults();
        rightPivotMotor.restoreFactoryDefaults();
+
        rightPivotMotor.follow(leftPivotMotor, true);
        leftPivotMotor.setInverted(false);
+
        leftPivotMotor.setCANTimeout(0);
        rightPivotMotor.setCANTimeout(0);
+
        leftPivotMotor.setIdleMode(IdleMode.kBrake);
        rightPivotMotor.setIdleMode(IdleMode.kBrake);
+       
        leftPivotMotor.burnFlash();
        rightPivotMotor.burnFlash();
-      // topLimitSwitch = new DigitalInput(1);
-      // bottomLimitSwitch = new DigitalInput(2);
+       upperLimitSwitch = new DigitalInput(1);
+       lowerLimitSwitch = new DigitalInput(2);
 
-      pivotVolts = 0;
-      SmartDashboard.putNumber("Pivot Volts", pivotVolts);
+       pivotController = new PIDController(0, 0, 0);
+       //pivotController.setTolerance(Units.degreesToRadians(5));
+       pivotController.setTolerance(.0001);
+       pivotController.setSetpoint(getMeasurement());
+       
+       
+    //    SmartDashboard.putNumber("Pivot P", 0);
+    //    SmartDashboard.putNumber("Pivot I", 0);
+    //    SmartDashboard.putNumber("Pivot D", 0);
+    //    SmartDashboard.putNumber("Pivot Setpoint", pivotController.getSetpoint());
+
+       
     
-      pivotEncoder.setDutyCycleRange(ArmConstants.DUTY_CYCLE_MIN, ArmConstants.DUTY_CYCLE_MAX);
-      pivotEncoder.setPositionOffset(0.17);
-      angleOffset = new Rotation2d((2 * Math.PI) * 0.17);
+       
+      //pivotEncoder.setDutyCycleRange(ArmConstants.DUTY_CYCLE_MIN, ArmConstants.DUTY_CYCLE_MAX);
+      //pivotEncoder.setPositionOffset(0.17);
 
-        
+        // getController().setTolerance(Units.degreesToRadians(5));
+    
     }
 
     public void config() {
@@ -80,71 +92,84 @@ public class Pivot extends SubsystemBase{
         
         
     }
-
-    // public void set(double speed) {
-    //     pivotGroup.set(speed);
-    // }
-
     public void pivotUp() {
-
-        //leftPivotMotor.set(-.5);
-        //rightPivotMotor.set(.5);
         leftPivotMotor.setVoltage(-5.0);
-        rightPivotMotor.setVoltage(5.0);
-        //.set(0.5);
     }
 
     public void pivotDown() {
-        //leftPivotMotor.set(.5);
         leftPivotMotor.setVoltage(4.0);
-        rightPivotMotor.setVoltage(-4.0);
-        //rightPivotMotor.set(-.5);
-        //pivotGroup.set(-0.5);
     }
 
     public void pivotStop() {
         leftPivotMotor.setVoltage(0.0);
-        rightPivotMotor.setVoltage(0.0);
     }
 
     public double getPivotPosition() {
         return pivotEncoder.getAbsolutePosition(); 
     }
 
-    public void testSetVoltage(){
-        leftPivotMotor.setVoltage(pivotVolts);
-        rightPivotMotor.setVoltage(-pivotVolts);
+
+    public boolean isAtMaxHeight(){
+        return upperLimitSwitch.get();
     }
 
-    // public boolean getTopSwitch(){
-    //     return topLimitSwitch.get();
-    // }
-
-    // public boolean getBottomSwitch(){
-    //     return bottomLimitSwitch.get();
-    // }
-
-    public double getOffsetPosition() {
-        return pivotEncoder.getAbsolutePosition() - pivotEncoder.getPositionOffset();
+    public boolean isAtMinHeight(){
+        return lowerLimitSwitch.get();
     }
+    // @Override
+    public double getMeasurement() {
+        return (pivotEncoder.getAbsolutePosition() + .5) % 1;
+    }
+
+    // @Override
+    // protected void useOutput(double output, double setpoint) {
+    //    double appliedVolts =  MathUtil.clamp(output, -2.5, 2.5);
+    //     leftPivotMotor.setVoltage(appliedVolts);
+        
+    // }
+
+
 
     @Override
     public void periodic(){
+
         
-        pivotVolts = SmartDashboard.getNumber("Pivot Volts", 0);
+        //  SmartDashboard.putNumber("Right Output", rightPivotMotor.getAppliedOutput());
+        //  SmartDashboard.putNumber("Left Output", leftPivotMotor.getAppliedOutput());
 
-        SmartDashboard.putNumber("Pivot Encoder", getOffsetPosition());
-        // SmartDashboard.putBoolean("Right Follows", rightPivotMotor.isFollower());
-        // SmartDashboard.putBoolean("Right Inverted", rightPivotMotor.getInverted());
-        // SmartDashboard.putBoolean("Left Follows", leftPivotMotor.isFollower());
-        // SmartDashboard.putBoolean("Left Inverted", leftPivotMotor.getInverted());
-         SmartDashboard.putNumber("Right Output", rightPivotMotor.getAppliedOutput());
-         SmartDashboard.putNumber("Left Output", leftPivotMotor.getAppliedOutput());
+        //  SmartDashboard.putNumber("Pivot Encoder", getMeasurement());
+        //  double rads = getMeasurement() * Math.PI * 2;
+        //  SmartDashboard.putNumber("Pivot Degrees", Units.radiansToDegrees(rads));
+        //  SmartDashboard.putNumber("Pivot Rads", rads);
 
-         double pivotDegrees = Units.radiansToDegrees((2 * Math.PI) * pivotEncoder.getAbsolutePosition());
-         SmartDashboard.putNumber("Pivot Degrees", pivotDegrees);
-         SmartDashboard.putNumber("Angle Offset", angleOffset.getDegrees());
+        //  SmartDashboard.putBoolean("Upper Limit", isAtMaxHeight());
+        //  SmartDashboard.putBoolean("Lower Limit", isAtMinHeight());
+
+        //  double p = SmartDashboard.getNumber("Pivot P", 0);
+        //  double i = SmartDashboard.getNumber("Pivot I", 0);
+        //  double d = SmartDashboard.getNumber("Pivot D", 0);
+        //  double setpoint =
+        //  SmartDashboard.getNumber("Pivot Setpoint", pivotController.getSetpoint());
+        
+        // setpoint = (Math.abs(setpoint) > Math.PI * 2) ? 
+        //     Units.degreesToRadians(setpoint) : setpoint;
+        //  pivotController.setP(p);
+        //  pivotController.setI(i);
+        //  pivotController.setD(d);
+        //  pivotController.setSetpoint(setpoint);
+        //  SmartDashboard.putData("Pivot PID Controller", pivotController);
+        // double calculatedOutput = pivotController.calculate(getMeasurement(), pivotController.getSetpoint());
+        //  SmartDashboard.putNumber("Calculated Output", calculatedOutput);
+         
+        //  double clampedOutput = MathUtil.clamp(calculatedOutput, -7, 6.75);
+        //  SmartDashboard.putNumber("Clamped Output", clampedOutput);
+        //  leftPivotMotor.setVoltage(clampedOutput);
          
     }
+
+    
+
+    
+
     
 }

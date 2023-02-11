@@ -47,6 +47,7 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kLeftStick.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton driveStart = new JoystickButton(driver, XboxController.Button.kStart.value);
+    private final JoystickButton driveA = new JoystickButton(driver, XboxController.Button.kA.value);
     
     /* Operator Buttons */
     private final JoystickButton opYButton = new JoystickButton(operator, XboxController.Button.kY.value);
@@ -96,8 +97,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driveStart.whileTrue(autoBalanceWithRoll);
-        driveStart.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
+        driveA.whileTrue(autoBalanceWithRoll);
+        driveA.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
 
         /* Operator Buttons */
 
@@ -128,7 +129,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         //return new TestAuto(testTrajectory, , s_Swerve);
-        return null;
-       // return new AutoBalanceAuto(s_Swerve);
+        //return null;
+       return new AutoBalanceAuto(s_Swerve);
     }
 }

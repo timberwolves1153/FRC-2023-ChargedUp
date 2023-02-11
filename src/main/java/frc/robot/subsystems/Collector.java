@@ -1,16 +1,11 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Collector {
+public class Collector extends SubsystemBase{
     private WPI_TalonSRX collector;
  
 
@@ -28,11 +23,11 @@ public class Collector {
     }
 
     public void collectorIntake(){
-        collector.setVoltage(-7.0);
+        collector.setVoltage(-10.0);
     }
 
     public void collectorOuttake(){
-        collector.setVoltage(4);
+        collector.setVoltage(7.0);
     }
 
     public void collectorStop(){

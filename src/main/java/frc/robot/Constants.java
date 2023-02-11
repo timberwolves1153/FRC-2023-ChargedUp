@@ -12,7 +12,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
-    public static final double rollDeadband = 0.1;
+    public static final double rollDeadband = 0.25;
 
     public static final class Swerve {
         public static final int pigeonID = 5;
@@ -158,6 +158,24 @@ public final class Constants {
         public static final int FREQUENCY = 976;
         public static final double PERIOD = 1025;
         public static final double ENCODER_DISTANCE_PER_PULSE = (2.0 * Math.PI / 8192);
+
+// trapezoidal subsystem constants
+
+        public static final double kP = 1;
+        public static final double kI = 0;
+        public static final double kD = 0;
+
+        public static final double kSVolts = 1; //sysid
+        public static final double kGVolts = 1; //gravity constant
+        public static final double kVVoltSecondPerRad = 0.5; //velocity
+        public static final double kAVoltSecondSquaredPerRad = 0.1; //acceleration
+
+        public static final double kMaxVelocityRadPerSecond = 3;
+        public static final double kMaxAccelerationRadPerSecSquared = 10;
+
+        // Offset of the arm from the horizontal in neutral position
+        // measured from the horizontal
+        public static final double kArmOffsetRads = 0.5;
         
     }
 }

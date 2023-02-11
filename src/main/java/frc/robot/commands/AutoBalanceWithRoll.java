@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
@@ -20,44 +21,33 @@ public class AutoBalanceWithRoll extends CommandBase{
     private DoubleSupplier strafeSup;
     private BooleanSupplier robotCentricSup;
     
-
-
-
     public AutoBalanceWithRoll(Swerve swerve, BooleanSupplier robotCentricSup) {
-
         this.swerve = swerve;
         addRequirements(swerve);
         this.robotCentricSup =  robotCentricSup;
-
-
-       
-    
     }
-    
-    
 
     @Override
     public void execute() {
             
-
             if (swerve.getRoll() < swerve.getInitRoll() - Constants.rollDeadband)  {
-                System.out.println("forwards Balancing With Roll");
+                //System.out.println("forwards Balancing With Roll");
                 swerve.drive(
-                    new Translation2d(-0.38, 0.0), 
+                    new Translation2d(-0.64, 0.0), 
                 0.0, 
                 !robotCentricSup.getAsBoolean(), 
                 true
             );
             } else if(swerve.getRoll() > swerve.getInitRoll() + Constants.rollDeadband) {
-                System.out.println("backwards Balancing With Roll");
+                //System.out.println("backwards Balancing With Roll");
                 swerve.drive(
-                    new Translation2d(0.38, 0.0), 
+                    new Translation2d(0.64, 0.0), 
                 0.0, 
                 !robotCentricSup.getAsBoolean(), 
                 true
             );
             } else {
-                System.out.println("flat Balancing With Roll");
+                //System.out.println("flat Balancing With Roll");
                 swerve.drive(
                     new Translation2d(0.0, 0.0), 
                 0.0, 
