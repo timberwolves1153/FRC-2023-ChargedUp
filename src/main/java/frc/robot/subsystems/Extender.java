@@ -150,61 +150,61 @@ public class Extender extends SubsystemBase{
     }
 
 
-    @Override
-    public void periodic() {
+    // @Override
+    // public void periodic() {
     
-        // read PID coefficients from SmartDashboard
-        double p = SmartDashboard.getNumber("P Gain", 0);
-        double i = SmartDashboard.getNumber("I Gain", 0);
-        double d = SmartDashboard.getNumber("D Gain", 0);
-        double iz = SmartDashboard.getNumber("I Zone", 0);
-        double ff = SmartDashboard.getNumber("Feed Forward", 0);
-        double max = SmartDashboard.getNumber("Max Output", 0);
-        double min = SmartDashboard.getNumber("Min Output", 0);
-        double maxV = SmartDashboard.getNumber("Max Velocity", 0);
-        double minV = SmartDashboard.getNumber("Min Velocity", 0);
-        double maxA = SmartDashboard.getNumber("Max Acceleration", 0);
-        double allE = SmartDashboard.getNumber("Allowed Closed Loop Error", 0);
+    //     // read PID coefficients from SmartDashboard
+    //     double p = SmartDashboard.getNumber("P Gain", 0);
+    //     double i = SmartDashboard.getNumber("I Gain", 0);
+    //     double d = SmartDashboard.getNumber("D Gain", 0);
+    //     double iz = SmartDashboard.getNumber("I Zone", 0);
+    //     double ff = SmartDashboard.getNumber("Feed Forward", 0);
+    //     double max = SmartDashboard.getNumber("Max Output", 0);
+    //     double min = SmartDashboard.getNumber("Min Output", 0);
+    //     double maxV = SmartDashboard.getNumber("Max Velocity", 0);
+    //     double minV = SmartDashboard.getNumber("Min Velocity", 0);
+    //     double maxA = SmartDashboard.getNumber("Max Acceleration", 0);
+    //     double allE = SmartDashboard.getNumber("Allowed Closed Loop Error", 0);
     
-        // if PID coefficients on SmartDashboard have changed, write new values to controller
-        if((p != kP)) { extenderPidController.setP(p); kP = p; }
-        if((i != kI)) { extenderPidController.setI(i); kI = i; }
-        if((d != kD)) { extenderPidController.setD(d); kD = d; }
-        if((iz != kIz)) { extenderPidController.setIZone(iz); kIz = iz; }
-        if((ff != kFF)) { extenderPidController.setFF(ff); kFF = ff; }
-        if((max != kMaxOutput) || (min != kMinOutput)) { 
-          extenderPidController.setOutputRange(min, max); 
-          kMinOutput = min; kMaxOutput = max; 
-        }
-        if((maxV != maxVel)) { extenderPidController.setSmartMotionMaxVelocity(maxV,0); maxVel = maxV; }
-        if((minV != minVel)) { extenderPidController.setSmartMotionMinOutputVelocity(minV,0); minVel = minV; }
-        if((maxA != maxAcc)) { extenderPidController.setSmartMotionMaxAccel(maxA,0); maxAcc = maxA; }
-        if((allE != allowedErr)) { extenderPidController.setSmartMotionAllowedClosedLoopError(allE,0); allowedErr = allE; }
+    //     // if PID coefficients on SmartDashboard have changed, write new values to controller
+    //     if((p != kP)) { extenderPidController.setP(p); kP = p; }
+    //     if((i != kI)) { extenderPidController.setI(i); kI = i; }
+    //     if((d != kD)) { extenderPidController.setD(d); kD = d; }
+    //     if((iz != kIz)) { extenderPidController.setIZone(iz); kIz = iz; }
+    //     if((ff != kFF)) { extenderPidController.setFF(ff); kFF = ff; }
+    //     if((max != kMaxOutput) || (min != kMinOutput)) { 
+    //       extenderPidController.setOutputRange(min, max); 
+    //       kMinOutput = min; kMaxOutput = max; 
+    //     }
+    //     if((maxV != maxVel)) { extenderPidController.setSmartMotionMaxVelocity(maxV,0); maxVel = maxV; }
+    //     if((minV != minVel)) { extenderPidController.setSmartMotionMinOutputVelocity(minV,0); minVel = minV; }
+    //     if((maxA != maxAcc)) { extenderPidController.setSmartMotionMaxAccel(maxA,0); maxAcc = maxA; }
+    //     if((allE != allowedErr)) { extenderPidController.setSmartMotionAllowedClosedLoopError(allE,0); allowedErr = allE; }
     
-        double setPoint, processVariable;
+    //     double setPoint, processVariable;
         
-          setPoint = SmartDashboard.getNumber("Set Position", 0);
-          /**
-           * As with other PID modes, Smart Motion is set by calling the
-           * setReference method on an existing pid object and setting
-           * the control type to kSmartMotion
-           */
-          extenderPidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
-          processVariable = extenderEncoder.getPosition();
+    //       setPoint = SmartDashboard.getNumber("Set Position", 0);
+    //       /**
+    //        * As with other PID modes, Smart Motion is set by calling the
+    //        * setReference method on an existing pid object and setting
+    //        * the control type to kSmartMotion
+    //        */
+    //       //extenderPidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
+    //       processVariable = extenderEncoder.getPosition();
         
         
-        SmartDashboard.putNumber("SetPoint", setPoint);
-        SmartDashboard.putNumber("Process Variable", processVariable);
-        SmartDashboard.putNumber("Output", extenderMotor.getAppliedOutput());
+    //     SmartDashboard.putNumber("SetPoint", setPoint);
+    //     SmartDashboard.putNumber("Process Variable", processVariable);
+    //     SmartDashboard.putNumber("Output", extenderMotor.getAppliedOutput());
     
-        SmartDashboard.putBoolean("Limit Switch", isLimitSwitchPressed());
+    //     SmartDashboard.putBoolean("Limit Switch", isLimitSwitchPressed());
     
-        if(Math.abs(processVariable - setPoint) < 0.25) {
-          extenderMotor.setVoltage(0);
-        }
+    //     // if(Math.abs(processVariable - setPoint) < 0.25) {
+    //     //   extenderMotor.setVoltage(0);
+    //     // }
     
-        if(isLimitSwitchPressed()) {
-          extenderEncoder.setPosition(0);
-        }
-      }
+    //     if(isLimitSwitchPressed()) {
+    //       extenderEncoder.setPosition(0);
+    //     }
+    //   }
 }

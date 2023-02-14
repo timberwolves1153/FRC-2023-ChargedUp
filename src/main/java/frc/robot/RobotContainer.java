@@ -22,7 +22,9 @@ import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Extender;
+import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.Swerve;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -56,6 +58,13 @@ public class RobotContainer {
     private final JoystickButton opBButton = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton opLeftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton opRightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+    private final JoystickButton opStart = new JoystickButton(operator, XboxController.Button.kStart.value);
+    private final JoystickButton opBack = new JoystickButton(operator, XboxController.Button.kBack.value);
+
+    // private final JoystickButton opOneButton = new JoystickButton(operator, 1);
+    // private final JoystickButton opTwoButton = new JoystickButton(operator, 2);
+
+
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -66,6 +75,8 @@ public class RobotContainer {
     //private final ExtendIn extendIn;
     //private final ExtendOut extendOut;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
+
+    private LEDLights ledLights;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -82,6 +93,8 @@ public class RobotContainer {
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
         //extendIn = new ExtendIn(extender);
         //extendOut = new ExtendOut(extender);
+
+        ledLights = new LEDLights();
 
 
         // Configure the button bindings
@@ -119,6 +132,15 @@ public class RobotContainer {
 
         opRightBumper.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
         opRightBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        
+        // opOneButton.whileTrue(new InstantCommand(() -> ledLights.setRGB(255, 255, 0)));
+        // opOneButton.onFalse(new InstantCommand(() -> ledLights.setRGB(0, 0, 0)));
+
+        // opTwoButton.whileTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
+        // opTwoButton.onFalse(new InstantCommand(() -> ledLights.setRGB(0, 0, 0)));
+
+
+        
     }
 
     /**
