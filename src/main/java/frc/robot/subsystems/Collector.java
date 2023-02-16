@@ -19,15 +19,15 @@ public class Collector extends SubsystemBase{
 
     public void config(){
         collector.configFactoryDefault();
-        collector.setNeutralMode(NeutralMode.Brake);
+        collector.setNeutralMode(NeutralMode.Coast);
     }
 
     public void collectorIntake(){
-        collector.setVoltage(-10.0);
+        collector.setVoltage(-12.0);
     }
 
     public void collectorOuttake(){
-        collector.setVoltage(9.0);
+        collector.setVoltage(12.0);
     }
 
     public void collectorStop(){

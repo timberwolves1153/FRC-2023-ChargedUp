@@ -15,6 +15,8 @@ import frc.robot.autos.LoopAuto;
 import frc.robot.autos.TestAuto;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
+import frc.robot.commands.DefaultPivot;
+import frc.robot.commands.PivotToPosition;
 // import frc.robot.commands.ExtendIn;
 // import frc.robot.commands.ExtendOut;
 // import frc.robot.commands.ExtendToDistance;
@@ -36,6 +38,7 @@ public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
+    private final Joystick atari = new Joystick(2);
 
     private SwerveDriveKinematics swerveKinematics;
 
@@ -61,6 +64,17 @@ public class RobotContainer {
     private final JoystickButton opStart = new JoystickButton(operator, XboxController.Button.kStart.value);
     private final JoystickButton opBack = new JoystickButton(operator, XboxController.Button.kBack.value);
 
+    private final JoystickButton atariButton1 = new JoystickButton(atari, 1);
+    private final JoystickButton atariButton2 = new JoystickButton(atari, 2);
+    private final JoystickButton atariButton3 = new JoystickButton(atari, 3);
+    private final JoystickButton atariButton4 = new JoystickButton(atari, 4);
+    private final JoystickButton atariButton5 = new JoystickButton(atari, 5);
+    private final JoystickButton atariButton6 = new JoystickButton(atari, 6);
+    private final JoystickButton atariButton7 = new JoystickButton(atari, 7);
+    private final JoystickButton atariButton8 = new JoystickButton(atari, 8);
+    private final JoystickButton atariButton9 = new JoystickButton(atari, 9);
+    private final JoystickButton atariButton10 = new JoystickButton(atari, 10);
+
     // private final JoystickButton opOneButton = new JoystickButton(operator, 1);
     // private final JoystickButton opTwoButton = new JoystickButton(operator, 2);
 
@@ -75,6 +89,13 @@ public class RobotContainer {
     //private final ExtendIn extendIn;
     //private final ExtendOut extendOut;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
+    private final PivotToPosition pivotToPositionTop;
+    private final PivotToPosition pivotToPositionBottom;
+    private final PivotToPosition L3;
+    private final PivotToPosition L2;
+    private final PivotToPosition Hybrid;
+    private final PivotToPosition ConeDSS;
+    private final PivotToPosition ConeSSS;
 
     private LEDLights ledLights;
 
@@ -89,8 +110,17 @@ public class RobotContainer {
                 () -> robotCentric.getAsBoolean()
             )
         );
+
+        pivot.setDefaultCommand(new DefaultPivot(() -> operator.getRawAxis(1), pivot));
         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
+        pivotToPositionTop = new PivotToPosition(0.3, pivot);
+        pivotToPositionBottom = new PivotToPosition(0.55, pivot);
+        L3 = new PivotToPosition(0.42, pivot);
+        L2 = new PivotToPosition(0.45, pivot);
+        Hybrid = new PivotToPosition(0.58, pivot);
+        ConeDSS = new PivotToPosition(0.38, pivot);
+        ConeSSS = new PivotToPosition(0.46, pivot);
         //extendIn = new ExtendIn(extender);
         //extendOut = new ExtendOut(extender);
 
@@ -132,6 +162,23 @@ public class RobotContainer {
 
         opRightBumper.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
         opRightBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
+
+        atariButton1.onTrue(Hybrid.withTimeout(1.75));
+        atariButton2.onTrue(L2.withTimeout(1.75));
+        atariButton3.onTrue(L3.withTimeout(1.75));
+        atariButton5.whileTrue(new InstantCommand(() -> extender.extendOut()));
+        atariButton5.onFalse(new InstantCommand(() -> extender.stop()));
+        atariButton6.whileTrue(new InstantCommand(() -> extender.extendIn()));
+        atariButton6.onFalse(new InstantCommand(() -> extender.stop()));
+        atariButton7.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
+        atariButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        atariButton8.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
+        atariButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        atariButton9.onTrue(ConeDSS.withTimeout(1.75));
+        atariButton10.onTrue(ConeSSS.withTimeout(1.75));
+        // opStart.onTrue(pivotToPositionTop.withTimeout(1.75));
+        // opBack.onTrue(pivotToPositionBottom.withTimeout(1.75));
+        //opStart.onFalse(pivotToPositionBottom());
         
         // opOneButton.whileTrue(new InstantCommand(() -> ledLights.setRGB(255, 255, 0)));
         // opOneButton.onFalse(new InstantCommand(() -> ledLights.setRGB(0, 0, 0)));
