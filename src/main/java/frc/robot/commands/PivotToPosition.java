@@ -12,7 +12,12 @@ public class PivotToPosition extends PIDCommand {
 
 
     public PivotToPosition(Double setpoint, Pivot pivot) {
-        super(new PIDController(80, 0, 0), pivot::getMeasurement, setpoint, volts -> pivot.PIDmovePivot(volts), pivot);
+        super(
+          
+        new PIDController(80, 0, 0), 
+        pivot::getMeasurement, setpoint, 
+        volts -> pivot.PIDmovePivot(volts), 
+        pivot);
 
     
 
@@ -22,10 +27,15 @@ public class PivotToPosition extends PIDCommand {
     }
 
 
+
     @Override
   public boolean isFinished(){
     return getController().atSetpoint();
   }
   
+  // @Override
+  // public void end(boolean interrupted) {
+  
+  // }
 
 }

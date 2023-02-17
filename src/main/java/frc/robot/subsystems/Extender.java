@@ -111,11 +111,11 @@ public class Extender extends SubsystemBase{
 
 
     public void extendOut(){
-        extenderMotor.setVoltage(-6.0);
+        extenderMotor.setVoltage(-7.0);
     }
 
     public void extendIn(){
-        extenderMotor.setVoltage(6.0);
+        extenderMotor.setVoltage(7.0);
     }
 
     public void stop(){

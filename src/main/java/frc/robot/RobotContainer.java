@@ -53,6 +53,9 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton driveStart = new JoystickButton(driver, XboxController.Button.kStart.value);
     private final JoystickButton driveA = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton driveB = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton driveX = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton driveY = new JoystickButton(driver, XboxController.Button.kY.value);
     
     /* Operator Buttons */
     private final JoystickButton opYButton = new JoystickButton(operator, XboxController.Button.kY.value);
@@ -74,9 +77,11 @@ public class RobotContainer {
     private final JoystickButton atariButton8 = new JoystickButton(atari, 8);
     private final JoystickButton atariButton9 = new JoystickButton(atari, 9);
     private final JoystickButton atariButton10 = new JoystickButton(atari, 10);
+    private final JoystickButton atariButton12 = new JoystickButton(atari, 12);
 
-    // private final JoystickButton opOneButton = new JoystickButton(operator, 1);
-    // private final JoystickButton opTwoButton = new JoystickButton(operator, 2);
+    private final JoystickButton opOneButton = new JoystickButton(operator, 1);
+    private final JoystickButton opTwoButton = new JoystickButton(operator, 2);
+    private final JoystickButton opThreeButton = new JoystickButton(operator, 3);
 
 
 
@@ -94,8 +99,10 @@ public class RobotContainer {
     private final PivotToPosition L3;
     private final PivotToPosition L2;
     private final PivotToPosition Hybrid;
+    private final PivotToPosition Travel;
     private final PivotToPosition ConeDSS;
     private final PivotToPosition ConeSSS;
+    private final PivotToPosition StartPosition;
 
     private LEDLights ledLights;
 
@@ -119,8 +126,10 @@ public class RobotContainer {
         L3 = new PivotToPosition(0.42, pivot);
         L2 = new PivotToPosition(0.45, pivot);
         Hybrid = new PivotToPosition(0.58, pivot);
+        Travel = new PivotToPosition(0.3, pivot);
         ConeDSS = new PivotToPosition(0.38, pivot);
         ConeSSS = new PivotToPosition(0.46, pivot);
+        StartPosition = new PivotToPosition(0.62, pivot);
         //extendIn = new ExtendIn(extender);
         //extendOut = new ExtendOut(extender);
 
@@ -166,25 +175,34 @@ public class RobotContainer {
         atariButton1.onTrue(Hybrid.withTimeout(1.75));
         atariButton2.onTrue(L2.withTimeout(1.75));
         atariButton3.onTrue(L3.withTimeout(1.75));
+        atariButton4.onTrue(Travel.withTimeout(1.75));
+
         atariButton5.whileTrue(new InstantCommand(() -> extender.extendOut()));
         atariButton5.onFalse(new InstantCommand(() -> extender.stop()));
+
         atariButton6.whileTrue(new InstantCommand(() -> extender.extendIn()));
         atariButton6.onFalse(new InstantCommand(() -> extender.stop()));
+
         atariButton7.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
         atariButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
+
         atariButton8.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
         atariButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
+
         atariButton9.onTrue(ConeDSS.withTimeout(1.75));
         atariButton10.onTrue(ConeSSS.withTimeout(1.75));
+
+        atariButton12.onTrue(StartPosition.withTimeout(1.75));
         // opStart.onTrue(pivotToPositionTop.withTimeout(1.75));
         // opBack.onTrue(pivotToPositionBottom.withTimeout(1.75));
         //opStart.onFalse(pivotToPositionBottom());
         
-        // opOneButton.whileTrue(new InstantCommand(() -> ledLights.setRGB(255, 255, 0)));
-        // opOneButton.onFalse(new InstantCommand(() -> ledLights.setRGB(0, 0, 0)));
+         driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
+        // //opOneButton.onFalse(new InstantCommand(() -> ledLights.setRGB(0, 0, 0)));
 
-        // opTwoButton.whileTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
-        // opTwoButton.onFalse(new InstantCommand(() -> ledLights.setRGB(0, 0, 0)));
+         driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
+        // //opTwoButton.onFalse(new InstantCommand(() -> ledLights.setRGB(0, 0, 0)));
+        driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
 
 
         

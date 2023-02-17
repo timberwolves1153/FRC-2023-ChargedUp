@@ -6,39 +6,29 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pivot extends SubsystemBase {
 
     private CANSparkMax leftPivotMotor;
     private CANSparkMax rightPivotMotor;
-    private DigitalInput upperLimitSwitch;
-    private DigitalInput lowerLimitSwitch;
+    private DigitalInput topLimitSwitch;
+    private DigitalInput bottomLimitSwitch;
 
     private DutyCycleEncoder pivotEncoder;
-
-    private Rotation2d angleOffset;
 
     private PIDController pivotController;
 
    
 
     public Pivot() {
-        // super(new PIDController(0, 0, 0));
         // Sets CAN ID numbers
         leftPivotMotor = new CANSparkMax(60, MotorType.kBrushless);
         rightPivotMotor = new CANSparkMax(61, MotorType.kBrushless);
-        //leftPivotMotor = new CANSparkMax(6, MotorType.kBrushless);
-        //rightPivotMotor = new CANSparkMax(20, MotorType.kBrushless);
-       // config();
-        
-        //pivotGroup = new MotorControllerGroup(leftPivotMotor, rightPivotMotor);
         
         pivotEncoder = new DutyCycleEncoder(0);
 
@@ -56,8 +46,9 @@ public class Pivot extends SubsystemBase {
        
        leftPivotMotor.burnFlash();
        rightPivotMotor.burnFlash();
-       upperLimitSwitch = new DigitalInput(1);
-       lowerLimitSwitch = new DigitalInput(2);
+
+       topLimitSwitch = new DigitalInput(1);
+       bottomLimitSwitch = new DigitalInput(2);
 
        pivotController = new PIDController(80, 0, 0);
        pivotController.setTolerance(Units.degreesToRadians(5));
@@ -69,14 +60,6 @@ public class Pivot extends SubsystemBase {
     //    SmartDashboard.putNumber("Pivot I", 0);
     //    SmartDashboard.putNumber("Pivot D", 0);
     //    SmartDashboard.putNumber("Pivot Setpoint", pivotController.getSetpoint());
-
-       
-    
-       
-      //pivotEncoder.setDutyCycleRange(ArmConstants.DUTY_CYCLE_MIN, ArmConstants.DUTY_CYCLE_MAX);
-      //pivotEncoder.setPositionOffset(0.17);
-
-        // getController().setTolerance(Units.degreesToRadians(5));
     
     }
 
@@ -110,11 +93,11 @@ public class Pivot extends SubsystemBase {
 
 
     public boolean isAtMaxHeight(){
-        return upperLimitSwitch.get();
+        return topLimitSwitch.get();
     }
 
     public boolean isAtMinHeight(){
-        return lowerLimitSwitch.get();
+        return bottomLimitSwitch.get();
     }
     // @Override
     public double getMeasurement() {
@@ -127,33 +110,25 @@ public class Pivot extends SubsystemBase {
 
     public void PIDmovePivot(double volts) {
         double clampedVolts = MathUtil.clamp(volts, -7, 6.75);
+        // if (clampedVolts < 0 && isAtMaxHeight()) {
+        //     leftPivotMotor.setVoltage(0);
+        // } else if (clampedVolts > 0 && isAtMinHeight()) {
+        //     leftPivotMotor.setVoltage(0);
+        // } else {
+        //     leftPivotMotor.setVoltage(clampedVolts);
+        // }
         leftPivotMotor.setVoltage(clampedVolts);
     }
-
-    //    
-
-    // public void goToSetpoint(double setpoint) {
-
-    //     pivotController.setSetpoint(setpoint);
-    // double calculatedOutput = pivotController.calculate(getMeasurement(), pivotController.getSetpoint());
-    //   double clampedOutput = MathUtil.clamp(calculatedOutput, -7, 6.75);
-    //     leftPivotMotor.setVoltage(clampedOutput);
-    // }
-
-    // @Override
-    // protected void useOutput(double output, double setpoint) {
-    //    double appliedVolts =  MathUtil.clamp(output, -2.5, 2.5);
-    //     leftPivotMotor.setVoltage(appliedVolts);
-        
-    // }
-
-
 
     @Override
     public void periodic(){
 
-       // SmartDashboard.putNumber("pivot position", getMeasurement());
-        
+        SmartDashboard.putBoolean("Top Limit Switch", isAtMaxHeight());
+        SmartDashboard.putBoolean("Bottom Limit Switch", isAtMinHeight());
+
+        SmartDashboard.putNumber("pivot position", getMeasurement());
+        double calculatedOutput = pivotController.calculate(getMeasurement(), pivotController.getSetpoint());
+        SmartDashboard.putNumber("output", calculatedOutput);
         //  SmartDashboard.putNumber("Right Output", rightPivotMotor.getAppliedOutput());
         //  SmartDashboard.putNumber("Left Output", leftPivotMotor.getAppliedOutput());
 
@@ -185,10 +160,4 @@ public class Pivot extends SubsystemBase {
         //  leftPivotMotor.setVoltage(clampedOutput);
          
     }
-
-    
-
-    
-
-    
 }
