@@ -47,6 +47,8 @@ public class Extender extends SubsystemBase{
         extenderPidController.setFeedbackDevice(extenderEncoder);
         extenderEncoder.setPositionConversionFactor(Math.PI * 0.5);
 
+        extenderMotor.setIdleMode(IdleMode.kBrake);
+
         // PID coefficients
         kP = 5e-5; 
         kI = 1e-6;
@@ -62,12 +64,12 @@ public class Extender extends SubsystemBase{
         maxAcc = 1500;
 
         // set PID coefficients
-        extenderPidController.setP(kP);
-        extenderPidController.setI(kI);
-        extenderPidController.setD(kD);
-        extenderPidController.setIZone(kIz);
-        extenderPidController.setFF(kFF);
-        extenderPidController.setOutputRange(kMinOutput, kMaxOutput);
+        // extenderPidController.setP(kP);
+        // extenderPidController.setI(kI);
+        // extenderPidController.setD(kD);
+        // extenderPidController.setIZone(kIz);
+        // extenderPidController.setFF(kFF);
+        // extenderPidController.setOutputRange(kMinOutput, kMaxOutput);
 
         /**
          * Smart Motion coefficients are set on a SparkMaxPIDController object
@@ -81,28 +83,28 @@ public class Extender extends SubsystemBase{
          * - setSmartMotionAllowedClosedLoopError() will set the max allowed
          * error for the pid controller in Smart Motion mode
          */
-        int smartMotionSlot = 0;
-        extenderPidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
-        extenderPidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
-        extenderPidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
-        extenderPidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+        // int smartMotionSlot = 0;
+        // extenderPidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
+        // extenderPidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
+        // extenderPidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
+        // extenderPidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
 
         // display PID coefficients on SmartDashboard
-        SmartDashboard.putNumber("P Gain", kP);
-        SmartDashboard.putNumber("I Gain", kI);
-        SmartDashboard.putNumber("D Gain", kD);
-        SmartDashboard.putNumber("I Zone", kIz);
-        SmartDashboard.putNumber("Feed Forward", kFF);
-        SmartDashboard.putNumber("Max Output", kMaxOutput);
-        SmartDashboard.putNumber("Min Output", kMinOutput);
+        // SmartDashboard.putNumber("P Gain", kP);
+        // SmartDashboard.putNumber("I Gain", kI);
+        // SmartDashboard.putNumber("D Gain", kD);
+        // SmartDashboard.putNumber("I Zone", kIz);
+        // SmartDashboard.putNumber("Feed Forward", kFF);
+        // SmartDashboard.putNumber("Max Output", kMaxOutput);
+        // SmartDashboard.putNumber("Min Output", kMinOutput);
 
-        // display Smart Motion coefficients
-        SmartDashboard.putNumber("Max Velocity", maxVel);
-        SmartDashboard.putNumber("Min Velocity", minVel);
-        SmartDashboard.putNumber("Max Acceleration", maxAcc);
-        SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErr);
-        SmartDashboard.putNumber("Set Position", 0);
-        SmartDashboard.putNumber("Set Velocity", 0);
+        // // display Smart Motion coefficients
+        // SmartDashboard.putNumber("Max Velocity", maxVel);
+        // SmartDashboard.putNumber("Min Velocity", minVel);
+        // SmartDashboard.putNumber("Max Acceleration", maxAcc);
+        // SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErr);
+        // SmartDashboard.putNumber("Set Position", 0);
+        // SmartDashboard.putNumber("Set Velocity", 0);
 
         // button to toggle between velocity and smart motion modes
     

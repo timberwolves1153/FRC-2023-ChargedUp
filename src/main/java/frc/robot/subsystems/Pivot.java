@@ -51,7 +51,7 @@ public class Pivot extends SubsystemBase {
        bottomLimitSwitch = new DigitalInput(2);
 
        pivotController = new PIDController(80, 0, 0);
-       pivotController.setTolerance(Units.degreesToRadians(5));
+       //pivotController.setTolerance(Units.degreesToRadians(5));
        pivotController.setTolerance(.0001);
        pivotController.setSetpoint(getMeasurement());
        
@@ -101,7 +101,8 @@ public class Pivot extends SubsystemBase {
     }
     // @Override
     public double getMeasurement() {
-        return (pivotEncoder.getAbsolutePosition() + .5) % 1;
+        //return (pivotEncoder.getAbsolutePosition() + .5) % 1;
+        return pivotEncoder.getAbsolutePosition();
     }
     
     public void teleopMovePivot(double volts) {
@@ -109,7 +110,7 @@ public class Pivot extends SubsystemBase {
     }
 
     public void PIDmovePivot(double volts) {
-        double clampedVolts = MathUtil.clamp(volts, -7, 6.75);
+        double clampedVolts = MathUtil.clamp(volts, -7, 5.75);
         // if (clampedVolts < 0 && isAtMaxHeight()) {
         //     leftPivotMotor.setVoltage(0);
         // } else if (clampedVolts > 0 && isAtMinHeight()) {

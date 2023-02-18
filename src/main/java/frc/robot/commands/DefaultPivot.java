@@ -47,7 +47,7 @@ public class DefaultPivot extends CommandBase {
         
         if (Math.abs(input) > .1) {
             double volts = input * 12;
-            double clampedOutput = MathUtil.clamp(volts, -7, 6.75);
+            double clampedOutput = MathUtil.clamp(volts, -4.7, 3);
             pivot.teleopMovePivot(clampedOutput);
             SmartDashboard.putNumber("joystick clamped", clampedOutput);
         } else {

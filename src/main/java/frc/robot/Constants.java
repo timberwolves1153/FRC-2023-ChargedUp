@@ -178,4 +178,15 @@ public final class Constants {
         public static final double kArmOffsetRads = 0.5;
         
     }
+
+    public static final class PivotSetpoints {
+
+        public static final double HYBRID = 0.58;
+        public static final double L2 = 0.425;
+        public static final double L3 = 0.39;
+        public static final double MAX = 0.3;
+        public static final double MIN = 0.62; // THIS IS FOR INSIDE THE FRAME PERIMETER - MIGHT NEED TO CHANGE
+        public static final double CONE_DSS =  0.38;
+        public static final double CONE_SSS = 0.438;
+    }
 }

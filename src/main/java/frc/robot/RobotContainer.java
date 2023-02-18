@@ -2,17 +2,18 @@ package frc.robot;
 
 import org.opencv.video.KalmanFilter;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.AutoBalanceAuto;
-import frc.robot.autos.BalanceAuto;
-import frc.robot.autos.LoopAuto;
-import frc.robot.autos.TestAuto;
+import frc.robot.autos.ScoreAndMove;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.DefaultPivot;
@@ -26,6 +27,7 @@ import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Extender;
 import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.Swerve;
+import pabeles.concurrency.IntOperatorTask.Max;
 
 
 /**
@@ -90,21 +92,21 @@ public class RobotContainer {
     private final Pivot pivot = new Pivot();
     private final Extender extender = new Extender();
     private final Collector collector = new Collector();
-
+    private final LEDLights ledLights = new LEDLights();
     //private final ExtendIn extendIn;
     //private final ExtendOut extendOut;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
-    private final PivotToPosition pivotToPositionTop;
-    private final PivotToPosition pivotToPositionBottom;
     private final PivotToPosition L3;
     private final PivotToPosition L2;
     private final PivotToPosition Hybrid;
-    private final PivotToPosition Travel;
+    private final PivotToPosition Max;
     private final PivotToPosition ConeDSS;
     private final PivotToPosition ConeSSS;
-    private final PivotToPosition StartPosition;
+    private final PivotToPosition Min;
 
-    private LEDLights ledLights;
+    private ScoreAndMove scoreAndMove;
+    private AutoBalanceAuto scoreAndBalance;
+    private SendableChooser<Command> autoCommandChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -118,26 +120,34 @@ public class RobotContainer {
             )
         );
 
-        pivot.setDefaultCommand(new DefaultPivot(() -> operator.getRawAxis(1), pivot));
+        pivot.setDefaultCommand(
+            new DefaultPivot(() -> operator.getRawAxis(1), 
+            pivot));
         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
-        pivotToPositionTop = new PivotToPosition(0.3, pivot);
-        pivotToPositionBottom = new PivotToPosition(0.55, pivot);
-        L3 = new PivotToPosition(0.42, pivot);
-        L2 = new PivotToPosition(0.45, pivot);
-        Hybrid = new PivotToPosition(0.58, pivot);
-        Travel = new PivotToPosition(0.3, pivot);
-        ConeDSS = new PivotToPosition(0.38, pivot);
-        ConeSSS = new PivotToPosition(0.46, pivot);
-        StartPosition = new PivotToPosition(0.62, pivot);
+        // pivotToPositionTop = new PivotToPosition(0.3, pivot);
+        // pivotToPositionBottom = new PivotToPosition(0.55, pivot);
+        L3 = new PivotToPosition(0.39, pivot);
+        L2 = new PivotToPosition(0.425, pivot);
+        Hybrid = new PivotToPosition(Constants.PivotSetpoints.HYBRID, pivot);
+        Max = new PivotToPosition(Constants.PivotSetpoints.MAX, pivot);
+        ConeDSS = new PivotToPosition(Constants.PivotSetpoints.CONE_DSS, pivot);
+        ConeSSS = new PivotToPosition(Constants.PivotSetpoints.CONE_SSS, pivot);
+        Min = new PivotToPosition(Constants.PivotSetpoints.MIN, pivot);
+
+        autoCommandChooser = new SendableChooser<Command>();
         //extendIn = new ExtendIn(extender);
         //extendOut = new ExtendOut(extender);
 
-        ledLights = new LEDLights();
 
+        autoCommandChooser.setDefaultOption("Move and Score", scoreAndMove);
+        autoCommandChooser.addOption("Score and Balacne", scoreAndBalance);
+
+        SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
 
         // Configure the button bindings
         configureButtonBindings();
+        CameraServer.startAutomaticCapture(1);
     }
 
     /**
@@ -175,7 +185,7 @@ public class RobotContainer {
         atariButton1.onTrue(Hybrid.withTimeout(1.75));
         atariButton2.onTrue(L2.withTimeout(1.75));
         atariButton3.onTrue(L3.withTimeout(1.75));
-        atariButton4.onTrue(Travel.withTimeout(1.75));
+        atariButton4.onTrue(Max.withTimeout(1.75));
 
         atariButton5.whileTrue(new InstantCommand(() -> extender.extendOut()));
         atariButton5.onFalse(new InstantCommand(() -> extender.stop()));
@@ -192,7 +202,7 @@ public class RobotContainer {
         atariButton9.onTrue(ConeDSS.withTimeout(1.75));
         atariButton10.onTrue(ConeSSS.withTimeout(1.75));
 
-        atariButton12.onTrue(StartPosition.withTimeout(1.75));
+        atariButton12.onTrue(Min.withTimeout(1.75));
         // opStart.onTrue(pivotToPositionTop.withTimeout(1.75));
         // opBack.onTrue(pivotToPositionBottom.withTimeout(1.75));
         //opStart.onFalse(pivotToPositionBottom());
@@ -217,6 +227,8 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         //return new TestAuto(testTrajectory, , s_Swerve);
         //return null;
-       return new AutoBalanceAuto(s_Swerve);
+       //return autoCommandChooser.getSelected();
+       return new ScoreAndMove(s_Swerve, pivot, collector);
     }
+
 }
