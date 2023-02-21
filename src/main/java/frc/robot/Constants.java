@@ -165,8 +165,9 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
 
-        public static final double kSVolts = 1; //sysid
-        public static final double kGVolts = 1; //gravity constant
+        public static final double kV = 4.1311;
+        public static final double kSVolts = 0.23376; //sysid
+        public static final double kGVolts = 0.36936; //gravity constant
         public static final double kVVoltSecondPerRad = 0.5; //velocity
         public static final double kAVoltSecondSquaredPerRad = 0.1; //acceleration
 
@@ -181,12 +182,12 @@ public final class Constants {
 
     public static final class PivotSetpoints {
 
-        public static final double HYBRID = 0.58;
-        public static final double L2 = 0.425;
-        public static final double L3 = 0.39;
-        public static final double MAX = 0.3;
-        public static final double MIN = 0.62; // THIS IS FOR INSIDE THE FRAME PERIMETER - MIGHT NEED TO CHANGE
-        public static final double CONE_DSS =  0.38;
-        public static final double CONE_SSS = 0.438;
+        public static final double HYBRID = 0.73;//0.58;
+        public static final double L2 = 0.58;//0.425;
+        public static final double L3 = 0.55;//0.39;
+        public static final double MAX = 0.45;//0.3;
+        public static final double MIN = 0.75; // THIS IS FOR INSIDE THE FRAME PERIMETER - MIGHT NEED TO CHANGE
+        public static final double CONE_DSS =  0.43;
+        public static final double CONE_SSS = 0.588;
     }
 }
