@@ -10,11 +10,12 @@ import frc.robot.subsystems.Pivot;
 
 public class PivotToPosition extends PIDCommand {
 
+  private static PIDController controller = new PIDController(80, 0, 0);
+
 
     public PivotToPosition(Double setpoint, Pivot pivot) {
         super(
-          
-        new PIDController(80, 0, 0), 
+        controller, 
         pivot::getMeasurement, setpoint, 
         volts -> pivot.PIDmovePivot(volts), 
         pivot);

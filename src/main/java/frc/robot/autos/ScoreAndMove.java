@@ -50,10 +50,10 @@ public class ScoreAndMove extends AutoBase {
         addCommands(
             new InstantCommand(() -> swerve.resetOdometry(trajectory.getInitialPose())),
             baseSwerveCommand(trajectory),
-            new PivotToPosition(Constants.PivotSetpoints.L2, pivot).withTimeout(1),
+            new PivotToPosition(0.51, pivot).withTimeout(1),
             new WaitCommand(0.5),
             new InstantCommand(() -> collector.collectorIntake()),
-            new WaitCommand(0.25),
+            new WaitCommand(1),
             new PivotToPosition(Constants.PivotSetpoints.HYBRID, pivot).withTimeout(1),
             baseSwerveCommand(trajectory2),
             new InstantCommand(() -> collector.collectorStop())

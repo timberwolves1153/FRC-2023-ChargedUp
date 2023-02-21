@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.PivotSetpoints;
 import frc.robot.autos.AutoBalanceAuto;
 import frc.robot.autos.ScoreAndMove;
 import frc.robot.autos.exampleAuto;
@@ -127,8 +128,8 @@ public class RobotContainer {
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
         // pivotToPositionTop = new PivotToPosition(0.3, pivot);
         // pivotToPositionBottom = new PivotToPosition(0.55, pivot);
-        L3 = new PivotToPosition(0.39, pivot);
-        L2 = new PivotToPosition(0.425, pivot);
+        L3 = new PivotToPosition(Constants.PivotSetpoints.L3, pivot);
+        L2 = new PivotToPosition(Constants.PivotSetpoints.L2, pivot);
         Hybrid = new PivotToPosition(Constants.PivotSetpoints.HYBRID, pivot);
         Max = new PivotToPosition(Constants.PivotSetpoints.MAX, pivot);
         ConeDSS = new PivotToPosition(Constants.PivotSetpoints.CONE_DSS, pivot);
@@ -202,7 +203,7 @@ public class RobotContainer {
         atariButton9.onTrue(ConeDSS.withTimeout(1.75));
         atariButton10.onTrue(ConeSSS.withTimeout(1.75));
 
-        atariButton12.onTrue(Min.withTimeout(1.75));
+        //atariButton12.onTrue(Min.withTimeout(1.75));
         // opStart.onTrue(pivotToPositionTop.withTimeout(1.75));
         // opBack.onTrue(pivotToPositionBottom.withTimeout(1.75));
         //opStart.onFalse(pivotToPositionBottom());
