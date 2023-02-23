@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PivotSetpoints;
 import frc.robot.autos.AutoBalanceAuto;
@@ -18,6 +19,7 @@ import frc.robot.autos.ScoreAndMove;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.DefaultPivot;
+//import frc.robot.commands.ExtendToPosition;
 import frc.robot.commands.PivotToPosition;
 // import frc.robot.commands.ExtendIn;
 // import frc.robot.commands.ExtendOut;
@@ -105,6 +107,9 @@ public class RobotContainer {
     private final PivotToPosition ConeSSS;
     private final PivotToPosition Min;
 
+    // private final ExtendToPosition extendToL3;
+    // private final ExtendToPosition extend1inch;
+
     private ScoreAndMove scoreAndMove;
     private AutoBalanceAuto scoreAndBalance;
     private SendableChooser<Command> autoCommandChooser;
@@ -124,6 +129,7 @@ public class RobotContainer {
         pivot.setDefaultCommand(
             new DefaultPivot(() -> operator.getRawAxis(1), 
             pivot));
+
         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
         // pivotToPositionTop = new PivotToPosition(0.3, pivot);
@@ -135,6 +141,8 @@ public class RobotContainer {
         ConeDSS = new PivotToPosition(Constants.PivotSetpoints.CONE_DSS, pivot);
         ConeSSS = new PivotToPosition(Constants.PivotSetpoints.CONE_SSS, pivot);
         Min = new PivotToPosition(Constants.PivotSetpoints.MIN, pivot);
+        // extendToL3 = new ExtendToPosition(extender.distanceToEncoderTicks(22.9), extender);
+        // extend1inch = new ExtendToPosition(extender.distanceToEncoderTicks(1), extender);
 
         autoCommandChooser = new SendableChooser<Command>();
         //extendIn = new ExtendIn(extender);
@@ -171,10 +179,10 @@ public class RobotContainer {
         opAButton.whileTrue(new InstantCommand(() -> pivot.pivotDown()));
         opAButton.onFalse(new InstantCommand(() -> pivot.pivotStop()));
         
-        opXButton.whileTrue(new InstantCommand(() -> extender.extendIn()));
+        opXButton.whileTrue(new InstantCommand(() -> extender.extendOut()));
         opXButton.onFalse(new InstantCommand(() -> extender.stop()));
         
-        opBButton.whileTrue(new InstantCommand(() -> extender.extendOut()));
+        opBButton.whileTrue(new InstantCommand(() -> extender.extendIn()));
         opBButton.onFalse(new InstantCommand(() -> extender.stop())); 
 
         opLeftBumper.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
@@ -185,13 +193,17 @@ public class RobotContainer {
 
         atariButton1.onTrue(Hybrid.withTimeout(1.75));
         atariButton2.onTrue(L2.withTimeout(1.75));
-        atariButton3.onTrue(L3.withTimeout(1.75));
-        atariButton4.onTrue(Max.withTimeout(1.75));
+        // atariButton3.onTrue(L3);
+        // atariButton3.onTrue(extendToL3);
+       // atariButton3.onTrue(extendToL3);
+       // atariButton4.onTrue(Max);
 
-        atariButton5.whileTrue(new InstantCommand(() -> extender.extendOut()));
+       // atariButton5.onTrue(new InstantCommand( () -> extender.incrementSetpoint()));
+        //atariButton6.onTrue(new InstantCommand( () -> extender.decrementSetpoint()));
+        atariButton5.whileTrue(new InstantCommand(() -> extender.extendIn()));
         atariButton5.onFalse(new InstantCommand(() -> extender.stop()));
 
-        atariButton6.whileTrue(new InstantCommand(() -> extender.extendIn()));
+        atariButton6.whileTrue(new InstantCommand(() -> extender.extendOut()));
         atariButton6.onFalse(new InstantCommand(() -> extender.stop()));
 
         atariButton7.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
@@ -203,6 +215,8 @@ public class RobotContainer {
         atariButton9.onTrue(ConeDSS.withTimeout(1.75));
         atariButton10.onTrue(ConeSSS.withTimeout(1.75));
 
+
+        //atariButton12.onTrue(extend1inch);
         //atariButton12.onTrue(Min.withTimeout(1.75));
         // opStart.onTrue(pivotToPositionTop.withTimeout(1.75));
         // opBack.onTrue(pivotToPositionBottom.withTimeout(1.75));
@@ -215,7 +229,7 @@ public class RobotContainer {
         // //opTwoButton.onFalse(new InstantCommand(() -> ledLights.setRGB(0, 0, 0)));
         driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
 
-
+        opBack.onTrue(new InstantCommand(() -> extender.reset()));
         
     }
 

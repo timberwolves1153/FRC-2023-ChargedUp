@@ -29,7 +29,7 @@ public class Pivot extends SubsystemBase {
 
     public Pivot() {
 
-        pivotFeedforward = new ArmFeedforward(ArmConstants.kSVolts, ArmConstants.kGVolts, ArmConstants.kV);
+        pivotFeedforward = new ArmFeedforward(ArmConstants.kSVolts, ArmConstants.kGVolts, 0);
         // Sets CAN ID numbers
         leftPivotMotor = new CANSparkMax(60, MotorType.kBrushless);
         rightPivotMotor = new CANSparkMax(61, MotorType.kBrushless);
@@ -123,7 +123,8 @@ public class Pivot extends SubsystemBase {
 
     public void PIDmovePivot(double volts) {
         //leftPivotMotor.
-        double calculatedVolts = volts + pivotFeedforward.calculate(getRadians(), 0);//we are trying to find the velocity here);
+        double calculatedFeedforward = pivotFeedforward.calculate(getRadians(), 0);
+        double calculatedVolts = volts + calculatedFeedforward;//we are trying to find the velocity here);
         double clampedVolts = MathUtil.clamp(calculatedVolts, -7, 5.75);
         if (clampedVolts < 0 && isAtMaxHeight()) {
             leftPivotMotor.setVoltage(0);
@@ -138,42 +139,42 @@ public class Pivot extends SubsystemBase {
     @Override
     public void periodic(){
 
-        SmartDashboard.putBoolean("Top Limit Switch", isAtMaxHeight());
-        SmartDashboard.putBoolean("Bottom Limit Switch", isAtMinHeight());
+    //     SmartDashboard.putBoolean("Top Limit Switch", isAtMaxHeight());
+    //     SmartDashboard.putBoolean("Bottom Limit Switch", isAtMinHeight());
 
         
-        SmartDashboard.putNumber("pivot Position", getMeasurement());
-       // double calculatedOutput = pivotController.calculate(getMeasurement(), pivotController.getSetpoint());
-       // SmartDashboard.putNumber("output", calculatedOutput);
-         SmartDashboard.putNumber("Right Output", rightPivotMotor.getAppliedOutput());
-         SmartDashboard.putNumber("Left Output", leftPivotMotor.getAppliedOutput());
+    //     SmartDashboard.putNumber("pivot Position", getMeasurement());
+    //    // double calculatedOutput = pivotController.calculate(getMeasurement(), pivotController.getSetpoint());
+    //    // SmartDashboard.putNumber("output", calculatedOutput);
+    //      SmartDashboard.putNumber("Right Output", rightPivotMotor.getAppliedOutput());
+    //      SmartDashboard.putNumber("Left Output", leftPivotMotor.getAppliedOutput());
 
-         SmartDashboard.putNumber("Pivot Encoder", getMeasurement());
-         double rads = getMeasurement() * Math.PI * 2;
-         SmartDashboard.putNumber("Pivot Degrees", Units.radiansToDegrees(rads));
-         SmartDashboard.putNumber("Pivot Rads", rads);
+    //      SmartDashboard.putNumber("Pivot Encoder", getMeasurement());
+    //      double rads = getMeasurement() * Math.PI * 2;
+    //      SmartDashboard.putNumber("Pivot Degrees", Units.radiansToDegrees(rads));
+    //      SmartDashboard.putNumber("Pivot Rads", rads);
 
-         SmartDashboard.putBoolean("Upper Limit", isAtMaxHeight());
-         SmartDashboard.putBoolean("Lower Limit", isAtMinHeight());
+    //      SmartDashboard.putBoolean("Upper Limit", isAtMaxHeight());
+    //      SmartDashboard.putBoolean("Lower Limit", isAtMinHeight());
 
-         double p = SmartDashboard.getNumber("Pivot P", 0);
-         double i = SmartDashboard.getNumber("Pivot I", 0);
-         double d = SmartDashboard.getNumber("Pivot D", 0);
-         double setpoint = SmartDashboard.getNumber("Pivot Setpoint", pivotController.getSetpoint());
+    //      double p = SmartDashboard.getNumber("Pivot P", 0);
+    //      double i = SmartDashboard.getNumber("Pivot I", 0);
+    //      double d = SmartDashboard.getNumber("Pivot D", 0);
+    //      double setpoint = SmartDashboard.getNumber("Pivot Setpoint", pivotController.getSetpoint());
         
-        setpoint = (Math.abs(setpoint) > Math.PI * 2) ? 
-            Units.degreesToRadians(setpoint) : setpoint;
-         pivotController.setP(p);
-         pivotController.setI(i);
-         pivotController.setD(d);
-         pivotController.setSetpoint(setpoint);
-         SmartDashboard.putData("Pivot PID Controller", pivotController);
-        double calculatedOutput = pivotController.calculate(getMeasurement(), pivotController.getSetpoint());
-         SmartDashboard.putNumber("Calculated Output", calculatedOutput);
+    //     setpoint = (Math.abs(setpoint) > Math.PI * 2) ? 
+    //         Units.degreesToRadians(setpoint) : setpoint;
+    //      pivotController.setP(p);
+    //      pivotController.setI(i);
+    //      pivotController.setD(d);
+    //      pivotController.setSetpoint(setpoint);
+    //      SmartDashboard.putData("Pivot PID Controller", pivotController);
+    //     double calculatedOutput = pivotController.calculate(getMeasurement(), pivotController.getSetpoint());
+    //      SmartDashboard.putNumber("Calculated Output", calculatedOutput);
          
-         double clampedOutput = MathUtil.clamp(calculatedOutput, -7, 6.75);
-         SmartDashboard.putNumber("Clamped Output", clampedOutput);
-         leftPivotMotor.setVoltage(clampedOutput);
+    //      double clampedOutput = MathUtil.clamp(calculatedOutput, -7, 6.75);
+    //      SmartDashboard.putNumber("Clamped Output", clampedOutput);
+    //      leftPivotMotor.setVoltage(clampedOutput);
          
     }
 }
