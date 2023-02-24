@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.time.Instant;
+
 import org.opencv.video.KalmanFilter;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -10,15 +12,19 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PivotSetpoints;
-import frc.robot.autos.AutoBalanceAuto;
+//import frc.robot.autos.AutoBalanceAuto;
 import frc.robot.autos.ScoreAndMove;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.DefaultPivot;
+import frc.robot.commands.ExtendIn;
 //import frc.robot.commands.ExtendToPosition;
 import frc.robot.commands.PivotToPosition;
 // import frc.robot.commands.ExtendIn;
@@ -27,8 +33,9 @@ import frc.robot.commands.PivotToPosition;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Collector;
-import frc.robot.subsystems.Extender;
+//import frc.robot.subsystems.Extender;
 import frc.robot.subsystems.LEDLights;
+import frc.robot.subsystems.PIDExtender;
 import frc.robot.subsystems.Swerve;
 import pabeles.concurrency.IntOperatorTask.Max;
 
@@ -93,7 +100,7 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Pivot pivot = new Pivot();
-    private final Extender extender = new Extender();
+    //private final Extender extender = new Extender();
     private final Collector collector = new Collector();
     private final LEDLights ledLights = new LEDLights();
     //private final ExtendIn extendIn;
@@ -107,11 +114,13 @@ public class RobotContainer {
     private final PivotToPosition ConeSSS;
     private final PivotToPosition Min;
 
+    private final PIDExtender pidExtender = new PIDExtender();
+
     // private final ExtendToPosition extendToL3;
     // private final ExtendToPosition extend1inch;
 
     private ScoreAndMove scoreAndMove;
-    private AutoBalanceAuto scoreAndBalance;
+   // private AutoBalanceAuto scoreAndBalance;
     private SendableChooser<Command> autoCommandChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -150,10 +159,12 @@ public class RobotContainer {
 
 
         autoCommandChooser.setDefaultOption("Move and Score", scoreAndMove);
-        autoCommandChooser.addOption("Score and Balacne", scoreAndBalance);
+        //autoCommandChooser.addOption("Score and Balacne", scoreAndBalance);
 
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
 
+
+        
         // Configure the button bindings
         configureButtonBindings();
         CameraServer.startAutomaticCapture(1);
@@ -179,11 +190,11 @@ public class RobotContainer {
         opAButton.whileTrue(new InstantCommand(() -> pivot.pivotDown()));
         opAButton.onFalse(new InstantCommand(() -> pivot.pivotStop()));
         
-        opXButton.whileTrue(new InstantCommand(() -> extender.extendOut()));
-        opXButton.onFalse(new InstantCommand(() -> extender.stop()));
+        opXButton.whileTrue(new InstantCommand(() -> pidExtender.extendOut()));
+        opXButton.onFalse(new InstantCommand(() -> pidExtender.stop()));
         
-        opBButton.whileTrue(new InstantCommand(() -> extender.extendIn()));
-        opBButton.onFalse(new InstantCommand(() -> extender.stop())); 
+        opBButton.whileTrue(new InstantCommand(() -> pidExtender.extendIn()));
+        opBButton.onFalse(new InstantCommand(() -> pidExtender.stop())); 
 
         opLeftBumper.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
         opLeftBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
@@ -200,11 +211,17 @@ public class RobotContainer {
 
        // atariButton5.onTrue(new InstantCommand( () -> extender.incrementSetpoint()));
         //atariButton6.onTrue(new InstantCommand( () -> extender.decrementSetpoint()));
-        atariButton5.whileTrue(new InstantCommand(() -> extender.extendIn()));
-        atariButton5.onFalse(new InstantCommand(() -> extender.stop()));
+        // atariButton5.whileTrue(new InstantCommand(() -> extender.extendIn()));
+        // atariButton5.onFalse(new InstantCommand(() -> extender.stop()));
+        
+        //atariButton6.onTrue(new InstantCommand(() -> pidExtender.setSetpoint((pidExtender.getController().getSetpoint())+1)).repeatedly());
+        atariButton5.whileTrue(new ExtendIn(pidExtender));
 
-        atariButton6.whileTrue(new InstantCommand(() -> extender.extendOut()));
-        atariButton6.onFalse(new InstantCommand(() -> extender.stop()));
+        atariButton6.onFalse(new InstantCommand(() -> pidExtender.holdPosition()));
+        atariButton6.onTrue(Commands.runOnce(() -> {pidExtender.disable(); pidExtender.extendOut();}));
+        //atariButton6.onFalse(new InstantCommand(() -> pidExtender.holdPosition()));
+        // atariButton6.whileTrue(new InstantCommand(() -> extender.extendOut()));
+        // atariButton6.onFalse(new InstantCommand(() -> extender.stop()));
 
         atariButton7.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
         atariButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
@@ -215,6 +232,8 @@ public class RobotContainer {
         atariButton9.onTrue(ConeDSS.withTimeout(1.75));
         atariButton10.onTrue(ConeSSS.withTimeout(1.75));
 
+        // atariButton12.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-5), pidExtender));
+        // atariButton10.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(22.9), pidExtender));
 
         //atariButton12.onTrue(extend1inch);
         //atariButton12.onTrue(Min.withTimeout(1.75));
@@ -229,7 +248,11 @@ public class RobotContainer {
         // //opTwoButton.onFalse(new InstantCommand(() -> ledLights.setRGB(0, 0, 0)));
         driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
 
-        opBack.onTrue(new InstantCommand(() -> extender.reset()));
+        opBack.onTrue(Commands.runOnce(() -> {
+            pidExtender.disable();
+            pidExtender.resetEncoder(); 
+            pidExtender.holdPosition();
+        }, pidExtender));
         
     }
 

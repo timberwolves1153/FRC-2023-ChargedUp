@@ -33,26 +33,31 @@ public class DefaultPivot extends CommandBase {
         // }
         
         input = joystickInput.getAsDouble();
-        // if (input > 0 && pivot.isAtMaxHeight()) {
-        //     pivot.teleopMovePivot(0);
-        // } else if (input < 0 && pivot.isAtMinHeight()) {
-        //     pivot.teleopMovePivot(0);
-        // } else {
-        //     if (Math.abs(input) > .1) {
-          //  pivot.teleopMovePivot(joystickInput.getAsDouble() * 12);
-      //  }
-        // }
+        if (input > 0 && pivot.isAtMaxHeight()) {
+            pivot.teleopMovePivot(0);
+        } else if (input < 0 && pivot.isAtMinHeight()) {
+            pivot.teleopMovePivot(0);
+        } else {
+            if (Math.abs(input) > .1) {
+                //pivot.teleopMovePivot(joystickInput.getAsDouble() * 12);
+                double volts = input * 12;
+                double clampedOutput = MathUtil.clamp(volts, -4.7, 3);
+                pivot.teleopMovePivot(clampedOutput);
+            } else {
+                pivot.teleopMovePivot(0);
+            }
+        } 
 
         SmartDashboard.putNumber("joystick input", input);
         
-        if (Math.abs(input) > .1) {
-            double volts = input * 12;
-            double clampedOutput = MathUtil.clamp(volts, -4.7, 3);
-            pivot.teleopMovePivot(clampedOutput);
-            SmartDashboard.putNumber("joystick clamped", clampedOutput);
-        } else {
-            pivot.teleopMovePivot(0);
-        }
+        // if (Math.abs(input) > .1) {
+        //     double volts = input * 12;
+        //     double clampedOutput = MathUtil.clamp(volts, -4.7, 3);
+        //     pivot.teleopMovePivot(clampedOutput);
+        //     SmartDashboard.putNumber("joystick clamped", clampedOutput);
+        // } else {
+        //     pivot.teleopMovePivot(0);
+        // }
     }
 }
 
