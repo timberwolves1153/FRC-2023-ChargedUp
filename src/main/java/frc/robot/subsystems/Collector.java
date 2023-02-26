@@ -30,6 +30,14 @@ public class Collector extends SubsystemBase{
         collector.setVoltage(12.0);
     }
 
+    public void slowIntake() {
+        collector.setVoltage(-3);
+    }
+
+    public void slowOuttake() {
+        collector.setVoltage(3);
+    }
+
     public void collectorStop(){
         collector.setVoltage(0.0);
     }

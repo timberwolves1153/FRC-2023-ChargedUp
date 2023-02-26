@@ -3,18 +3,12 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix.sensors.Pigeon2;
-import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class AutoBalanceWithRoll extends CommandBase{
+public class QuickAutoBalance extends CommandBase{
     private Swerve swerve;
     
     private DoubleSupplier translationSup;
@@ -22,7 +16,7 @@ public class AutoBalanceWithRoll extends CommandBase{
     private BooleanSupplier robotCentricSup;
     private boolean haveTipped = false;
     
-    public AutoBalanceWithRoll(Swerve swerve, BooleanSupplier robotCentricSup) {
+    public QuickAutoBalance(Swerve swerve, BooleanSupplier robotCentricSup) {
         this.swerve = swerve;
         addRequirements(swerve);
         this.robotCentricSup =  robotCentricSup;
@@ -48,15 +42,6 @@ public class AutoBalanceWithRoll extends CommandBase{
                     true
                     );
                 }
-            } else if(swerve.getRoll() > swerve.getInitRoll() + Constants.rollDeadband) {
-                //System.out.println("backwards Balancing With Roll");
-                haveTipped = true;
-                swerve.drive(
-                    new Translation2d(0.4, 0.0), 
-                0.0, 
-                !robotCentricSup.getAsBoolean(), 
-                true
-            );
             } else {
                 //System.out.println("flat Balancing With Roll");
                 swerve.drive(
@@ -72,3 +57,4 @@ public class AutoBalanceWithRoll extends CommandBase{
         haveTipped = false;
     }
 }
+

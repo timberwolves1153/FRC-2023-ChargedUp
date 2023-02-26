@@ -15,24 +15,25 @@
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 // import frc.robot.Constants;
 // import frc.robot.commands.AutoBalanceWithRoll;
-// import frc.robot.commands.PivotToPosition;
-// import frc.robot.subsystems.Collector;
-// import frc.robot.subsystems.Extender;
-// import frc.robot.subsystems.Pivot;
+// // import frc.robot.commands.PivotToPosition;
+// // import frc.robot.subsystems.Collector;
+// // import frc.robot.subsystems.Extender;
+// // import frc.robot.subsystems.Pivot;
 // import frc.robot.subsystems.Swerve;
 
-// public class AutoBalanceAuto extends AutoBase {
+// public class AutoBalanceAuto extends PPAutoBase {
     
 //     //Swerve s_Swerve;
-//     private final String BALANCE_AUTO_PATH1 = "pathplanner/generatedJSON/ScoreAndBalancePath1.wpilib.json";
-//     private final String BALANCE_AUTO_PATH2 = "pathplanner/generatedJSON/ScoreAndBalancePath2.wpilib.json";
+//     // private final String BALANCE_AUTO_PATH1 = "pathplanner/generatedJSON/ScoreAndBalancePath1.wpilib.json";
+//     // private final String BALANCE_AUTO_PATH2 = "pathplanner/generatedJSON/ScoreAndBalancePath2.wpilib.json";
+//     //private final String BALANCE_PATH = "pathplanner/generatedJSON/Score "
 //     Trajectory trajectory;
 //     Trajectory trajectory2;
 
-//     SwerveControllerCommand TrajectoryPath1 = baseSwerveCommand(trajectory);
-//     SwerveControllerCommand trajectoryPath2 = baseSwerveCommand(trajectory2);
+//     // SwerveControllerCommand TrajectoryPath1 = baseSwerveCommand(trajectory);
+//     // SwerveControllerCommand trajectoryPath2 = baseSwerveCommand(trajectory2);
 
-//     public AutoBalanceAuto(Swerve swerve, Pivot pivot, Extender extender, Collector collector) {
+//     public AutoBalanceAuto(Swerve swerve) {
 //         super(swerve);
         
 //         TrajectoryConfig config =
@@ -41,17 +42,7 @@
 //                     Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
 //                 .setKinematics(Constants.Swerve.swerveKinematics);
 
-//         Path path = Filesystem.getDeployDirectory().toPath().resolve(BALANCE_AUTO_PATH1);
-//         Path path2 = Filesystem.getDeployDirectory().toPath().resolve(BALANCE_AUTO_PATH2);
-        
-//         try {
-//             trajectory = TrajectoryUtil.fromPathweaverJson(path);
-//             trajectory2 = TrajectoryUtil.fromPathweaverJson(path2);
-//         } catch (IOException e) {
-//             trajectory = null;
-//             trajectory2 = null;
-//             System.err.println(e.getMessage());
-//         }
+
 
 
 //         addCommands(

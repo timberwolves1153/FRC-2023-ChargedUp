@@ -68,8 +68,10 @@ public class PIDPivot extends PIDSubsystem {
 
         // Only clamps voltage and is called in useOutput()
     public void PIDmovePivot(double volts) {
+        double adjustedVolts = volts + 0.35;
             //negative goes up & positive goes down
-        double clampedVolts = MathUtil.clamp(volts, -5, 5);
+
+        double clampedVolts = MathUtil.clamp(adjustedVolts, -5, 5);
 
         leftPivotMotor.setVoltage(-clampedVolts);
     }
