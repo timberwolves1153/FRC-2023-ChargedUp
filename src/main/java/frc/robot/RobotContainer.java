@@ -20,22 +20,25 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PivotSetpoints;
 //import frc.robot.autos.AutoBalanceAuto;
-import frc.robot.autos.ScoreAndMove;
+//import frc.robot.autos.ScoreAndMove;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
-import frc.robot.commands.DefaultPivot;
+//import frc.robot.commands.DefaultPivot;
 import frc.robot.commands.ExtendIn;
+//import frc.robot.commands.OverridePivot;
 //import frc.robot.commands.ExtendToPosition;
-import frc.robot.commands.PivotToPosition;
+//import frc.robot.commands.PivotToPosition;
+//import frc.robot.commands.OverridePivot;
 // import frc.robot.commands.ExtendIn;
 // import frc.robot.commands.ExtendOut;
 // import frc.robot.commands.ExtendToDistance;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.subsystems.Pivot;
+//import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Collector;
 //import frc.robot.subsystems.Extender;
 import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.PIDExtender;
+import frc.robot.subsystems.PIDPivot;
 import frc.robot.subsystems.Swerve;
 import pabeles.concurrency.IntOperatorTask.Max;
 
@@ -99,32 +102,35 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Pivot pivot = new Pivot();
+    //private final Pivot pivot = new Pivot();
     //private final Extender extender = new Extender();
     private final Collector collector = new Collector();
     private final LEDLights ledLights = new LEDLights();
+    private final PIDExtender pidExtender = new PIDExtender();
+    private final PIDPivot pidPivot = new PIDPivot();
+
+
     //private final ExtendIn extendIn;
     //private final ExtendOut extendOut;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
-    private final PivotToPosition L3;
-    private final PivotToPosition L2;
-    private final PivotToPosition Hybrid;
-    private final PivotToPosition Max;
-    private final PivotToPosition ConeDSS;
-    private final PivotToPosition ConeSSS;
-    private final PivotToPosition Min;
-
-    private final PIDExtender pidExtender = new PIDExtender();
+    // private final PivotToPosition L3;
+    // private final PivotToPosition L2;
+    // private final PivotToPosition Hybrid;
+    // private final PivotToPosition Max;
+    // private final PivotToPosition ConeDSS;
+    // private final PivotToPosition ConeSSS;
+    // private final PivotToPosition Min;
 
     // private final ExtendToPosition extendToL3;
     // private final ExtendToPosition extend1inch;
 
-    private ScoreAndMove scoreAndMove;
+    //private ScoreAndMove scoreAndMove;
    // private AutoBalanceAuto scoreAndBalance;
     private SendableChooser<Command> autoCommandChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -135,21 +141,22 @@ public class RobotContainer {
             )
         );
 
-        pivot.setDefaultCommand(
-            new DefaultPivot(() -> operator.getRawAxis(1), 
-            pivot));
-
+        // pivot.setDefaultCommand(
+        //     new DefaultPivot(() -> operator.getRawAxis(1), 
+        //     pivot));
+        //pidPivot.setDefaultCommand(new OverridePivot(() -> operator.getRawAxis(translationAxis), pidPivot));
+       
         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
         // pivotToPositionTop = new PivotToPosition(0.3, pivot);
         // pivotToPositionBottom = new PivotToPosition(0.55, pivot);
-        L3 = new PivotToPosition(Constants.PivotSetpoints.L3, pivot);
-        L2 = new PivotToPosition(Constants.PivotSetpoints.L2, pivot);
-        Hybrid = new PivotToPosition(Constants.PivotSetpoints.HYBRID, pivot);
-        Max = new PivotToPosition(Constants.PivotSetpoints.MAX, pivot);
-        ConeDSS = new PivotToPosition(Constants.PivotSetpoints.CONE_DSS, pivot);
-        ConeSSS = new PivotToPosition(Constants.PivotSetpoints.CONE_SSS, pivot);
-        Min = new PivotToPosition(Constants.PivotSetpoints.MIN, pivot);
+        // L3 = new PivotToPosition(Constants.PivotSetpoints.L3, pivot);
+        // L2 = new PivotToPosition(Constants.PivotSetpoints.L2, pivot);
+        // Hybrid = new PivotToPosition(Constants.PivotSetpoints.HYBRID, pivot);
+        // Max = new PivotToPosition(Constants.PivotSetpoints.MAX, pivot);
+        // ConeDSS = new PivotToPosition(Constants.PivotSetpoints.CONE_DSS, pivot);
+        // ConeSSS = new PivotToPosition(Constants.PivotSetpoints.CONE_SSS, pivot);
+        // Min = new PivotToPosition(Constants.PivotSetpoints.MIN, pivot);
         // extendToL3 = new ExtendToPosition(extender.distanceToEncoderTicks(22.9), extender);
         // extend1inch = new ExtendToPosition(extender.distanceToEncoderTicks(1), extender);
 
@@ -158,7 +165,7 @@ public class RobotContainer {
         //extendOut = new ExtendOut(extender);
 
 
-        autoCommandChooser.setDefaultOption("Move and Score", scoreAndMove);
+        //autoCommandChooser.setDefaultOption("Move and Score", scoreAndMove);
         //autoCommandChooser.addOption("Score and Balacne", scoreAndBalance);
 
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
@@ -177,6 +184,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driveA.whileTrue(autoBalanceWithRoll);
@@ -184,11 +192,14 @@ public class RobotContainer {
 
         /* Operator Buttons */
 
-        opYButton.whileTrue(new InstantCommand(() -> pivot.pivotUp()));
-        opYButton.onFalse(new InstantCommand(() -> pivot.pivotStop()));
-
-        opAButton.whileTrue(new InstantCommand(() -> pivot.pivotDown()));
-        opAButton.onFalse(new InstantCommand(() -> pivot.pivotStop()));
+        
+        // opYButton.onTrue(Commands.runOnce(() -> {pidPivot.disable(); pidPivot.pivotUp();}));
+        // opYButton.onFalse(new InstantCommand(() -> pidPivot.holdPosition()));
+        
+        // opAButton.onTrue(Commands.runOnce(() -> {pidPivot.disable(); pidPivot.pivotDown();}));
+        // opAButton.onFalse(new InstantCommand(() -> pidPivot.holdPosition()));
+       // opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpoint(0.5), pidPivot));
+        
         
         opXButton.whileTrue(new InstantCommand(() -> pidExtender.extendOut()));
         opXButton.onFalse(new InstantCommand(() -> pidExtender.stop()));
@@ -202,9 +213,11 @@ public class RobotContainer {
         opRightBumper.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
         opRightBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-        atariButton1.onTrue(Hybrid.withTimeout(1.75));
-        atariButton2.onTrue(L2.withTimeout(1.75));
+        // atariButton1.onTrue(Hybrid.withTimeout(1.75));
+        // atariButton2.onTrue(L2.withTimeout(1.75));
         // atariButton3.onTrue(L3);
+        atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(7.5), pidPivot));
+        atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(19), pidPivot));
         // atariButton3.onTrue(extendToL3);
        // atariButton3.onTrue(extendToL3);
        // atariButton4.onTrue(Max);
@@ -215,10 +228,10 @@ public class RobotContainer {
         // atariButton5.onFalse(new InstantCommand(() -> extender.stop()));
         
         //atariButton6.onTrue(new InstantCommand(() -> pidExtender.setSetpoint((pidExtender.getController().getSetpoint())+1)).repeatedly());
-        atariButton5.whileTrue(new ExtendIn(pidExtender));
+        atariButton6.whileTrue(new ExtendIn(pidExtender));
 
-        atariButton6.onFalse(new InstantCommand(() -> pidExtender.holdPosition()));
-        atariButton6.onTrue(Commands.runOnce(() -> {pidExtender.disable(); pidExtender.extendOut();}));
+        atariButton5.onFalse(new InstantCommand(() -> pidExtender.holdPosition()));
+        atariButton5.onTrue(Commands.runOnce(() -> {pidExtender.disable(); pidExtender.extendOut();}));
         //atariButton6.onFalse(new InstantCommand(() -> pidExtender.holdPosition()));
         // atariButton6.whileTrue(new InstantCommand(() -> extender.extendOut()));
         // atariButton6.onFalse(new InstantCommand(() -> extender.stop()));
@@ -229,12 +242,15 @@ public class RobotContainer {
         atariButton8.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
         atariButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-        atariButton9.onTrue(ConeDSS.withTimeout(1.75));
-        atariButton10.onTrue(ConeSSS.withTimeout(1.75));
+        
+        opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
+        opAButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
+        // atariButton9.onTrue(ConeDSS.withTimeout(1.75));
+        // atariButton10.onTrue(ConeSSS.withTimeout(1.75));
 
         // atariButton12.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-5), pidExtender));
-        // atariButton10.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(22.9), pidExtender));
-
+        atariButton10.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
+        //atariButton12.onTrue(Commands.runOnce(() -> pidPivot.setSetpoint(0.5), pidPivot));
         //atariButton12.onTrue(extend1inch);
         //atariButton12.onTrue(Min.withTimeout(1.75));
         // opStart.onTrue(pivotToPositionTop.withTimeout(1.75));
@@ -266,7 +282,8 @@ public class RobotContainer {
         //return new TestAuto(testTrajectory, , s_Swerve);
         //return null;
        //return autoCommandChooser.getSelected();
-       return new ScoreAndMove(s_Swerve, pivot, collector);
+      // return new ScoreAndMove(s_Swerve, pivot, collector);
+      return null;
     }
 
 }

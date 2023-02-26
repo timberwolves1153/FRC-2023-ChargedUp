@@ -61,7 +61,7 @@ public class PIDExtender extends PIDSubsystem {
     }
 
     public void extenderPidMove(double volts){
-        double clampedVolts = MathUtil.clamp(volts, -6, 12);
+        double clampedVolts = MathUtil.clamp(volts, -6, 6);
         extenderMotor.setVoltage(clampedVolts);
     }
 
@@ -86,7 +86,7 @@ public class PIDExtender extends PIDSubsystem {
         getController().reset();
         enable();
     }
-
+//call this in robotcontainer so extender can convert inches to ticks for the setpoint
     public void setSetpointInches(double inches) {
         double newSetpoint = distanceToEncoderTicks(inches);
         setSetpoint(newSetpoint);

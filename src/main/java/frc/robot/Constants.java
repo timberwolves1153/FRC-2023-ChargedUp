@@ -187,7 +187,7 @@ public final class Constants {
         public static final double L3 = 0.55;//0.39;
         public static final double MAX = 0.45;//0.3;
         public static final double MIN = 0.75; // THIS IS FOR INSIDE THE FRAME PERIMETER - MIGHT NEED TO CHANGE
-        public static final double CONE_DSS =  0.43;
+        public static final double CONE_DSS =  0.4835;
         public static final double CONE_SSS = 0.588;
     }
 }

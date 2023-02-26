@@ -23,11 +23,11 @@ public class Collector extends SubsystemBase{
     }
 
     public void collectorIntake(){
-        collector.setVoltage(-10.0);
+        collector.setVoltage(-12.0);
     }
 
     public void collectorOuttake(){
-        collector.setVoltage(10.0);
+        collector.setVoltage(12.0);
     }
 
     public void collectorStop(){
