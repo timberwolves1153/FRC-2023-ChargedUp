@@ -13,6 +13,7 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static final double stickDeadband = 0.1;
     public static final double rollDeadband = 5;
+    public static final boolean competitionRobot = false;
 
     public static final class Swerve {
         public static final int pigeonID = 5;
