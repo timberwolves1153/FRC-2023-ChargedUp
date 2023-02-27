@@ -1,9 +1,5 @@
 package frc.robot;
 
-import java.time.Instant;
-
-import org.opencv.video.KalmanFilter;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -13,36 +9,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.PivotSetpoints;
-import frc.robot.autos.PPDriveStraight;
-import frc.robot.autos.ScoreandBalanceTest;
-//import frc.robot.autos.AutoBalanceAuto;
-//import frc.robot.autos.ScoreAndMove;
-import frc.robot.autos.exampleAuto;
+import frc.robot.autos.ScoreAndBalanceTest;
 import frc.robot.commands.AutoBalanceWithRoll;
-//import frc.robot.commands.DefaultPivot;
 import frc.robot.commands.ExtendIn;
-//import frc.robot.commands.OverridePivot;
-//import frc.robot.commands.ExtendToPosition;
-//import frc.robot.commands.PivotToPosition;
-//import frc.robot.commands.OverridePivot;
-// import frc.robot.commands.ExtendIn;
-// import frc.robot.commands.ExtendOut;
-// import frc.robot.commands.ExtendToDistance;
 import frc.robot.commands.TeleopSwerve;
-//import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Collector;
-//import frc.robot.subsystems.Extender;
 import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.PIDExtender;
 import frc.robot.subsystems.PIDPivot;
 import frc.robot.subsystems.Swerve;
-import pabeles.concurrency.IntOperatorTask.Max;
 
 
 /**
@@ -56,9 +33,6 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
     private final Joystick atari = new Joystick(2);
-
-    private SwerveDriveKinematics swerveKinematics;
-
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -104,12 +78,10 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    //private final Pivot pivot = new Pivot();
-    //private final Extender extender = new Extender();
     private final Collector collector = new Collector();
-    private final LEDLights ledLights = new LEDLights();
     private final PIDExtender pidExtender = new PIDExtender();
     private final PIDPivot pidPivot = new PIDPivot();
+    private final LEDLights ledLights = new LEDLights();
 
 
     //private final ExtendIn extendIn;
@@ -294,7 +266,7 @@ public class RobotContainer {
         //return null;
        //return autoCommandChooser.getSelected();
       // return new ScoreAndMove(s_Swerve, pivot, collector);
-      return new ScoreandBalanceTest(s_Swerve);
+      return new ScoreAndBalanceTest(s_Swerve);
     }
 
 }

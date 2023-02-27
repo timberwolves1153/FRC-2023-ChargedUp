@@ -12,10 +12,8 @@ import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,23 +23,28 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     public double initRoll;
-    //public ADIS16470_IMU gyro;
 
     public Swerve() {
-        //gyro = new ADIS16470_IMU(); //new Pigeon2(Constants.Swerve.pigeonID);
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
-       // gyro.configFactoryDefault();
         zeroGyro();
-        //gyro.reset();
 
         initRoll = gyro.getRoll();
 
-        mSwerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.constants),
-            new SwerveModule(1, Constants.Swerve.Mod1.constants),
-            new SwerveModule(2, Constants.Swerve.Mod2.constants),
-            new SwerveModule(3, Constants.Swerve.Mod3.constants)
-        };
+        if (Constants.competitionRobot) {
+            mSwerveMods = new SwerveModule[] {
+                new SwerveModule(0, Constants.Swerve.CompMod0.constants),
+                new SwerveModule(1, Constants.Swerve.CompMod1.constants),
+                new SwerveModule(2, Constants.Swerve.CompMod2.constants),
+                new SwerveModule(3, Constants.Swerve.CompMod3.constants)
+            };
+        } else {
+            mSwerveMods = new SwerveModule[] {
+                new SwerveModule(0, Constants.Swerve.ProtoMod0.constants),
+                new SwerveModule(1, Constants.Swerve.ProtoMod1.constants),
+                new SwerveModule(2, Constants.Swerve.ProtoMod2.constants),
+                new SwerveModule(3, Constants.Swerve.ProtoMod3.constants)
+            };
+        }
 
         /* By pausing init for a second before setting module offsets, we avoid a bug with inverting motors.
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
@@ -115,8 +118,6 @@ public class Swerve extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        //double yaw = gyro.getYaw();
-        // return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - yaw) : Rotation2d.fromDegrees(yaw);
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
@@ -149,13 +150,16 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  
 
-        for(SwerveModule mod : mSwerveMods){
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-            SmartDashboard.putNumber("Gyro Heading", gyro.getYaw());
-            SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch());
-            SmartDashboard.putNumber("Gyro Roll", gyro.getRoll());
+        if (Constants.tuneSwerve) {
+            for(SwerveModule mod : mSwerveMods){
+                SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+                SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
+                SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+            }
         }
+
+        SmartDashboard.putNumber("Gyro Heading", gyro.getYaw());
+        SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch());
+        SmartDashboard.putNumber("Gyro Roll", gyro.getRoll());
     }
 }

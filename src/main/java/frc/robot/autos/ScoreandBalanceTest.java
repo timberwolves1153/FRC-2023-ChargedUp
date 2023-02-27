@@ -8,11 +8,13 @@ import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.WaitCommand;
 import frc.robot.subsystems.Swerve;
 
-public class ScoreandBalanceTest extends PPAutoBase{
-    private Swerve swerve;
-    public ScoreandBalanceTest(Swerve swerve) {
-        super(swerve);
+public class ScoreAndBalanceTest extends PPAutoBase {
 
+    private Swerve swerve;
+
+    public ScoreAndBalanceTest(Swerve swerve) {
+        super(swerve);
+        
         // PathPlannerTrajectory path1 = PathPlanner.loadPath("ScoreAndMove1", new PathConstraints(3, 2));
         // PathPlannerTrajectory path2 = PathPlanner.loadPath("TestPath2", new PathConstraints(3, 2));
 

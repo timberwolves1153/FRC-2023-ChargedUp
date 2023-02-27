@@ -21,7 +21,8 @@ public class AutoBalanceWithRoll extends CommandBase{
     private DoubleSupplier strafeSup;
     private BooleanSupplier robotCentricSup;
     private boolean haveTipped = false;
-    
+    public static final double rollDeadband = 5;
+
     public AutoBalanceWithRoll(Swerve swerve, BooleanSupplier robotCentricSup) {
         this.swerve = swerve;
         addRequirements(swerve);
@@ -31,7 +32,7 @@ public class AutoBalanceWithRoll extends CommandBase{
     @Override
     public void execute() {
             
-            if (swerve.getRoll() < swerve.getInitRoll() - Constants.rollDeadband)  {
+            if (swerve.getRoll() < swerve.getInitRoll() - rollDeadband)  {
                 //System.out.println("forwards Balancing With Roll");
                 if (!haveTipped) {
                     swerve.drive(
@@ -48,7 +49,7 @@ public class AutoBalanceWithRoll extends CommandBase{
                     true
                     );
                 }
-            } else if(swerve.getRoll() > swerve.getInitRoll() + Constants.rollDeadband) {
+            } else if(swerve.getRoll() > swerve.getInitRoll() + rollDeadband) {
                 //System.out.println("backwards Balancing With Roll");
                 haveTipped = true;
                 swerve.drive(

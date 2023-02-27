@@ -15,6 +15,7 @@ public class QuickAutoBalance extends CommandBase{
     private DoubleSupplier strafeSup;
     private BooleanSupplier robotCentricSup;
     private boolean haveTipped = false;
+    public static final double rollDeadband = 5;
     
     public QuickAutoBalance(Swerve swerve, BooleanSupplier robotCentricSup) {
         this.swerve = swerve;
@@ -25,7 +26,7 @@ public class QuickAutoBalance extends CommandBase{
     @Override
     public void execute() {
             
-            if (swerve.getRoll() < swerve.getInitRoll() - Constants.rollDeadband)  {
+            if (swerve.getRoll() < swerve.getInitRoll() - rollDeadband)  {
                 //System.out.println("forwards Balancing With Roll");
                 if (!haveTipped) {
                     swerve.drive(
