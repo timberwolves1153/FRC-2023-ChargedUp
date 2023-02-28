@@ -49,6 +49,7 @@ public class SwerveModule {
         desiredState = CTREModuleState.optimize(desiredState, getState().angle); 
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
+        
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){

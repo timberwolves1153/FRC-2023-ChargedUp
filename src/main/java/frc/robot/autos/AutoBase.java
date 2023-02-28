@@ -5,6 +5,7 @@ import java.nio.file.Path;
 
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -35,7 +36,12 @@ public class AutoBase extends SequentialCommandGroup {
     }
 
         public SwerveControllerCommand WPIbaseSwerveCommand(Trajectory trajectory) {
-            SwerveControllerCommand command = new SwerveControllerCommand(
+            //HolonomicDriveController controller = new HolonomicDriveController(new PIDController(Constants.AutoConstants.kPXController, 0, 0), new PIDController(Constants.AutoConstants.kPYController, 0, 0), thetaController);
+            //SwerveControllerCommand command2 = new SwerveControllerCommand(trajectory, swerve::getPose, Constants.Swerve.swerveKinematics, controller, trajectory,getstat, swerve::setModuleStates, swer)
+            SwerveControllerCommand command = new SwerveControllerCommand(trajectory, swerve::getPose, Constants.Swerve.swerveKinematics, new PIDController(Constants.AutoConstants.kPXController, 0, 0), new PIDController(Constants.AutoConstants.kPYController, 0, 0), thetaController, swerve::setModuleStates, swerve);
+      
+            
+            new SwerveControllerCommand(
                 trajectory,
                 swerve::getPose,
                 Constants.Swerve.swerveKinematics,
