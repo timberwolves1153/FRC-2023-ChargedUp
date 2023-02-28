@@ -25,6 +25,8 @@ import frc.robot.autos.ScoreandBalanceTest;
 //import frc.robot.autos.ScoreAndMove;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
+import frc.robot.commands.ConeIntake;
+import frc.robot.commands.CubeIntake;
 //import frc.robot.commands.DefaultPivot;
 import frc.robot.commands.ExtendIn;
 //import frc.robot.commands.OverridePivot;
@@ -111,7 +113,10 @@ public class RobotContainer {
     private final PIDExtender pidExtender = new PIDExtender();
     private final PIDPivot pidPivot = new PIDPivot();
 
+    /* Commands */
 
+    private final ConeIntake coneIntake = new ConeIntake(collector);
+    private final CubeIntake cubeIntake = new CubeIntake(collector);
     //private final ExtendIn extendIn;
     //private final ExtendOut extendOut;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
@@ -209,10 +214,10 @@ public class RobotContainer {
         // opBButton.whileTrue(new InstantCommand(() -> pidExtender.extendIn()));
         // opBButton.onFalse(new InstantCommand(() -> pidExtender.stop())); 
 
-        opLeftBumper.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
-        opLeftBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        opLeftBumper.whileTrue(coneIntake);
+        //opLeftBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-        opRightBumper.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
+        opRightBumper.whileTrue(cubeIntake);
         opRightBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
         // atariButton1.onTrue(Hybrid.withTimeout(1.75));
@@ -222,9 +227,9 @@ public class RobotContainer {
         opBButton.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(22.9), pidExtender));
         opStart.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-5), pidExtender));
         atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-50), pidPivot));
-        atariButton1.onTrue(new InstantCommand(() -> collector.slowIntake()));
-        atariButton2.onTrue(new InstantCommand(() -> collector.slowIntake()));
-        atariButton3.onTrue(new InstantCommand(() -> collector.slowIntake()));
+        // atariButton1.onTrue(new InstantCommand(() -> collector.slowIntake()));
+        // atariButton2.onTrue(new InstantCommand(() -> collector.slowIntake()));
+        // atariButton3.onTrue(new InstantCommand(() -> collector.slowIntake()));
         atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(15), pidPivot));
         //atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(7), pidExtender));
         atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(19), pidPivot));
@@ -247,12 +252,20 @@ public class RobotContainer {
         // atariButton6.whileTrue(new InstantCommand(() -> extender.extendOut()));
         // atariButton6.onFalse(new InstantCommand(() -> extender.stop()));
 
-        atariButton7.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
-        atariButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        //atariButton7.whileTrue(new InstantCommand(() -> collector.collectorIntake()));
+        //holds cone inside the robot
+        //outtakes cube
+        atariButton7.whileTrue(coneIntake);
+        //atariButton7.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-        atariButton8.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
-        atariButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        //atariButton8.whileTrue(new InstantCommand(() -> collector.collectorOuttake()));
+        //holds the cube inside the robot
+        //outtakes cone
+        atariButton8.whileTrue(cubeIntake);
+        //atariButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
+        atariButton9.onTrue(new InstantCommand(() -> collector.collectorStop()));
+        atariButton9.onFalse(new InstantCommand(() -> collector.collectorStop()));
         
         opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
         opAButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
