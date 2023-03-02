@@ -63,8 +63,10 @@ public class SwerveModule {
     }
 
     private void setAngle(SwerveModuleState desiredState){
+
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        
+        Rotation2d oldAngle = getAngle();
+        angle = optimizeTurn(oldAngle, angle);
         mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
         lastAngle = angle;
     }
@@ -75,6 +77,39 @@ public class SwerveModule {
 
     public Rotation2d getCanCoder(){
         return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
+    }
+
+    public double makePositiveDegrees(double angle) {
+        double degrees = angle;
+        degrees = degrees % 360;
+        if(degrees < 0.0) {
+            degrees = degrees + 360;
+        }
+        return degrees;
+    }
+
+    public double makePositiveDegrees(Rotation2d angle) {
+        return makePositiveDegrees(angle.getDegrees());
+    }
+
+    public Rotation2d optimizeTurn(Rotation2d oldAngle, Rotation2d newAngle) {
+        double steerAngle = makePositiveDegrees(newAngle);
+        steerAngle %= (360);
+        if(steerAngle < 0.0) {
+            steerAngle = steerAngle + 360;
+        }
+        double difference = steerAngle - oldAngle.getDegrees();
+        // change the target angle so the difference is in the range -360 to 360 instead of 0 to 360
+        if (difference >= 360) {
+            steerAngle = steerAngle - 360;
+        } else if (difference < -360) {
+            steerAngle  = steerAngle + 360;
+        } 
+        difference = steerAngle - oldAngle.getDegrees();
+        if ( difference > 90 || difference < -90) {
+            steerAngle = steerAngle + 180;
+        } 
+        return Rotation2d.fromDegrees(makePositiveDegrees(steerAngle));
     }
 
     public void resetToAbsolute(){
