@@ -16,7 +16,10 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "HighNodePivot1",
+          "HighNodeExtender1"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -106,6 +109,56 @@
         "x": 2.058229073723105,
         "y": 4.252838336274963
       },
+      "nextControl": {
+        "x": 1.624300684498805,
+        "y": 4.207161663725038
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.3322891090226623,
+        "y": 3.4257504412444724
+      },
+      "prevControl": {
+        "x": 1.8412648791109543,
+        "y": 3.7569063172314374
+      },
+      "nextControl": {
+        "x": 2.66687529196016,
+        "y": 3.200099294612207
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.878763603681054,
+        "y": 3.3115587598696563
+      },
+      "prevControl": {
+        "x": 4.764571922306238,
+        "y": 3.291174318160603
+      },
       "nextControl": null,
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -120,8 +173,39 @@
       }
     }
   ],
-  "maxVelocity": 3.75,
-  "maxAcceleration": 2.0,
-  "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.01,
+      "names": [
+        "ConeOuttake"
+      ]
+    },
+    {
+      "position": 1.0,
+      "names": [
+        "ReadyCubePositionPivot",
+        "ReadyCubePositionExtender"
+      ]
+    },
+    {
+      "position": 2.0,
+      "names": [
+        "CubeIntake",
+        "GroundCubePositionPivot"
+      ]
+    },
+    {
+      "position": 3.6,
+      "names": [
+        "HighNodePivot2",
+        "HighNodeExtender2"
+      ]
+    },
+    {
+      "position": 4.145454545454515,
+      "names": [
+        "CubeOuttake"
+      ]
+    }
+  ]
 }

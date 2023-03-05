@@ -21,7 +21,10 @@ public class PIDExtender extends PIDSubsystem {
     public PIDExtender(){
         super(new PIDController(0.5, 0.001, 0));
         
+
         extenderMotor = new CANSparkMax(deviceID, MotorType.kBrushless);
+
+        
         /**
          * The RestoreFactoryDefaults method can be used to reset the configuration parameters
          * in the SPARK MAX to their factory default state. If no argument is passed, these
@@ -30,7 +33,9 @@ public class PIDExtender extends PIDSubsystem {
         extenderMotor.restoreFactoryDefaults();
         extenderMotor.setIdleMode(IdleMode.kBrake);
         extenderMotor.setInverted(true);
+        //extenderMotor.setSmartCurrentLimit(40);
         extenderMotor.burnFlash();
+
 
         // initialze encoder objects
         extenderEncoder = extenderMotor.getEncoder();
@@ -47,12 +52,12 @@ public class PIDExtender extends PIDSubsystem {
 
     @Override
     public void useOutput(double output, double setpoint) {
-        if (isExtenderInSwitchPressed() && output < 0) {
-            extenderPidMove(0);
+        // if (isExtenderInSwitchPressed() && output < 0) {
+        //     extenderPidMove(0);
             
-        } else {
+        // } else {
             extenderPidMove(output);
-        }
+       // }
     }
 
     @Override
@@ -109,6 +114,12 @@ public class PIDExtender extends PIDSubsystem {
     public boolean isExtenderInSwitchPressed(){
         //vex button defaults to true so we need the opposite
         return !extenderLimitSwitch.get();
+    }
+
+    public void resetExtenderEncoder() {
+        resetEncoder();
+        setSetpoint(0);
+        getController().reset();
     }
 
     public double distanceToEncoderTicks(double setpoint) {

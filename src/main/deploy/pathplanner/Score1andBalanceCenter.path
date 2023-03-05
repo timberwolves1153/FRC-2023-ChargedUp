@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.24,
-        "y": 2.722861312705999
+        "x": 1.8184265428359916,
+        "y": 2.7177620167206156
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4724148811718063,
-        "y": 2.722861312705999
+        "x": 2.400804117847552,
+        "y": 2.8776303706453565
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -16,7 +16,10 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "HighNodePivot",
+          "HighNodeExtender"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -24,16 +27,16 @@
     },
     {
       "anchorPoint": {
-        "x": 4.0,
-        "y": 2.72
+        "x": 4.0451643296449,
+        "y": 2.9118878750578014
       },
       "prevControl": {
-        "x": 3.7442931990013015,
-        "y": 2.72
+        "x": 3.5883976041456362,
+        "y": 2.8319536980954307
       },
       "nextControl": {
-        "x": 4.2557068009986985,
-        "y": 2.72
+        "x": 4.433268966068544,
+        "y": 2.979806186431939
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -49,16 +52,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.0900633915282105,
-        "y": 2.884709712412299
+        "x": 6.2833212845912865,
+        "y": 3.037498724570099
       },
       "prevControl": {
-        "x": 7.099160903722053,
-        "y": 2.884709712412299
+        "x": 6.054691820062705,
+        "y": 3.033264845597347
       },
       "nextControl": {
-        "x": 5.080965879334368,
-        "y": 2.884709712412299
+        "x": 6.899956364015293,
+        "y": 3.04891789270758
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -74,12 +77,12 @@
     },
     {
       "anchorPoint": {
-        "x": 4.014595677647414,
-        "y": 3.027517123917858
+        "x": 3.405690913945931,
+        "y": 3.014660388295136
       },
       "prevControl": {
-        "x": 4.519181864967057,
-        "y": 2.9894351475163763
+        "x": 3.3497900226972273,
+        "y": 3.0032412201576544
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -95,5 +98,15 @@
       }
     }
   ],
-  "markers": []
+  "maxVelocity": 2.0,
+  "maxAcceleration": 2.0,
+  "isReversed": null,
+  "markers": [
+    {
+      "position": 0.01,
+      "names": [
+        "Outtake"
+      ]
+    }
+  ]
 }

@@ -96,6 +96,7 @@ public class RobotContainer {
     private final JoystickButton atariButton8 = new JoystickButton(atari, 8);
     private final JoystickButton atariButton9 = new JoystickButton(atari, 9);
     private final JoystickButton atariButton10 = new JoystickButton(atari, 10);
+    private final JoystickButton atariButton11 = new JoystickButton(atari, 11);
     private final JoystickButton atariButton12 = new JoystickButton(atari, 12);
 
     private final JoystickButton opOneButton = new JoystickButton(operator, 1);
@@ -143,7 +144,7 @@ public class RobotContainer {
                 s_Swerve, 
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
+                () -> -driver.getRawAxis(rotationAxis) * 0.8, 
                 () -> robotCentric.getAsBoolean()
             )
         );
@@ -220,19 +221,33 @@ public class RobotContainer {
         opRightBumper.whileTrue(cubeIntake);
         opRightBumper.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
+        opXButton.onTrue(new InstantCommand(() -> collector.dropHinge(), collector));
+        opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
+        atariButton9.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-70), pidPivot));
         // atariButton1.onTrue(Hybrid.withTimeout(1.75));
         // atariButton2.onTrue(L2.withTimeout(1.75));
         // atariButton3.onTrue(L3);
-        opXButton.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(7), pidExtender));
-        opBButton.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(22.9), pidExtender));
-        opStart.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-5), pidExtender));
+        // opXButton.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(7), pidExtender));
+        // opBButton.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(22.9), pidExtender));
+        //opStart.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-5), pidExtender));
         atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-50), pidPivot));
+       // atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-3), pidExtender));
+
+        atariButton12.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot));
+        
+        atariButton10.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(6.5), pidExtender));
+        atariButton10.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-50), pidPivot));
         // atariButton1.onTrue(new InstantCommand(() -> collector.slowIntake()));
         // atariButton2.onTrue(new InstantCommand(() -> collector.slowIntake()));
         // atariButton3.onTrue(new InstantCommand(() -> collector.slowIntake()));
         atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(15), pidPivot));
+        atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5), pidExtender));
         //atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(7), pidExtender));
-        atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(19), pidPivot));
+        atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5), pidPivot));
+        atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(20), pidExtender));
+
+
+        //atariButton4.onTrue(new InstantCommand(() -> pidExtender.resetExtenderEncoder()));
        // atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(22.9), pidExtender));
         // atariButton3.onTrue(extendToL3);
        // atariButton3.onTrue(extendToL3);
@@ -264,16 +279,16 @@ public class RobotContainer {
         atariButton8.whileTrue(cubeIntake);
         //atariButton8.onFalse(new InstantCommand(() -> collector.collectorStop()));
 
-        atariButton9.onTrue(new InstantCommand(() -> collector.collectorStop()));
-        atariButton9.onFalse(new InstantCommand(() -> collector.collectorStop()));
+        atariButton11.onTrue(new InstantCommand(() -> collector.collectorStop()));
+        atariButton11.onFalse(new InstantCommand(() -> collector.collectorStop()));
         
-        opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
-        opAButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
+        // opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
+        // opAButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
         // atariButton9.onTrue(ConeDSS.withTimeout(1.75));
         // atariButton10.onTrue(ConeSSS.withTimeout(1.75));
 
         // atariButton12.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-5), pidExtender));
-        atariButton10.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
+       // atariButton10.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
         //atariButton12.onTrue(Commands.runOnce(() -> pidPivot.setSetpoint(0.5), pidPivot));
         //atariButton12.onTrue(extend1inch);
         //atariButton12.onTrue(Min.withTimeout(1.75));
@@ -307,7 +322,8 @@ public class RobotContainer {
         //return null;
        //return autoCommandChooser.getSelected();
       // return new ScoreAndMove(s_Swerve, pivot, collector);
-      return new ScoreandBalanceTest(s_Swerve);
+      return new PPDriveStraight(s_Swerve, collector, coneIntake, pidPivot); //ScoreandBalanceTest(s_Swerve);
+      //return new SequentialCommandGroup()
     }
 
 }

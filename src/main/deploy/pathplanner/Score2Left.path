@@ -2,21 +2,24 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.7727498702860651,
-        "y": 1.0391443005108238
+        "x": 1.8298457109734734,
+        "y": 4.978757307941967
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5035132619907157,
-        "y": 1.0391443005108238
+        "x": 2.9831816928591097,
+        "y": 4.967338139804485
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "HighNodePivot1",
+          "HighNodeExtender1"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -24,16 +27,16 @@
     },
     {
       "anchorPoint": {
-        "x": 4.3649010374943815,
-        "y": 0.9363717872734894
+        "x": 4.364901037494382,
+        "y": 4.818888954017225
       },
       "prevControl": {
-        "x": 4.136548356999578,
-        "y": 0.9401152738389777
+        "x": 4.205032683569641,
+        "y": 4.818888954017225
       },
       "nextControl": {
-        "x": 5.061470293880759,
-        "y": 0.9249526191360087
+        "x": 4.741733586031274,
+        "y": 4.818888954017225
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -49,18 +52,18 @@
     },
     {
       "anchorPoint": {
-        "x": 6.02068041742921,
-        "y": 1.8841627426844594
+        "x": 6.922794700290257,
+        "y": 4.499152246167741
       },
       "prevControl": {
-        "x": 5.8037162228170605,
-        "y": 1.5301685304225314
+        "x": 5.738755734318787,
+        "y": 4.696492073829647
       },
       "nextControl": {
-        "x": 6.394525929609469,
-        "y": 2.494121209925935
+        "x": 7.059824717940036,
+        "y": 4.476313909892778
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 0.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -74,18 +77,18 @@
     },
     {
       "anchorPoint": {
-        "x": 5.837973727229505,
-        "y": 3.2544629191822487
+        "x": 5.35836866545528,
+        "y": 4.5905055912675925
       },
       "prevControl": {
-        "x": 6.351836293416175,
-        "y": 3.2544629191822487
+        "x": 6.112033762529063,
+        "y": 4.5905055912675925
       },
       "nextControl": {
-        "x": 5.11278911760261,
-        "y": 3.2544629191822487
+        "x": 2.7018105083727137,
+        "y": 4.5905055912675925
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -99,29 +102,59 @@
     },
     {
       "anchorPoint": {
-        "x": 4.05658349778238,
-        "y": 3.2316245829072856
+        "x": 1.841264879110955,
+        "y": 4.23
       },
       "prevControl": {
-        "x": 4.616122736518976,
-        "y": 3.220205414769804
+        "x": 2.058229073723105,
+        "y": 4.252838336274963
       },
       "nextControl": null,
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "CubeOuttake"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
     }
   ],
-  "maxVelocity": 2.0,
-  "maxAcceleration": 1.5,
+  "maxVelocity": 3.75,
+  "maxAcceleration": 2.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.01,
+      "names": [
+        "ConeOuttake"
+      ]
+    },
+    {
+      "position": 1.2509090909090446,
+      "names": [
+        "ReadyCubePositionPivot",
+        "ReadyCubePositionExtender"
+      ]
+    },
+    {
+      "position": 2.0363636363636526,
+      "names": [
+        "CubeIntake",
+        "GroundCubePositionPivot"
+      ]
+    },
+    {
+      "position": 3.75,
+      "names": [
+        "HighNodePivot2",
+        "HighNodeExtender2"
+      ]
+    }
+  ]
 }
