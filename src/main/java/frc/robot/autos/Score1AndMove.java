@@ -25,9 +25,9 @@ public class Score1AndMove extends PPAutoBase{
         //TODO Auto-generated constructor stub
 
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("Outtake", new CubeIntake(collector));
-        eventMap.put("HighNodePivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5)));
-        eventMap.put("HighNodeExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(20)));
+        // eventMap.put("Outtake", new CubeIntake(collector));
+        // eventMap.put("HighNodePivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5)));
+        // eventMap.put("HighNodeExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(20)));
 
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score1AndMove, true), Score1AndMove.getMarkers(), eventMap);
 

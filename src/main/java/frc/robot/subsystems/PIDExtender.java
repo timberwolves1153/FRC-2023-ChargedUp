@@ -33,7 +33,7 @@ public class PIDExtender extends PIDSubsystem {
         extenderMotor.restoreFactoryDefaults();
         extenderMotor.setIdleMode(IdleMode.kBrake);
         extenderMotor.setInverted(true);
-        //extenderMotor.setSmartCurrentLimit(40);
+        extenderMotor.setSmartCurrentLimit(40);
         extenderMotor.burnFlash();
 
 
@@ -66,7 +66,7 @@ public class PIDExtender extends PIDSubsystem {
     }
 
     public void extenderPidMove(double volts){
-        double clampedVolts = MathUtil.clamp(volts, -6, 6);
+        double clampedVolts = MathUtil.clamp(volts, -12, 12);
         extenderMotor.setVoltage(clampedVolts);
     }
 

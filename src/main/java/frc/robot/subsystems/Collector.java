@@ -15,7 +15,7 @@ public class Collector extends SubsystemBase{
     public Collector(){
         
         collector = new WPI_TalonSRX(59);
-        hinge = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+        //hinge = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
         config();
 
     }
@@ -24,13 +24,13 @@ public class Collector extends SubsystemBase{
         collector.configFactoryDefault();
         collector.setNeutralMode(NeutralMode.Coast);
 
-        hinge.set(true);
+        //hinge.set(true);
     }
 
-    public void dropHinge() {
-        hinge.toggle();
-        //hinge.set(false);
-    }
+    // public void dropHinge() {
+    //     hinge.toggle();
+    //     //hinge.set(false);
+    // }
 
    
 
