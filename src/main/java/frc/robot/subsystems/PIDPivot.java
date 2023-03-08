@@ -85,8 +85,8 @@ public class PIDPivot extends PIDSubsystem {
         SmartDashboard.putNumber("PIDPivot Position Radians", getRadians());
         SmartDashboard.putNumber("Pivot Positon Degrees", getDegrees());
         SmartDashboard.putNumber("Pivot Positon Encoder Position", getCorrectedEncounterTicks());
-        SmartDashboard.putBoolean("Is at Max height", isAtMaxHeight());
-        SmartDashboard.putBoolean("Is at Min Heigh", isAtMinHeight());
+        SmartDashboard.putBoolean("Is at MIN height", isAtMinHeight());
+        SmartDashboard.putBoolean("Is at MAX Heigh", isAtMaxHeight());
         SmartDashboard.putBoolean("PID Pivot Enabled", isEnabled());
     }
 
