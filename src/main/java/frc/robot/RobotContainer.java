@@ -78,28 +78,16 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Collector collector = new Collector();
-    private final PIDExtender pidExtender = new PIDExtender();
     private final PIDPivot pidPivot = new PIDPivot();
-    private final LEDLights ledLights = new LEDLights();
+    // private final Collector collector = new Collector();
+    // private final PIDExtender pidExtender = new PIDExtender();
+    // private final LEDLights ledLights = new LEDLights();
 
 
     //private final ExtendIn extendIn;
     //private final ExtendOut extendOut;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
-    // private final PivotToPosition L3;
-    // private final PivotToPosition L2;
-    // private final PivotToPosition Hybrid;
-    // private final PivotToPosition Max;
-    // private final PivotToPosition ConeDSS;
-    // private final PivotToPosition ConeSSS;
-    // private final PivotToPosition Min;
-
-    // private final ExtendToPosition extendToL3;
-    // private final ExtendToPosition extend1inch;
-
-    //private ScoreAndMove scoreAndMove;
-   // private AutoBalanceAuto scoreAndBalance;
+    
     private SendableChooser<Command> autoCommandChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */

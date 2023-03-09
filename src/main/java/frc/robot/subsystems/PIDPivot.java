@@ -8,14 +8,16 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import frc.robot.Constants;
 
 public class PIDPivot extends PIDSubsystem {
+    
     private CANSparkMax leftPivotMotor;
     private CANSparkMax rightPivotMotor;
     private DigitalInput upperLimitSwitch;
     private DigitalInput lowerLimitSwitch;
     private DutyCycleEncoder pivotEncoder;
-    private final double UNIT_CIRCLE_OFFSET = .561;
+    private final double UNIT_CIRCLE_OFFSET = Constants.competitionRobot ? .00 : .47;
 
     public PIDPivot() {
         super(new PIDController(8.5, 0.05, 0));
@@ -79,15 +81,18 @@ public class PIDPivot extends PIDSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-        SmartDashboard.putNumber("Pivot Setpoint", getSetpoint());
-        SmartDashboard.putNumber("Left Pivot Output", leftPivotMotor.getAppliedOutput());
-        SmartDashboard.putNumber("Right Pivot Output", rightPivotMotor.getAppliedOutput());
-        SmartDashboard.putNumber("PIDPivot Position Radians", getRadians());
-        SmartDashboard.putNumber("Pivot Positon Degrees", getDegrees());
-        SmartDashboard.putNumber("Pivot Positon Encoder Position", getCorrectedEncounterTicks());
-        SmartDashboard.putBoolean("Is at Max height", isAtMaxHeight());
-        SmartDashboard.putBoolean("Is at Min Heigh", isAtMinHeight());
-        SmartDashboard.putBoolean("PID Pivot Enabled", isEnabled());
+
+        if (Constants.tunePivot) {
+            SmartDashboard.putNumber("Pivot Setpoint", getSetpoint());
+            SmartDashboard.putNumber("Left Pivot Output", leftPivotMotor.getAppliedOutput());
+            SmartDashboard.putNumber("Right Pivot Output", rightPivotMotor.getAppliedOutput());
+            SmartDashboard.putNumber("PIDPivot Position Radians", getRadians());
+            SmartDashboard.putNumber("Pivot Positon Degrees", getDegrees());
+            SmartDashboard.putNumber("Pivot Positon Encoder Position", getCorrectedEncounterTicks());
+            SmartDashboard.putBoolean("Is at Max height", isAtMaxHeight());
+            SmartDashboard.putBoolean("Is at Min Heigh", isAtMinHeight());
+            SmartDashboard.putBoolean("PID Pivot Enabled", isEnabled());
+        }
     }
 
     public void pivotUp() {
