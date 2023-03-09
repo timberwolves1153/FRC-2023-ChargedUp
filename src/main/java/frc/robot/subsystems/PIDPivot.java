@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import frc.robot.Constants;
 
 public class PIDPivot extends PIDSubsystem {
     private CANSparkMax leftPivotMotor;
@@ -15,11 +16,16 @@ public class PIDPivot extends PIDSubsystem {
     private DigitalInput upperLimitSwitch;
     private DigitalInput lowerLimitSwitch;
     private DutyCycleEncoder pivotEncoder;
-    private final double UNIT_CIRCLE_OFFSET = .561;
-
+    private final double PROTO_UNIT_CIRCLE_OFFSET = .561;
+    private final double COMP_UNIT_CIRCLE_OFFSET = 0.647;
+    private double UNIT_CIRCLE_OFFSET;
     public PIDPivot() {
         super(new PIDController(8.5, 0.05, 0));
-        
+        if (Constants.competitionRobot) {
+            UNIT_CIRCLE_OFFSET = COMP_UNIT_CIRCLE_OFFSET;
+        } else {
+            UNIT_CIRCLE_OFFSET = PROTO_UNIT_CIRCLE_OFFSET;
+        }
         //pivotFeedforward = new ArmFeedforward(ArmConstants.kSVolts, ArmConstants.kGVolts, 0);
         leftPivotMotor = new CANSparkMax(60, MotorType.kBrushless);
         rightPivotMotor = new CANSparkMax(61, MotorType.kBrushless);
@@ -79,15 +85,17 @@ public class PIDPivot extends PIDSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-        SmartDashboard.putNumber("Pivot Setpoint", getSetpoint());
-        SmartDashboard.putNumber("Left Pivot Output", leftPivotMotor.getAppliedOutput());
-        SmartDashboard.putNumber("Right Pivot Output", rightPivotMotor.getAppliedOutput());
-        SmartDashboard.putNumber("PIDPivot Position Radians", getRadians());
-        SmartDashboard.putNumber("Pivot Positon Degrees", getDegrees());
-        SmartDashboard.putNumber("Pivot Positon Encoder Position", getCorrectedEncounterTicks());
-        SmartDashboard.putBoolean("Is at Max height", isAtMaxHeight());
-        SmartDashboard.putBoolean("Is at Min Heigh", isAtMinHeight());
-        SmartDashboard.putBoolean("PID Pivot Enabled", isEnabled());
+        if(Constants.tunePivot) {
+            SmartDashboard.putNumber("Pivot Setpoint", getSetpoint());
+            SmartDashboard.putNumber("Left Pivot Output", leftPivotMotor.getAppliedOutput());
+            SmartDashboard.putNumber("Right Pivot Output", rightPivotMotor.getAppliedOutput());
+            SmartDashboard.putNumber("PIDPivot Position Radians", getRadians());
+            SmartDashboard.putNumber("Pivot Positon Degrees", getDegrees());
+            SmartDashboard.putNumber("Pivot Positon Encoder Position", getCorrectedEncounterTicks());
+            SmartDashboard.putBoolean("Is at Max Height", isAtMaxHeight());
+            SmartDashboard.putBoolean("Is at Min Height", isAtMinHeight());
+            SmartDashboard.putBoolean("PID Pivot Enabled", isEnabled());
+        }
     }
 
     public void pivotUp() {
@@ -103,7 +111,12 @@ public class PIDPivot extends PIDSubsystem {
 
     public double getCorrectedEncounterTicks() {
         //The absolute encoder ticks adjusted to remove the wrap point
-        return (pivotEncoder.getAbsolutePosition() + .5) % 1;
+        if (Constants.competitionRobot) {
+            return pivotEncoder.getAbsolutePosition();
+        } else {
+            return (pivotEncoder.getAbsolutePosition() + .5) % 1;
+        }
+        
     }
 
     public double getRadians() {

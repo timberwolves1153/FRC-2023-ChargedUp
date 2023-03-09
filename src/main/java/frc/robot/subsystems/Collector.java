@@ -22,12 +22,20 @@ public class Collector extends SubsystemBase{
         collector.setNeutralMode(NeutralMode.Coast);
     }
 
-    public void collectorIntake(){
+    public void coneIntake(){
         collector.setVoltage(-12.0);
     }
 
-    public void collectorOuttake(){
+    public void cubeIntake(){
         collector.setVoltage(12.0);
+    }
+
+    public void coneOuttake(){
+        collector.setVoltage(12.0);
+    }
+
+    public void cubeOuttake(){
+        collector.setVoltage(-12.0);
     }
 
     public void slowIntake() {
