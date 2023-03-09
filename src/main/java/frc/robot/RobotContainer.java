@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.PivotSetpoints;
 import frc.robot.autos.CenterScore1AndBalance;
+import frc.robot.autos.LimelightAlign;
 import frc.robot.autos.PPDriveStraight;
 import frc.robot.autos.Score2WithBump;
 import frc.robot.autos.Score1AndMove;
@@ -138,6 +139,8 @@ public class RobotContainer {
 
     //private ScoreAndMove scoreAndMove;
    // private AutoBalanceAuto scoreAndBalance;
+
+   private final LimelightAlign limelightAlign;
     private SendableChooser<Command> autoCommandChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -171,6 +174,8 @@ public class RobotContainer {
         // Min = new PivotToPosition(Constants.PivotSetpoints.MIN, pivot);
         // extendToL3 = new ExtendToPosition(extender.distanceToEncoderTicks(22.9), extender);
         // extend1inch = new ExtendToPosition(extender.distanceToEncoderTicks(1), extender);
+
+        limelightAlign = new LimelightAlign(s_Swerve);
 
         autoCommandChooser = new SendableChooser<Command>();
         //extendIn = new ExtendIn(extender);
@@ -312,6 +317,12 @@ public class RobotContainer {
         //     pidExtender.resetEncoder(); 
         //     pidExtender.holdPosition();
         // }, pidExtender));
+
+        driveStart.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
+        driveStart.onFalse(new InstantCommand(() -> {
+            if(limelightAlign.getCommand() != null) 
+                limelightAlign.getCommand().cancel();
+        }));
         
     }
 
