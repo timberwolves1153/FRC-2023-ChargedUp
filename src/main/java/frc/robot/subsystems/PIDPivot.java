@@ -22,7 +22,6 @@ public class PIDPivot extends PIDSubsystem {
     public PIDPivot() {
         super(new PIDController(8.5, 0.05, 0));
         
-        //pivotFeedforward = new ArmFeedforward(ArmConstants.kSVolts, ArmConstants.kGVolts, 0);
         leftPivotMotor = new CANSparkMax(60, MotorType.kBrushless);
         rightPivotMotor = new CANSparkMax(61, MotorType.kBrushless);
 
@@ -51,21 +50,13 @@ public class PIDPivot extends PIDSubsystem {
 
     @Override
     public void useOutput(double output, double setpoint) {
-        // if (output < 0 && isAtMaxHeight()) {
-        //     PIDmovePivot(0);
-        // } else if (output > 0 && isAtMinHeight()) {
-        //     PIDmovePivot(0);
-        // } else {
-            PIDmovePivot(output);
-        // }
-        
+            PIDmovePivot(output);        
     }
 
     @Override
     public double getMeasurement() {
         //PID controllers need to use radians b/c standard units
         return getRadians();
-        //return (pivotEncoder.getAbsolutePosition() + .5) % 1;
     }
 
         // Only clamps voltage and is called in useOutput()
@@ -97,11 +88,12 @@ public class PIDPivot extends PIDSubsystem {
 
     public void pivotUp() {
         leftPivotMotor.setVoltage(-5.0);
-            }
+    }
         
     public void pivotDown() {
         leftPivotMotor.setVoltage(4.0);
-            }
+    }
+
     public void pivotStop() {
         leftPivotMotor.setVoltage(0);
     }
@@ -171,6 +163,5 @@ public class PIDPivot extends PIDSubsystem {
     public double degreesToTicks(double degrees) {
         return Math.toRadians(degrees)/ (2 * Math.PI);
     }
-
 
 }

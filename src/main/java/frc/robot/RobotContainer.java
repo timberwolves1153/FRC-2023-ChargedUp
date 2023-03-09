@@ -1,22 +1,16 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-//import frc.robot.autos.ScoreAndBalanceTest;
 import frc.robot.commands.AutoBalanceWithRoll;
-import frc.robot.commands.ExtendIn;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.subsystems.Collector;
-import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.PIDExtender;
 import frc.robot.subsystems.PIDPivot;
 import frc.robot.subsystems.Swerve;
@@ -83,9 +77,6 @@ public class RobotContainer {
     // private final PIDExtender pidExtender = new PIDExtender();
     // private final LEDLights ledLights = new LEDLights();
 
-
-    //private final ExtendIn extendIn;
-    //private final ExtendOut extendOut;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
     
     private SendableChooser<Command> autoCommandChooser;
@@ -101,34 +92,11 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(rotationAxis) * 0.7, 
                 () -> robotCentric.getAsBoolean()
             )
-        );
-
-        // pivot.setDefaultCommand(
-        //     new DefaultPivot(() -> operator.getRawAxis(1), 
-        //     pivot));
-        //pidPivot.setDefaultCommand(new OverridePivot(() -> operator.getRawAxis(translationAxis), pidPivot));
-       
+        );     
         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
-        // pivotToPositionTop = new PivotToPosition(0.3, pivot);
-        // pivotToPositionBottom = new PivotToPosition(0.55, pivot);
-        // L3 = new PivotToPosition(Constants.PivotSetpoints.L3, pivot);
-        // L2 = new PivotToPosition(Constants.PivotSetpoints.L2, pivot);
-        // Hybrid = new PivotToPosition(Constants.PivotSetpoints.HYBRID, pivot);
-        // Max = new PivotToPosition(Constants.PivotSetpoints.MAX, pivot);
-        // ConeDSS = new PivotToPosition(Constants.PivotSetpoints.CONE_DSS, pivot);
-        // ConeSSS = new PivotToPosition(Constants.PivotSetpoints.CONE_SSS, pivot);
-        // Min = new PivotToPosition(Constants.PivotSetpoints.MIN, pivot);
-        // extendToL3 = new ExtendToPosition(extender.distanceToEncoderTicks(22.9), extender);
-        // extend1inch = new ExtendToPosition(extender.distanceToEncoderTicks(1), extender);
 
         autoCommandChooser = new SendableChooser<Command>();
-        //extendIn = new ExtendIn(extender);
-        //extendOut = new ExtendOut(extender);
-
-
-        //autoCommandChooser.setDefaultOption("Move and Score", scoreAndMove);
-        //autoCommandChooser.addOption("Score and Balacne", scoreAndBalance);
 
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
 
