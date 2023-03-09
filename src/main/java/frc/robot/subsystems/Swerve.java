@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -129,12 +130,28 @@ public class Swerve extends SubsystemBase {
         return gyro.getPitch();
     }
 
-    
-
     public void resetModulesToAbsolute(){
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }
+    }
+
+    public void xPosition(boolean isOpenLoop){
+        SwerveModuleState[] swerveModuleStates =
+            new SwerveModuleState[]{
+                new SwerveModuleState(1, Rotation2d.fromDegrees(45)),
+                new SwerveModuleState(1, Rotation2d.fromDegrees(-45)),
+                new SwerveModuleState(1, Rotation2d.fromDegrees(-45)),
+                new SwerveModuleState(1, Rotation2d.fromDegrees(45))
+            };
+        
+       // return swerveModuleStates;
+
+        for(SwerveModule mod : mSwerveMods){
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+        }
+
+        System.out.println("Set to X Position");
     }
 
     public void stop() {
