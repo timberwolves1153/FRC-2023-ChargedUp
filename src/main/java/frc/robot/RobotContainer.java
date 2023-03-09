@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -11,14 +10,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-//import frc.robot.autos.ScoreAndBalanceTest;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.ExtendIn;
 import frc.robot.commands.PivotDown;
 import frc.robot.commands.PivotUp;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.subsystems.Collector;
-import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.PIDExtender;
 import frc.robot.subsystems.PIDPivot;
 import frc.robot.subsystems.Swerve;
@@ -84,18 +80,11 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Collector collector = new Collector();
-    private final PIDExtender pidExtender = new PIDExtender();
     private final PIDPivot pidPivot = new PIDPivot();
-    private final LEDLights ledLights = new LEDLights();
+    private final PIDExtender pidExtender = new PIDExtender();
+//    private final Collector collector = new Collector();
 
-
-    private final ExtendIn extendIn;
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
-
-
-    //private ScoreAndMove scoreAndMove;
-   // private AutoBalanceAuto scoreAndBalance;
     private SendableChooser<Command> autoCommandChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -110,26 +99,14 @@ public class RobotContainer {
                 () -> robotCentric.getAsBoolean()
             )
         );
-
         
-        autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());
-        
+        autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());     
         autoCommandChooser = new SendableChooser<Command>();
-
-        extendIn = new ExtendIn(pidExtender);
-        
-
-
-        //autoCommandChooser.setDefaultOption("Move and Score", scoreAndMove);
-        //autoCommandChooser.addOption("Score and Balacne", scoreAndBalance);
 
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
 
-
-        
         // Configure the button bindings
         configureButtonBindings();
-        CameraServer.startAutomaticCapture(1);
     }
 
     /**
@@ -145,8 +122,8 @@ public class RobotContainer {
         driveA.whileTrue(autoBalanceWithRoll);
         driveA.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
         driveX.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
-        driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
-        driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
+        //driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
+        //driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
         // driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
 
         /* Operator Buttons */

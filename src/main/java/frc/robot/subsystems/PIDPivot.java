@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants;
 
 public class PIDPivot extends PIDSubsystem {
+    
     private CANSparkMax leftPivotMotor;
     private CANSparkMax rightPivotMotor;
     private DigitalInput upperLimitSwitch;
@@ -55,21 +56,13 @@ public class PIDPivot extends PIDSubsystem {
 
     @Override
     public void useOutput(double output, double setpoint) {
-        // if (output < 0 && isAtMaxHeight()) {
-        //     PIDmovePivot(0);
-        // } else if (output > 0 && isAtMinHeight()) {
-        //     PIDmovePivot(0);
-        // } else {
-            PIDmovePivot(output);
-        // }
-        
+            PIDmovePivot(output);        
     }
 
     @Override
     public double getMeasurement() {
         //PID controllers need to use radians b/c standard units
         return getRadians();
-        //return (pivotEncoder.getAbsolutePosition() + .5) % 1;
     }
 
         // Only clamps voltage and is called in useOutput()
@@ -100,11 +93,12 @@ public class PIDPivot extends PIDSubsystem {
 
     public void pivotUp() {
         leftPivotMotor.setVoltage(-5.0);
-            }
+    }
         
     public void pivotDown() {
         leftPivotMotor.setVoltage(4.0);
-            }
+    }
+
     public void pivotStop() {
         leftPivotMotor.setVoltage(0);
     }
@@ -179,6 +173,5 @@ public class PIDPivot extends PIDSubsystem {
     public double degreesToTicks(double degrees) {
         return Math.toRadians(degrees)/ (2 * Math.PI);
     }
-
 
 }
