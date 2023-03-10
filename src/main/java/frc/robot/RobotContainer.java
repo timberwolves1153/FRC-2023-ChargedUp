@@ -100,9 +100,9 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis) * 0.7, 
+                () -> adjustedRobotTranslationSpeed(), 
+                () -> adjustedRobotStrafeSpeed(), 
+                () -> adjustedRobotRotationSpeed(), 
                 () -> robotCentric.getAsBoolean()
             )
         );
@@ -140,7 +140,7 @@ public class RobotContainer {
 
         // if (Constants.competitionRobot) {
             atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-50), pidPivot));
-            atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-0.75), pidExtender));
+            atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
             atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(15), pidPivot));
             atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5), pidExtender));
             atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5), pidPivot));
@@ -220,6 +220,31 @@ public class RobotContainer {
 
     public void lockHinge() {
         collector.lockHinge();
+    }
+
+    public void unlockHinge() {
+        collector.openHinge();
+    }
+
+    public Double adjustedRobotTranslationSpeed() {
+        double defaultSpeed = -driver.getRawAxis(translationAxis);
+        double multiplier = 1;
+        double currentAngle = pidPivot.getDegrees();
+        return defaultSpeed * multiplier;
+    }
+
+    public Double adjustedRobotStrafeSpeed() {
+        double defaultSpeed = -driver.getRawAxis(strafeAxis);
+        double multiplier = 1;
+        double currentAngle = pidPivot.getDegrees();
+        return defaultSpeed * multiplier;
+    }
+
+    public Double adjustedRobotRotationSpeed() {
+        double defaultSpeed = -driver.getRawAxis(rotationAxis) * 0.7;
+        double multiplier = 1;
+        double currentAngle = pidPivot.getDegrees();
+        return defaultSpeed * multiplier;
     }
 
     /**

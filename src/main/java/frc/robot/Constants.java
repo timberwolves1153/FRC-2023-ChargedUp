@@ -14,7 +14,7 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static final boolean competitionRobot = true;
 
-    public static final boolean tuneSwerve = false;
+    public static final boolean tuneSwerve = true;
     public static final boolean tuneExtender = false;
     public static final boolean tunePivot = false;
     public static final boolean tuneCollector = true;
@@ -37,10 +37,10 @@ public final class Constants {
         public static final double proto_mod3Offset = 344.17 + 180;
 
         //TODO: This must be tuned 2/27/23
-        public static final double comp_mod0Offset = 114.43 + 180;
-        public static final double comp_mod1Offset = 83.58 + 180;
-        public static final double comp_mod2Offset = 51.33 + 180;
-        public static final double comp_mod3Offset = 193.62 + 180;
+        public static final double comp_mod0Offset = 291.18;//114.43 + 180;
+        public static final double comp_mod1Offset = 264.814;//83.58 + 180;
+        public static final double comp_mod2Offset = 230.688;//51.33 + 180;
+        public static final double comp_mod3Offset = 13.974;//193.62 + 180;
 
         /* Swerve Kinematics 
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */

@@ -35,8 +35,8 @@ public class Score2NoBump extends PPAutoBase{
          eventMap.put("CubeIntake", new InstantCommand(() -> collector.cubeIntake()));
          eventMap.put("GroundCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-57)));
          eventMap.put("CubeSlowIntake", new InstantCommand(() -> collector.slowCubeIntake()));
-         eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5)));
-         eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(22.9)));
+         eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(25)));
+         eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(24.7)));
 
 // CHANGE THE EXTENDER SETPOINTS
 // CHANGE THE EXTENDER SETPOINTS
@@ -49,17 +49,18 @@ public class Score2NoBump extends PPAutoBase{
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score2Left, true), Score2Left.getMarkers(), eventMap);
 
         addCommands(
-        Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5), pidPivot),
+        Commands.runOnce(() -> pidPivot.setSetpointDegrees(25), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(47), pidExtender),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(25), pidExtender),
         new WaitCommand(1.85),
         new CubeIntake(collector).withTimeout(0.5),
         Commands.runOnce(() -> pidExtender.setSetpointInches(3), pidExtender),
         new WaitCommand(1.85),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),
         command,
-        new ScoreCube(collector).withTimeout(0.5));
+        new ScoreCube(collector).withTimeout(0.5),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(1), pidExtender));
 
     }
     

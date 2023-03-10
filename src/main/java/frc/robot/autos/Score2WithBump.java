@@ -35,12 +35,13 @@ public class Score2WithBump extends PPAutoBase{
          eventMap.put("CubeIntake", new InstantCommand(() -> collector.cubeIntake()));
          eventMap.put("GroundCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-53)));
          eventMap.put("CubeSlowIntake", new InstantCommand(() -> collector.slowCubeIntake()));
-         eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(23)));
+         eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(25)));
          eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(24.7)));
 
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score2Right, true), Score2Right.getMarkers(), eventMap);
 
         addCommands(
+        Commands.runOnce(() -> pidExtender.setSetpointInches(3), pidExtender),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(25), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
