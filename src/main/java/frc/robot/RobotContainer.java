@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.GamePiece;
+import frc.robot.autos.Score2WithBump;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.CollectGamePiece;
 import frc.robot.commands.ExtendIn;
@@ -126,6 +127,9 @@ public class RobotContainer {
         driveA.whileTrue(autoBalanceWithRoll);
         driveA.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
         driveX.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
+        driveB.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
+        driveY.onTrue(new InstantCommand(() -> collector.deployHinge()));
+        driveStart.onTrue(new InstantCommand(() -> collector.toggleHinge()));
         //driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
         //driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
         // driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
@@ -134,19 +138,19 @@ public class RobotContainer {
 
         // if (Constants.competitionRobot) {
             atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-50), pidPivot));
-            atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
+            atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-0.75), pidExtender));
             atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(15), pidPivot));
-            atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(7), pidExtender));
-            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(19), pidPivot));
+            atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5), pidExtender));
+            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5), pidPivot));
             atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(22.9), pidExtender));
 
-            atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-55), pidPivot));
-            atariButton4.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(9), pidExtender));
+            atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-53), pidPivot));
+            atariButton5.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5.5), pidExtender));
 
-            atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot));
+            atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-35), pidPivot));
 
-            atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
-            atariButton6.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0), pidExtender));
+            atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
+            atariButton4.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0), pidExtender));
 
             atariButton7.whileTrue(new CollectGamePiece(collector));
             atariButton8.whileTrue(new OuttakeGamePiece(collector));
@@ -221,7 +225,7 @@ public class RobotContainer {
         //return null;
        //return autoCommandChooser.getSelected();
       // return new ScoreAndMove(s_Swerve, pivot, collector);
-      return null;//new ScoreAndBalanceTest(s_Swerve);
+      return new Score2WithBump(s_Swerve, collector, pidExtender, pidPivot);//new ScoreAndBalanceTest(s_Swerve);
     }
 
 }
