@@ -12,7 +12,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
-    public static final boolean competitionRobot = true;
+    public static final boolean competitionRobot = false;
 
     public static final boolean tuneSwerve = false;
     public static final boolean tuneExtender = false;
@@ -202,6 +202,10 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    }
+
+    public static enum GamePiece {
+        CONE, CUBE
     }
 
 }

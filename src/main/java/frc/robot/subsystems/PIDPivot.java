@@ -17,7 +17,7 @@ public class PIDPivot extends PIDSubsystem {
     private DigitalInput upperLimitSwitch;
     private DigitalInput lowerLimitSwitch;
     private DutyCycleEncoder pivotEncoder;
-    private final double PROTO_UNIT_CIRCLE_OFFSET = .561;
+    private final double PROTO_UNIT_CIRCLE_OFFSET = 0.479;
     private final double COMP_UNIT_CIRCLE_OFFSET = 0.647;
     private double UNIT_CIRCLE_OFFSET;
     public PIDPivot() {
@@ -70,7 +70,7 @@ public class PIDPivot extends PIDSubsystem {
         double adjustedVolts = volts + 0.35;
             //negative goes up & positive goes down
 
-        double clampedVolts = MathUtil.clamp(adjustedVolts, -5, 5);
+        double clampedVolts = MathUtil.clamp(adjustedVolts, -9, 9);
 
         leftPivotMotor.setVoltage(-clampedVolts);
     }

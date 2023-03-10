@@ -22,7 +22,7 @@ public class ExtendIn extends CommandBase {
     @Override
     public void execute() {  
         if (!extender.isExtenderInSwitchPressed()) {
-            extender.setSetpoint((extender.getController().getSetpoint())-1);
+            extender.setSetpoint((extender.getController().getSetpoint())-2);
         }
     }
 

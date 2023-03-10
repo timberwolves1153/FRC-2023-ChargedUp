@@ -38,8 +38,7 @@ public class PIDExtender extends PIDSubsystem {
         
         // initialze PID controller 
         getController().setTolerance(0);
-        getController().setSetpoint(getMeasurement());
-        
+        holdPosition();
 
         extenderLimitSwitch = new DigitalInput(3);
 
@@ -49,7 +48,9 @@ public class PIDExtender extends PIDSubsystem {
     public void useOutput(double output, double setpoint) {
         if (isExtenderInSwitchPressed() && output < 0) {
             extenderPidMove(0);
-            
+            resetEncoder();
+            setSetpoint(0);
+            getController().reset();
         } else {
             extenderPidMove(output);
         }
@@ -61,7 +62,7 @@ public class PIDExtender extends PIDSubsystem {
     }
 
     public void extenderPidMove(double volts){
-        double clampedVolts = MathUtil.clamp(volts, -6, 6);
+        double clampedVolts = MathUtil.clamp(volts, -9, 9);
         extenderMotor.setVoltage(clampedVolts);
     }
 
@@ -74,11 +75,11 @@ public class PIDExtender extends PIDSubsystem {
         SmartDashboard.putNumber("Extender Encoder Rotations", getMeasurement());
         SmartDashboard.putBoolean("Extender Limit Switch", isExtenderInSwitchPressed());
 
-        if(isExtenderInSwitchPressed()) {
-            resetEncoder();
-            setSetpoint(0);
-            getController().reset();
-        }
+        // if(isExtenderInSwitchPressed()) {
+        //     resetEncoder();
+        //     setSetpoint(0);
+        //     getController().reset();
+        // }
     }
 
     public void holdPosition() {
