@@ -41,7 +41,7 @@ public class Score2WithBump extends PPAutoBase{
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score2Right, true), Score2Right.getMarkers(), eventMap);
 
         addCommands(
-        Commands.runOnce(() -> pidExtender.setSetpointInches(3), pidExtender),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(25), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),

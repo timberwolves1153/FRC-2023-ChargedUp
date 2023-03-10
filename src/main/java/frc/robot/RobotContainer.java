@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.GamePiece;
+import frc.robot.autos.CenterScore1AndBalance;
+import frc.robot.autos.Score1AndMove;
+import frc.robot.autos.Score2NoBump;
 import frc.robot.autos.Score2WithBump;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.CollectGamePiece;
@@ -110,6 +113,11 @@ public class RobotContainer {
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());     
         autoCommandChooser = new SendableChooser<Command>();
 
+        autoCommandChooser.addOption("Score 2 Bump", new Score2WithBump(s_Swerve, collector, pidExtender, pidPivot));
+        autoCommandChooser.addOption("Score 2 No Bump", new Score2NoBump(s_Swerve, collector, pidExtender, pidPivot));
+        autoCommandChooser.addOption("Score 1 And Move", new Score1AndMove(s_Swerve, collector, pidExtender, pidPivot));
+        autoCommandChooser.addOption("Score 1 and Balane Center", new CenterScore1AndBalance(s_Swerve, collector, pidExtender, pidPivot));
+
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
 
         // Configure the button bindings
@@ -127,11 +135,13 @@ public class RobotContainer {
         
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driveA.whileTrue(autoBalanceWithRoll);
-        driveA.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
+        // driveA.whileTrue(autoBalanceWithRoll);
+        // driveA.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
         driveX.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
         driveB.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
         driveStart.onTrue(new InstantCommand(() -> collector.toggleHinge()));
+        driveA.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
+        
         //driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
         //driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
         // driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
