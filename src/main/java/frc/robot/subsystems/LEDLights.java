@@ -32,13 +32,11 @@ public class LEDLights extends SubsystemBase {
     }
 
     public void setYellow(){
-    m_ledBuffer.setRGB(20, 255, 255, 0);
-    System.out.println("Yellow running");
+      setRGB(255, 255, 0);
     }
 
     public void setPurple(){
-    m_ledBuffer.setRGB(20, 128, 0, 128);
-    System.out.println("Purple running");
+      setRGB(128, 0, 128);
     }
 
     public void ledStop(){

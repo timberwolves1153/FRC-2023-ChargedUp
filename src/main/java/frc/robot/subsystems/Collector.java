@@ -5,7 +5,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.GamePiece;
 
 public class Collector extends SubsystemBase{
@@ -27,7 +29,11 @@ public class Collector extends SubsystemBase{
         collector.setNeutralMode(NeutralMode.Coast);
         hinge.set(true);
     }
-    public void deployHinge() {
+    public void openHinge() {
+        hinge.set(true);
+    }
+    
+    public void lockHinge() {
         hinge.set(false);
     }
 
@@ -52,11 +58,19 @@ public class Collector extends SubsystemBase{
     }
 
     public void slowConeIntake() {
-        collector.setVoltage(-1.5);
+        if(Constants.competitionRobot) {
+            collector.setVoltage(-2.5);
+        } else {
+            collector.setVoltage(-1.5);
+        }
     }
 
     public void slowCubeIntake() {
-        collector.setVoltage(1.5);
+        if(Constants.competitionRobot) {
+            collector.setVoltage(2.5);
+        } else {
+            collector.setVoltage(1.5);
+        }
     }
 
     public void collectorStop(){
@@ -69,5 +83,12 @@ public class Collector extends SubsystemBase{
 
     public void setCurrentGamePiece(GamePiece gamePiece) {
         this.currectGamePiece = gamePiece;
+    }
+
+    @Override
+    public void periodic() {
+        if(Constants.tuneCollector) {
+            SmartDashboard.putBoolean("Hinge", hinge.get());
+        }
     }
 }

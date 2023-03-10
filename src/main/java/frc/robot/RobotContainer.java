@@ -20,6 +20,7 @@ import frc.robot.commands.PivotDown;
 import frc.robot.commands.PivotUp;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Collector;
+import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.PIDExtender;
 import frc.robot.subsystems.PIDPivot;
 import frc.robot.subsystems.Swerve;
@@ -88,6 +89,7 @@ public class RobotContainer {
     private final PIDPivot pidPivot = new PIDPivot();
     private final PIDExtender pidExtender = new PIDExtender();
     private final Collector collector = new Collector();
+    private final LEDLights lights = new LEDLights();
 
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
     private SendableChooser<Command> autoCommandChooser;
@@ -112,6 +114,7 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+        lights.setRGB(125, 249, 255);
     }
 
     /**
@@ -128,7 +131,6 @@ public class RobotContainer {
         driveA.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
         driveX.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
         driveB.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
-        driveY.onTrue(new InstantCommand(() -> collector.deployHinge()));
         driveStart.onTrue(new InstantCommand(() -> collector.toggleHinge()));
         //driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
         //driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
@@ -155,7 +157,9 @@ public class RobotContainer {
             atariButton7.whileTrue(new CollectGamePiece(collector));
             atariButton8.whileTrue(new OuttakeGamePiece(collector));
             atariButton13.onTrue(new InstantCommand(() -> collector.setCurrentGamePiece(GamePiece.CUBE)));
+            atariButton13.onTrue(new InstantCommand(() -> lights.setPurple()));
             atariButton13.onFalse(new InstantCommand(() -> collector.setCurrentGamePiece(GamePiece.CONE)));
+            atariButton13.onFalse(new InstantCommand(() -> lights.setYellow()));
 
             // we need to set an initial game piece
             if (atariButton13.getAsBoolean()) {
@@ -212,6 +216,10 @@ public class RobotContainer {
 
     public void resetToAbsolute() {
         s_Swerve.resetModulesToAbsolute();
+    }
+
+    public void lockHinge() {
+        collector.lockHinge();
     }
 
     /**

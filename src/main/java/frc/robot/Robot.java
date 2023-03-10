@@ -91,6 +91,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.resetToAbsolute();
+    m_robotContainer.lockHinge();
   }
 
   /** This function is called periodically during operator control. */
