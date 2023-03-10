@@ -16,7 +16,7 @@ public class LEDLights extends SubsystemBase {
 
   /** Creates a new LEDLights. */
     public LEDLights() {
-    m_led = new AddressableLED(0);
+    m_led = new AddressableLED(8);
     m_ledBuffer = new AddressableLEDBuffer(30);
     m_led.setLength(m_ledBuffer.getLength());
 

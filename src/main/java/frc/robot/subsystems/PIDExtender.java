@@ -30,6 +30,7 @@ public class PIDExtender extends PIDSubsystem {
         extenderMotor.restoreFactoryDefaults();
         extenderMotor.setIdleMode(IdleMode.kBrake);
         extenderMotor.setInverted(true);
+        extenderMotor.setSmartCurrentLimit(40);
         extenderMotor.burnFlash();
 
         // initialze encoder objects
@@ -62,7 +63,7 @@ public class PIDExtender extends PIDSubsystem {
     }
 
     public void extenderPidMove(double volts){
-        double clampedVolts = MathUtil.clamp(volts, -9, 9);
+        double clampedVolts = MathUtil.clamp(volts, -12, 12);
         extenderMotor.setVoltage(clampedVolts);
     }
 
@@ -114,7 +115,7 @@ public class PIDExtender extends PIDSubsystem {
 
     public double distanceToEncoderTicks(double setpoint) {
   
-        double encoderTicksPerRev = 25;
+        double encoderTicksPerRev = 24;
         double distancePerRev = Math.PI;
         double conversionFactor = distancePerRev / encoderTicksPerRev;
       
@@ -123,7 +124,7 @@ public class PIDExtender extends PIDSubsystem {
       
     public double encoderTicksToDistance() {
       
-        double encoderTicksPerRev = 25;
+        double encoderTicksPerRev = 24;
         double distancePerRev = Math.PI;
         double conversionFactor = distancePerRev / encoderTicksPerRev;
         double currentTicks = getMeasurement();

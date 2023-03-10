@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.subsystems.PIDExtender;
 import frc.robot.subsystems.PIDPivot;
 
 public class PivotDown extends CommandBase {
