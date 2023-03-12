@@ -49,13 +49,16 @@ public class Score2NoBump extends PPAutoBase{
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score2Left, true), Score2Left.getMarkers(), eventMap);
 
         addCommands(
-        Commands.runOnce(() -> pidPivot.setSetpointDegrees(25), pidPivot),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(2), pidExtender),
+        new WaitCommand(0.2),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(-1), pidExtender),
+        Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
         Commands.runOnce(() -> pidExtender.setSetpointInches(25), pidExtender),
         new WaitCommand(1.85),
         new CubeIntake(collector).withTimeout(0.5),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(3), pidExtender),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(-4), pidExtender),
         new WaitCommand(1.85),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),
         command,

@@ -93,6 +93,7 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.resetToAbsolute();
     m_robotContainer.lockHinge();
+    m_robotContainer.setInitGamePeiceLights();
   }
 
   /** This function is called periodically during operator control. */

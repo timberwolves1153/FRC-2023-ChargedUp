@@ -9,12 +9,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,10 +25,17 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    public ADIS16470_IMU driveGyro;
     public double initRoll;
 
     public Swerve() {
-        gyro = new Pigeon2(Constants.Swerve.pigeonID);
+        gyro = new WPI_Pigeon2(Constants.Swerve.pigeonID);
+        gyro.configFactoryDefault();
+        gyro.clearStickyFaults();
+
+        driveGyro = new ADIS16470_IMU();
+        driveGyro.calibrate();
+        
         zeroGyro();
 
         initRoll = gyro.getRoll();
@@ -53,7 +62,7 @@ public class Swerve extends SubsystemBase {
         Timer.delay(1.0);
         resetModulesToAbsolute();
 
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
+        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getDriveYaw(), getModulePositions());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -63,7 +72,7 @@ public class Swerve extends SubsystemBase {
                                     translation.getX(), 
                                     translation.getY(), 
                                     rotation, 
-                                    getYaw()
+                                    getDriveYaw()
                                 )
                                 : new ChassisSpeeds(
                                     translation.getX(), 
@@ -95,7 +104,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
+        swerveOdometry.resetPosition(getDriveYaw(), getModulePositions(), pose);
     }
 
     public SwerveModuleState[] getModuleStates(){
@@ -116,10 +125,15 @@ public class Swerve extends SubsystemBase {
 
     public void zeroGyro(){
        gyro.setYaw(0);
+       driveGyro.reset();
     }
 
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+    }
+
+    public Rotation2d getDriveYaw() {
+        return Rotation2d.fromDegrees(driveGyro.getAngle());
     }
 
     public double getRoll() {
@@ -165,7 +179,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
-        swerveOdometry.update(getYaw(), getModulePositions());  
+        swerveOdometry.update(getDriveYaw(), getModulePositions());  
 
         if (Constants.tuneSwerve) {
             for(SwerveModule mod : mSwerveMods){
@@ -175,7 +189,7 @@ public class Swerve extends SubsystemBase {
             }
         }
 
-        SmartDashboard.putNumber("Gyro Heading", gyro.getYaw());
+        SmartDashboard.putNumber("Drive Gyro Heading", driveGyro.getAngle());
         SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch());
         SmartDashboard.putNumber("Gyro Roll", gyro.getRoll());
     }

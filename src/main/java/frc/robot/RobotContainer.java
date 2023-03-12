@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.GamePiece;
 import frc.robot.autos.CenterScore1AndBalance;
+import frc.robot.autos.LimelightAlign;
 import frc.robot.autos.Score1AndMove;
 import frc.robot.autos.Score2NoBump;
 import frc.robot.autos.Score2WithBump;
@@ -38,7 +39,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final Joystick operator = new Joystick(1);
+    //private final Joystick operator = new Joystick(1);
     private final Joystick atari = new Joystick(2);
 
     /* Drive Controls */
@@ -48,23 +49,24 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kLeftStick.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton driveStart = new JoystickButton(driver, XboxController.Button.kStart.value);
+    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton driveA = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton driveB = new JoystickButton(driver, XboxController.Button.kB.value);
     private final JoystickButton driveX = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton driveY = new JoystickButton(driver, XboxController.Button.kY.value);
-    
+    private final JoystickButton driveBack = new JoystickButton(driver, XboxController.Button.kBack.value);
+
     /* Operator Buttons */
 
-    private final JoystickButton opYButton = new JoystickButton(operator, XboxController.Button.kY.value);
-    private final JoystickButton opAButton = new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton opXButton = new JoystickButton(operator, XboxController.Button.kX.value);
-    private final JoystickButton opBButton = new JoystickButton(operator, XboxController.Button.kB.value);
-    private final JoystickButton opLeftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton opRightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-    private final JoystickButton opStart = new JoystickButton(operator, XboxController.Button.kStart.value);
-    private final JoystickButton opBack = new JoystickButton(operator, XboxController.Button.kBack.value);
+    // private final JoystickButton opYButton = new JoystickButton(operator, XboxController.Button.kY.value);
+    // private final JoystickButton opAButton = new JoystickButton(operator, XboxController.Button.kA.value);
+    // private final JoystickButton opXButton = new JoystickButton(operator, XboxController.Button.kX.value);
+    // private final JoystickButton opBButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    // private final JoystickButton opLeftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    // private final JoystickButton opRightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+    // private final JoystickButton opStart = new JoystickButton(operator, XboxController.Button.kStart.value);
+    // private final JoystickButton opBack = new JoystickButton(operator, XboxController.Button.kBack.value);
 
     private final JoystickButton atariButton1 = new JoystickButton(atari, 1);
     private final JoystickButton atariButton2 = new JoystickButton(atari, 2);
@@ -81,9 +83,9 @@ public class RobotContainer {
     private final JoystickButton atariButton13 = new JoystickButton(atari, 13);
 
 
-    private final JoystickButton opOneButton = new JoystickButton(operator, 1);
-    private final JoystickButton opTwoButton = new JoystickButton(operator, 2);
-    private final JoystickButton opThreeButton = new JoystickButton(operator, 3);
+    // private final JoystickButton opOneButton = new JoystickButton(operator, 1);
+    // private final JoystickButton opTwoButton = new JoystickButton(operator, 2);
+    // private final JoystickButton opThreeButton = new JoystickButton(operator, 3);
 
 
 
@@ -93,6 +95,12 @@ public class RobotContainer {
     private final PIDExtender pidExtender = new PIDExtender();
     private final Collector collector = new Collector();
     private final LEDLights lights = new LEDLights();
+    private final LimelightAlign limelightAlign = new LimelightAlign(s_Swerve);
+
+    private final Score2NoBump score2NoBump = new Score2NoBump(s_Swerve, collector, pidExtender, pidPivot);
+    private final Score2WithBump score2WithBump = new Score2WithBump(s_Swerve, collector, pidExtender, pidPivot);
+    private final Score1AndMove score1AndMove = new Score1AndMove(s_Swerve, collector, pidExtender, pidPivot);
+    private final CenterScore1AndBalance centerScore1AndBalance = new CenterScore1AndBalance(s_Swerve, collector, pidExtender, pidPivot);
 
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
     private SendableChooser<Command> autoCommandChooser;
@@ -112,11 +120,11 @@ public class RobotContainer {
         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());     
         autoCommandChooser = new SendableChooser<Command>();
-
-        autoCommandChooser.addOption("Score 2 Bump", new Score2WithBump(s_Swerve, collector, pidExtender, pidPivot));
-        autoCommandChooser.addOption("Score 2 No Bump", new Score2NoBump(s_Swerve, collector, pidExtender, pidPivot));
-        autoCommandChooser.addOption("Score 1 And Move", new Score1AndMove(s_Swerve, collector, pidExtender, pidPivot));
-        autoCommandChooser.addOption("Score 1 and Balane Center", new CenterScore1AndBalance(s_Swerve, collector, pidExtender, pidPivot));
+        autoCommandChooser.setDefaultOption("Score 1 And Move", score1AndMove);
+        autoCommandChooser.addOption("Score 2 Bump", score2WithBump);
+        autoCommandChooser.addOption("Score 2 No Bump", score2NoBump);
+        autoCommandChooser.addOption("Score 1 And Move", score1AndMove);
+        autoCommandChooser.addOption("Score 1 and Balane Center", centerScore1AndBalance);
 
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
 
@@ -139,9 +147,11 @@ public class RobotContainer {
         // driveA.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
         driveX.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
         driveB.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
-        driveStart.onTrue(new InstantCommand(() -> collector.toggleHinge()));
+        driveBack.onTrue(new InstantCommand(() -> collector.toggleHinge()));
         driveA.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
-        
+        driveStart.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
+        driveStart.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();
+        }));
         //driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
         //driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
         // driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
@@ -149,20 +159,23 @@ public class RobotContainer {
         /* Operator Buttons */
 
         // if (Constants.competitionRobot) {
-            atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-50), pidPivot));
+
+           
+            atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
             atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(15), pidPivot));
             atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5), pidExtender));
-            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5), pidPivot));
-            atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(22.9), pidExtender));
+            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(23), pidPivot));
+            atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(21.9), pidExtender));
+
+            atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(28), pidPivot));
+            atariButton4.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.01), pidExtender));
 
             atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-53), pidPivot));
             atariButton5.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5.5), pidExtender));
 
             atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-35), pidPivot));
-
-            atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(29), pidPivot));
-            atariButton4.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0), pidExtender));
+            atariButton6.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
 
             atariButton7.whileTrue(new CollectGamePiece(collector));
             atariButton8.whileTrue(new OuttakeGamePiece(collector));
@@ -268,7 +281,15 @@ public class RobotContainer {
         //return null;
        //return autoCommandChooser.getSelected();
       // return new ScoreAndMove(s_Swerve, pivot, collector);
-      return new Score2WithBump(s_Swerve, collector, pidExtender, pidPivot);//new ScoreAndBalanceTest(s_Swerve);
+      return autoCommandChooser.getSelected();//new ScoreAndBalanceTest(s_Swerve);
+    }
+
+    public void setInitGamePeiceLights() {
+        if (atariButton13.getAsBoolean()) {
+            lights.setPurple();
+        } else {
+            lights.setYellow();
+        }
     }
 
 }

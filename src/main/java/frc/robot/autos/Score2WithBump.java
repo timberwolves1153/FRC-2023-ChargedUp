@@ -7,6 +7,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -31,7 +32,7 @@ public class Score2WithBump extends PPAutoBase{
     
          eventMap.put("ReadyCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-30)));
          eventMap.put("ReadyCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(5.5)));
-         eventMap.put("ExtendTo0", Commands.runOnce(() -> pidExtender.setSetpointInches(2), pidExtender));
+         eventMap.put("ExtendTo0", Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
          eventMap.put("CubeIntake", new InstantCommand(() -> collector.cubeIntake()));
          eventMap.put("GroundCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-53)));
          eventMap.put("CubeSlowIntake", new InstantCommand(() -> collector.slowCubeIntake()));
@@ -41,14 +42,17 @@ public class Score2WithBump extends PPAutoBase{
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score2Right, true), Score2Right.getMarkers(), eventMap);
 
         addCommands(
-        Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender),
+        
+        Commands.runOnce(() -> pidExtender.setSetpointInches(2), pidExtender),
+        new WaitCommand(0.2),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(-1), pidExtender),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(25), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
         Commands.runOnce(() -> pidExtender.setSetpointInches(25), pidExtender),
         new WaitCommand(1.75),
         new CubeIntake(collector).withTimeout(0.5),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(3), pidExtender),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(-4), pidExtender),
         new WaitCommand(1.5),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),
         command,
