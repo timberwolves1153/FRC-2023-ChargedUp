@@ -140,6 +140,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+
         
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
@@ -168,7 +169,7 @@ public class RobotContainer {
             atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(23), pidPivot));
             atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(21.9), pidExtender));
 
-            atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(28), pidPivot));
+            atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(27.5), pidPivot));
             atariButton4.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.01), pidExtender));
 
             atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-53), pidPivot));

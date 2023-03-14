@@ -38,7 +38,7 @@ public class CenterScore1AndBalance extends PPAutoBase{
         Commands.runOnce(() -> pidExtender.setSetpointInches(2), pidExtender),
         new WaitCommand(0.2),
         Commands.runOnce(() -> pidExtender.setSetpointInches(-3), pidExtender),
-        Commands.runOnce(() -> pidPivot.setSetpointDegrees(23), pidPivot),
+        Commands.runOnce(() -> pidPivot.setSetpointDegrees(21), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
         Commands.runOnce(() -> pidExtender.setSetpointInches(25), pidExtender),
