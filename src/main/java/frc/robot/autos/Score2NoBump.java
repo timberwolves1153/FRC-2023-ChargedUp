@@ -29,14 +29,14 @@ public class Score2NoBump extends PPAutoBase{
         HashMap<String, Command> eventMap = new HashMap<>();
     
         // eventMap.put("ExtendIn1", Commands.runOnce(() -> pidExtender.setSetpointInches(0), pidExtender));
-         eventMap.put("ReadyCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-31)));
-         eventMap.put("ReadyCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(5.5)));
-         eventMap.put("ExtendTo0", Commands.runOnce(() -> pidExtender.setSetpointInches(2), pidExtender));
+         eventMap.put("ReadyCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-25)));
+         eventMap.put("ReadyCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(2.5)));
+         eventMap.put("ExtendTo0", Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
          eventMap.put("CubeIntake", new InstantCommand(() -> collector.cubeIntake()));
          eventMap.put("GroundCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-57)));
          eventMap.put("CubeSlowIntake", new InstantCommand(() -> collector.slowCubeIntake()));
          eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(25)));
-         eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(24.7)));
+         eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(25)));
 
 // CHANGE THE EXTENDER SETPOINTS
 // CHANGE THE EXTENDER SETPOINTS

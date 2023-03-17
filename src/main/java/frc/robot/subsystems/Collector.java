@@ -19,7 +19,7 @@ public class Collector extends SubsystemBase{
     public Collector(){
         
         collector = new WPI_TalonSRX(59);
-        hinge = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+       // hinge = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
         config();
 
     }
@@ -27,19 +27,19 @@ public class Collector extends SubsystemBase{
     public void config(){
         collector.configFactoryDefault();
         collector.setNeutralMode(NeutralMode.Coast);
-        hinge.set(true);
+        //hinge.set(true);
     }
-    public void openHinge() {
-        hinge.set(true);
-    }
+    // public void openHinge() {
+    //     hinge.set(true);
+    // }
     
-    public void lockHinge() {
-        hinge.set(false);
-    }
+    // public void lockHinge() {
+    //     hinge.set(false);
+    // }
 
-    public void toggleHinge() {
-        hinge.toggle();
-    }
+    // public void toggleHinge() {
+    //     hinge.toggle();
+    // }
 
     public void coneIntake(){
         collector.setVoltage(-12.0);
@@ -87,8 +87,8 @@ public class Collector extends SubsystemBase{
 
     @Override
     public void periodic() {
-        if(Constants.tuneCollector) {
-            SmartDashboard.putBoolean("Hinge", hinge.get());
-        }
+        // if(Constants.tuneCollector) {
+        //     SmartDashboard.putBoolean("Hinge", hinge.get());
+        // }
     }
 }

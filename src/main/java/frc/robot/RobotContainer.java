@@ -39,7 +39,7 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    //private final Joystick operator = new Joystick(1);
+    private final Joystick operator = new Joystick(1);
     private final Joystick atari = new Joystick(2);
 
     /* Drive Controls */
@@ -50,16 +50,18 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kLeftStick.value);
     private final JoystickButton driveStart = new JoystickButton(driver, XboxController.Button.kStart.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton driveLeftBumper = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton driveRightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     private final JoystickButton driveA = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton driveB = new JoystickButton(driver, XboxController.Button.kB.value);
     private final JoystickButton driveX = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton driveY = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton driveBack = new JoystickButton(driver, XboxController.Button.kBack.value);
+    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kRightStick.value);
 
     /* Operator Buttons */
 
-    // private final JoystickButton opYButton = new JoystickButton(operator, XboxController.Button.kY.value);
+     private final JoystickButton opYButton = new JoystickButton(operator, XboxController.Button.kY.value);
     // private final JoystickButton opAButton = new JoystickButton(operator, XboxController.Button.kA.value);
     // private final JoystickButton opXButton = new JoystickButton(operator, XboxController.Button.kX.value);
     // private final JoystickButton opBButton = new JoystickButton(operator, XboxController.Button.kB.value);
@@ -108,15 +110,17 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> adjustedRobotTranslationSpeed(), 
-                () -> adjustedRobotStrafeSpeed(), 
-                () -> adjustedRobotRotationSpeed(), 
-                () -> robotCentric.getAsBoolean()
-            )
-        );
+        s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, 
+        () -> adjustedRobotTranslationSpeed(), 
+        () -> adjustedRobotStrafeSpeed(), 
+        () -> adjustedRobotRotationSpeed(), 
+         robotCentric,
+         driveLeftBumper,
+         driveRightBumper,
+         driveY,
+         driveB,
+         driveA,
+         driveX));
         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());     
         autoCommandChooser = new SendableChooser<Command>();
@@ -146,13 +150,15 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         // driveA.whileTrue(autoBalanceWithRoll);
         // driveA.onFalse(new InstantCommand(() -> s_Swerve.stop())); 
-        driveX.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
-        driveB.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
-        driveBack.onTrue(new InstantCommand(() -> collector.toggleHinge()));
-        driveA.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
+        // driveX.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
+        robotCentric.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
+        // driveBack.onTrue(new InstantCommand(() -> collector.toggleHinge()));
+        // driveA.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
         driveStart.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
-        driveStart.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();
-        }));
+        driveStart.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();}));
+        driveBack.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
+
+
         //driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
         //driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
         // driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
@@ -161,7 +167,7 @@ public class RobotContainer {
 
         // if (Constants.competitionRobot) {
 
-           
+            //opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
             atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(15), pidPivot));
@@ -242,13 +248,13 @@ public class RobotContainer {
         s_Swerve.resetModulesToAbsolute();
     }
 
-    public void lockHinge() {
-        collector.lockHinge();
-    }
+    // public void lockHinge() {
+    //     collector.lockHinge();
+    // }
 
-    public void unlockHinge() {
-        collector.openHinge();
-    }
+    // public void unlockHinge() {
+    //     collector.openHinge();
+    // }
 
     public Double adjustedRobotTranslationSpeed() {
         double defaultSpeed = -driver.getRawAxis(translationAxis);
@@ -265,7 +271,7 @@ public class RobotContainer {
     }
 
     public Double adjustedRobotRotationSpeed() {
-        double defaultSpeed = -driver.getRawAxis(rotationAxis) * 0.7;
+        double defaultSpeed = -driver.getRawAxis(rotationAxis) * 0.85;
         double multiplier = 1;
         double currentAngle = pidPivot.getDegrees();
         return defaultSpeed * multiplier;

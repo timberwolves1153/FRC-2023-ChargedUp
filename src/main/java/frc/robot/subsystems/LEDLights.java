@@ -32,11 +32,11 @@ public class LEDLights extends SubsystemBase {
     }
 
     public void setYellow(){
-      setRGB(255, 255, 0);
+      setRGB(255, 200, 0);
     }
 
     public void setPurple(){
-      setRGB(128, 0, 128);
+      setRGB(130, 0, 130);
     }
 
     public void ledStop(){

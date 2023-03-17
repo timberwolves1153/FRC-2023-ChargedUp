@@ -18,7 +18,7 @@ public class PIDPivot extends PIDSubsystem {
     private DigitalInput lowerLimitSwitch;
     private DutyCycleEncoder pivotEncoder;
     private final double PROTO_UNIT_CIRCLE_OFFSET = 0.479;
-    private final double COMP_UNIT_CIRCLE_OFFSET = 0.616;
+    private final double COMP_UNIT_CIRCLE_OFFSET = 0.4984;
     private double UNIT_CIRCLE_OFFSET;
     public PIDPivot() {
         super(new PIDController(8.5, 0.05, 0));

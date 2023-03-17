@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    m_robotContainer.unlockHinge();
+    //m_robotContainer.unlockHinge();
   }
 
   /** This function is called periodically during autonomous. */
@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.resetToAbsolute();
-    m_robotContainer.lockHinge();
+    //m_robotContainer.lockHinge();
     m_robotContainer.setInitGamePeiceLights();
   }
 

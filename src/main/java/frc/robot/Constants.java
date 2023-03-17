@@ -33,12 +33,12 @@ public final class Constants {
 
         public static final double proto_mod0Offset = 38.76 + 180;
         public static final double proto_mod1Offset = 86.74 + 180;
-        public static final double proto_mod2Offset = 326.51 + 180;
-        public static final double proto_mod3Offset = 344.17 + 180;
+        public static final double proto_mod2Offset = 357.1875 + 180;
+        public static final double proto_mod3Offset = 194.238 + 180;
 
         //TODO: This must be tuned 2/27/23
-        public static final double comp_mod0Offset = 116.8 + 180;//114.43 + 180;
-        public static final double comp_mod1Offset = 84.02 + 180;//83.58 + 180;
+        public static final double comp_mod0Offset = 137.79 + 180;//114.43 + 180;
+        public static final double comp_mod1Offset = 83.58 + 180;//83.58 + 180;
         public static final double comp_mod2Offset = 357.01 + 180;//51.33 + 180;
         public static final double comp_mod3Offset = 193.89 + 180;//193.62 + 180;
 
@@ -91,9 +91,9 @@ public final class Constants {
 
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-        public static final double driveKS = (0.23798 / 12);//0.10359 
-        public static final double driveKV = (0.7844 / 12);//2.6738
-        public static final double driveKA = (0.17975 / 12);//0.18016
+        public static final double driveKS = (0.17491 / 12);//0.10359 
+        public static final double driveKV = (0.82633 / 12);//2.6738
+        public static final double driveKA = (0.17776 / 12);//0.18016
 
         /* Swerve Profiling Values */
         /** Meters per Second */
