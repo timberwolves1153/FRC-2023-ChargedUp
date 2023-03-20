@@ -54,14 +54,7 @@ public class TeleopSwerve extends CommandBase {
         m_90 = ninety;
         m_270 = twoSeventy;
         addRequirements(m_Swerve);
-        m_speedChooser = new SendableChooser<Double>();
-        m_speedChooser.addOption("100%", 1.0);
-        m_speedChooser.setDefaultOption("90%", 0.9);
-        m_speedChooser.addOption("85%", 0.85);
-        m_speedChooser.addOption("80%", 0.8);
-        m_speedChooser.addOption("70%", 0.7);
-        m_speedChooser.addOption("60%", 0.6);
-        SmartDashboard.putData("Speed Percent", m_speedChooser);
+       
     }
 
     @Override 
@@ -76,8 +69,8 @@ public class TeleopSwerve extends CommandBase {
 
         /* Get Values, Deadband*/
         boolean rotateWithButton = m_0.getAsBoolean() || m_90.getAsBoolean() || m_180.getAsBoolean() || m_270.getAsBoolean();
-        translationVal = MathUtil.applyDeadband(xSup.getAsDouble() * m_speedChooser.getSelected() , Constants.stickDeadband);
-        strafeVal = MathUtil.applyDeadband(ySup.getAsDouble() * m_speedChooser.getSelected(), Constants.stickDeadband);
+        translationVal = MathUtil.applyDeadband(xSup.getAsDouble(), Constants.stickDeadband);
+        strafeVal = MathUtil.applyDeadband(ySup.getAsDouble(), Constants.stickDeadband);
         // SmartDashboard.putBoolean("rotate with button", rotateWithButton);
         
         if(rotateWithButton){
@@ -99,7 +92,7 @@ public class TeleopSwerve extends CommandBase {
             // SmartDashboard.putNumber("Theta Controller setpoint", m_thetaController.getSetpoint());
         }
         else if (!rotateWithButton){
-            rotationVal = (MathUtil.applyDeadband(rotationSup.getAsDouble() * m_speedChooser.getSelected(), Constants.stickDeadband))*0.75;
+            rotationVal = (MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband));
         }
 
 
@@ -119,7 +112,7 @@ public class TeleopSwerve extends CommandBase {
         }
         else{
             translationVal = translationVal*1.0;
-            strafeVal =strafeVal*1.0;
+            strafeVal =     strafeVal*1.0;
             if(!rotateWithButton){
                 rotationVal = rotationVal *1.0;
             } 

@@ -25,20 +25,19 @@ public class Score2WithBump extends PPAutoBase{
     public Score2WithBump(Swerve swerve, Collector collector, PIDExtender pidExtender, PIDPivot pidPivot) {
         super(swerve);
 
-        PathPlannerTrajectory Score2Right = PathPlanner.loadPath("Score2Speedbump", new PathConstraints(2.0, 2.0));
+        PathPlannerTrajectory Score2Right = PathPlanner.loadPath("Score2WithBump", new PathConstraints(2.0, 2.0));
         //TODO Auto-generated constructor stub
 
         HashMap<String, Command> eventMap = new HashMap<>();
     
-         eventMap.put("ReadyCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-30)));
-         eventMap.put("ReadyCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(5.5)));
-         eventMap.put("ExtendTo0", Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
-         eventMap.put("CubeIntake", new InstantCommand(() -> collector.cubeIntake()));
-         eventMap.put("GroundCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-53)));
-         eventMap.put("CubeSlowIntake", new InstantCommand(() -> collector.slowCubeIntake()));
-         eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(25)));
-         eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(24.7)));
-
+        eventMap.put("ReadyCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-25)));
+        eventMap.put("ReadyCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(2.5)));
+        eventMap.put("ExtendTo0", Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
+        eventMap.put("CubeIntake", new InstantCommand(() -> collector.cubeIntake()));
+        eventMap.put("GroundCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-57)));
+        eventMap.put("CubeSlowIntake", new InstantCommand(() -> collector.slowCubeIntake()));
+        eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(25)));
+        eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(25)));
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score2Right, true), Score2Right.getMarkers(), eventMap);
 
         addCommands(
@@ -46,18 +45,19 @@ public class Score2WithBump extends PPAutoBase{
         Commands.runOnce(() -> pidExtender.setSetpointInches(2), pidExtender),
         new WaitCommand(0.2),
         Commands.runOnce(() -> pidExtender.setSetpointInches(-1), pidExtender),
-        Commands.runOnce(() -> pidPivot.setSetpointDegrees(25), pidPivot),
+        Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
         Commands.runOnce(() -> pidExtender.setSetpointInches(25), pidExtender),
-        new WaitCommand(1.75),
+        new WaitCommand(1.55),
         new CubeIntake(collector).withTimeout(0.5),
         Commands.runOnce(() -> pidExtender.setSetpointInches(-4), pidExtender),
-        new WaitCommand(1.5),
+        new WaitCommand(1.55),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),
         command,
         new WaitCommand(0.5),
-        new ScoreCube(collector).withTimeout(0.5)
+        new ScoreCube(collector).withTimeout(0.5),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(1), pidExtender)
         );
 
     }

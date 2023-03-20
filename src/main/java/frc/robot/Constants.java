@@ -37,10 +37,10 @@ public final class Constants {
         public static final double proto_mod3Offset = 194.238 + 180;
 
         //TODO: This must be tuned 2/27/23
-        public static final double comp_mod0Offset = 137.79 + 180;//114.43 + 180;
-        public static final double comp_mod1Offset = 83.58 + 180;//83.58 + 180;
-        public static final double comp_mod2Offset = 357.01 + 180;//51.33 + 180;
-        public static final double comp_mod3Offset = 193.89 + 180;//193.62 + 180;
+        public static final double comp_mod0Offset = 237.04;//114.43 + 180;
+        public static final double comp_mod1Offset = 264.84;//83.58 + 180;
+        public static final double comp_mod2Offset = 176.83;//51.33 + 180;
+        public static final double comp_mod3Offset = 14.06;//193.62 + 180;
 
         /* Swerve Kinematics 
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
@@ -97,7 +97,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5; 
+        public static final double maxSpeed = 5.5; 
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; 
 

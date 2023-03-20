@@ -22,7 +22,7 @@ public class CenterScore1AndBalance extends PPAutoBase{
 
     public CenterScore1AndBalance(Swerve swerve, Collector collector, PIDExtender pidExtender, PIDPivot pidPivot) {
         super(swerve);
-        PathPlannerTrajectory Score1andBalanceCenter = PathPlanner.loadPath("Score1andBalanceCenter", new PathConstraints(1.2, 1.5));
+        PathPlannerTrajectory Score1andBalanceCenter = PathPlanner.loadPath("Score1andBalanceCenter", new PathConstraints(1.3, 1.5));
         PathPlannerTrajectory jiggle = PathPlanner.loadPath("JigglePath", new PathConstraints(1.2, 1.5));  
         //TODO Auto-generated constructor stub
 

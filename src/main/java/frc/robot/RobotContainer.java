@@ -10,12 +10,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.GamePiece;
 import frc.robot.autos.CenterScore1AndBalance;
 import frc.robot.autos.LimelightAlign;
 import frc.robot.autos.Score1AndMove;
 import frc.robot.autos.Score2NoBump;
 import frc.robot.autos.Score2WithBump;
+import frc.robot.autos.TestBalance;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.CollectGamePiece;
 import frc.robot.commands.ExtendIn;
@@ -58,6 +60,7 @@ public class RobotContainer {
     private final JoystickButton driveY = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton driveBack = new JoystickButton(driver, XboxController.Button.kBack.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kRightStick.value);
+    private final POVButton povUp = new POVButton(driver, 0);
 
     /* Operator Buttons */
 
@@ -103,6 +106,7 @@ public class RobotContainer {
     private final Score2WithBump score2WithBump = new Score2WithBump(s_Swerve, collector, pidExtender, pidPivot);
     private final Score1AndMove score1AndMove = new Score1AndMove(s_Swerve, collector, pidExtender, pidPivot);
     private final CenterScore1AndBalance centerScore1AndBalance = new CenterScore1AndBalance(s_Swerve, collector, pidExtender, pidPivot);
+    private final TestBalance testBalance = new TestBalance(s_Swerve);
 
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
     private SendableChooser<Command> autoCommandChooser;
@@ -129,6 +133,7 @@ public class RobotContainer {
         autoCommandChooser.addOption("Score 2 No Bump", score2NoBump);
         autoCommandChooser.addOption("Score 1 And Move", score1AndMove);
         autoCommandChooser.addOption("Score 1 and Balane Center", centerScore1AndBalance);
+        //autoCommandChooser.addOption("Test Balance", testBalance);
 
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
 
@@ -157,6 +162,7 @@ public class RobotContainer {
         driveStart.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
         driveStart.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();}));
         driveBack.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
+        povUp.whileTrue(autoBalanceWithRoll);
 
 
         //driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
@@ -168,11 +174,11 @@ public class RobotContainer {
         // if (Constants.competitionRobot) {
 
             //opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
-            atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot));
+            atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-36), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
-            atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(15), pidPivot));
+            atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(16), pidPivot));
             atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5), pidExtender));
-            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(23), pidPivot));
+            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(24.5), pidPivot));
             atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(21.9), pidExtender));
 
             atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(27.5), pidPivot));
