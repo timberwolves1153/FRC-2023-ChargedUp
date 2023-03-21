@@ -16,8 +16,8 @@ public final class Constants {
 
     public static final boolean tuneSwerve = true;
     public static final boolean tuneExtender = false;
-    public static final boolean tunePivot = true;
-    public static final boolean tuneCollector = true;
+    public static final boolean tunePivot = false;
+    public static final boolean tuneCollector = false;
 
     public static final class Swerve {
         public static final int pigeonID = 5;

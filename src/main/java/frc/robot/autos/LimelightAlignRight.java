@@ -30,7 +30,7 @@ public class LimelightAlignRight {
     private Command currCommand;
 
     // tune this value to change the distance to the left that the robot travels
-    private double distanceOffset = 5;
+    private double distanceOffset = 0.5588;
 
     //Change this value to increase the pid. Total PID constant value will be this value plus the value in Constants
     private double pidConstantIncrease = 2;
@@ -60,7 +60,7 @@ public class LimelightAlignRight {
 
         Pose2d currRobotPose = swerve.getPose();
 
-        double deltaTargetX = -LimelightHelpers.getBotPose_TargetSpace("limelight")[0] + distanceToCenter + distanceOffset;
+        double deltaTargetX = -LimelightHelpers.getBotPose_TargetSpace("limelight")[0] + distanceToCenter - distanceOffset;
         double rotationRadians = Math.PI;
 
         //Pose2d finalRobotPose = currRobotPose.transformBy(new Transform2d(new Translation2d(0, -deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians())));

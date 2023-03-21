@@ -30,10 +30,11 @@ public class LimelightAlign {
     private Command currCommand;
 
     //Change this value to increase the pid. Total PID constant value will be this value plus the value in Constants
-    private double pidConstantIncrease = 2;
+    private double pidConstantIncrease = 2
+    ;
 
     //Change this value to the distance from the center of the Limelight camera to the center of the robot drive base
-    private double distanceToCenter = 0.16;
+    private double distanceToCenter = 0.165;
 
     private final ProfiledPIDController thetaController =
         new ProfiledPIDController(
@@ -50,6 +51,7 @@ public class LimelightAlign {
     }
 
     public Command generateAlignCommand() {
+        System.out.println("LimeLight Align");
         if(!LimelightHelpers.getTV("limelight")) {
             currCommand = null;
             return new InstantCommand();

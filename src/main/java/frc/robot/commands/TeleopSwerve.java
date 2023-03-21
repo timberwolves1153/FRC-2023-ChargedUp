@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-
+import frc.robot.subsystems.PIDPivot;
 import frc.robot.subsystems.Swerve;
 
 import java.util.function.BooleanSupplier;
@@ -29,6 +29,8 @@ public class TeleopSwerve extends CommandBase {
     private PIDController m_thetaController;
     private SendableChooser<Double> m_speedChooser;
   
+    private PIDPivot pivot;
+    public double pivotDegrees;
     /**
      * 
      * @param s_Swerve
@@ -42,8 +44,9 @@ public class TeleopSwerve extends CommandBase {
     public TeleopSwerve(Swerve swerve, DoubleSupplier xSup, DoubleSupplier ySup, 
                         DoubleSupplier rotationSup, BooleanSupplier robotCentricSup, 
                         BooleanSupplier halfSpeed, BooleanSupplier quarterSpeed, 
-                        BooleanSupplier zero, BooleanSupplier ninety, BooleanSupplier oneEighty, BooleanSupplier twoSeventy){
+                        BooleanSupplier zero, BooleanSupplier ninety, BooleanSupplier oneEighty, BooleanSupplier twoSeventy, PIDPivot pivot){
         m_Swerve = swerve;
+        this.pivot = pivot;
         this.ySup = ySup;
         this.xSup = xSup;
         this.rotationSup = rotationSup;
@@ -54,7 +57,11 @@ public class TeleopSwerve extends CommandBase {
         m_90 = ninety;
         m_270 = twoSeventy;
         addRequirements(m_Swerve);
-       
+        
+        SmartDashboard.putNumber("translation multiplier", 1);
+        SmartDashboard.putNumber("strafe multiplier", 1);
+        SmartDashboard.putNumber("rotation multiplier", 1);
+        
     }
 
     @Override 
@@ -96,28 +103,37 @@ public class TeleopSwerve extends CommandBase {
         }
 
 
-        if(m_quarterSpeed.getAsBoolean()){
-            translationVal = translationVal*0.25;
-            strafeVal =strafeVal*0.25;
-            if(!rotateWithButton){
-                rotationVal = rotationVal *0.25;
-            }
+
+        // if(m_quarterSpeed.getAsBoolean()){
+        //     translationVal = translationVal*0.25;
+        //     strafeVal =strafeVal*0.25;
+        //     if(!rotateWithButton){
+        //         rotationVal = rotationVal *0.25;
+        //     }
+        // }
+        // else if(m_halfSpeed.getAsBoolean()){
+        //     translationVal = translationVal*0.5;
+        //     strafeVal =strafeVal*0.5;
+        //     if(!rotateWithButton){
+        //         rotationVal = rotationVal *0.5;
+        //     }
+        // }
+        // else{
+        //     translationVal = translationVal*1.0;
+        //     strafeVal =     strafeVal*1.0;
+        //     if(!rotateWithButton){
+        //         rotationVal = rotationVal *1.0;
+        //     } 
+         //}
+        if(Math.abs(pivot.getDegrees()) < 10) {
+            double translationMultiplier = SmartDashboard.getNumber("translation multiplier", 1);
+            double strafeMultiplier = SmartDashboard.getNumber("strafe multiplier", 1);
+            double rotationMultiplier = SmartDashboard.getNumber("rotation multiplier", 1);
+
+            translationVal = translationVal * translationMultiplier;
+            strafeVal = strafeVal * strafeMultiplier;
+            rotationVal = rotationVal * rotationMultiplier;
         }
-        else if(m_halfSpeed.getAsBoolean()){
-            translationVal = translationVal*0.5;
-            strafeVal =strafeVal*0.5;
-            if(!rotateWithButton){
-                rotationVal = rotationVal *0.5;
-            }
-        }
-        else{
-            translationVal = translationVal*1.0;
-            strafeVal =     strafeVal*1.0;
-            if(!rotateWithButton){
-                rotationVal = rotationVal *1.0;
-            } 
-        }
-        
 
         m_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 

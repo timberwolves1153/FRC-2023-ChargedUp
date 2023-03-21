@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.GamePiece;
 import frc.robot.autos.CenterScore1AndBalance;
 import frc.robot.autos.LimelightAlign;
+import frc.robot.autos.LimelightAlignLeft;
+import frc.robot.autos.LimelightAlignRight;
 import frc.robot.autos.Score1AndMove;
 import frc.robot.autos.Score2NoBump;
 import frc.robot.autos.Score2WithBump;
@@ -21,6 +23,7 @@ import frc.robot.autos.TestBalance;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.CollectGamePiece;
 import frc.robot.commands.ExtendIn;
+import frc.robot.commands.GoToTunableDegree;
 import frc.robot.commands.OuttakeGamePiece;
 import frc.robot.commands.PivotDown;
 import frc.robot.commands.PivotUp;
@@ -60,11 +63,15 @@ public class RobotContainer {
     private final JoystickButton driveY = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton driveBack = new JoystickButton(driver, XboxController.Button.kBack.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kRightStick.value);
+    private final POVButton povDown = new POVButton(driver, 180);
     private final POVButton povUp = new POVButton(driver, 0);
+    private final POVButton povLeft = new POVButton(driver, 270);
+    private final POVButton povRight = new POVButton(driver, 90);
 
     /* Operator Buttons */
 
      private final JoystickButton opYButton = new JoystickButton(operator, XboxController.Button.kY.value);
+     private final JoystickButton opAbutton = new JoystickButton(operator, XboxController.Button.kA.value);
     // private final JoystickButton opAButton = new JoystickButton(operator, XboxController.Button.kA.value);
     // private final JoystickButton opXButton = new JoystickButton(operator, XboxController.Button.kX.value);
     // private final JoystickButton opBButton = new JoystickButton(operator, XboxController.Button.kB.value);
@@ -101,6 +108,9 @@ public class RobotContainer {
     private final Collector collector = new Collector();
     private final LEDLights lights = new LEDLights();
     private final LimelightAlign limelightAlign = new LimelightAlign(s_Swerve);
+    private final LimelightAlignLeft limelightAlignLeft = new LimelightAlignLeft(s_Swerve);
+    private final LimelightAlignRight limelightAlignRight = new LimelightAlignRight(s_Swerve);
+
 
     private final Score2NoBump score2NoBump = new Score2NoBump(s_Swerve, collector, pidExtender, pidPivot);
     private final Score2WithBump score2WithBump = new Score2WithBump(s_Swerve, collector, pidExtender, pidPivot);
@@ -109,6 +119,7 @@ public class RobotContainer {
     private final TestBalance testBalance = new TestBalance(s_Swerve);
 
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
+    private final GoToTunableDegree goToTunableDegree;
     private SendableChooser<Command> autoCommandChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -124,19 +135,24 @@ public class RobotContainer {
          driveY,
          driveB,
          driveA,
-         driveX));
+         driveX, 
+         pidPivot));
         
-        autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean());     
+        autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean()); 
+        goToTunableDegree = new GoToTunableDegree(pidPivot);
         autoCommandChooser = new SendableChooser<Command>();
         autoCommandChooser.setDefaultOption("Score 1 And Move", score1AndMove);
         autoCommandChooser.addOption("Score 2 Bump", score2WithBump);
         autoCommandChooser.addOption("Score 2 No Bump", score2NoBump);
         autoCommandChooser.addOption("Score 1 And Move", score1AndMove);
-        autoCommandChooser.addOption("Score 1 and Balane Center", centerScore1AndBalance);
+        autoCommandChooser.addOption("Score 1 and Balance Center", centerScore1AndBalance);
+        autoCommandChooser.addOption("Straight Line", testBalance);
         //autoCommandChooser.addOption("Test Balance", testBalance);
 
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
+        SmartDashboard.putNumber("Set Pivot Setpoint Degrees", 0);
 
+      
         // Configure the button bindings
         configureButtonBindings();
         lights.setRGB(125, 249, 255);
@@ -159,16 +175,23 @@ public class RobotContainer {
         robotCentric.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
         // driveBack.onTrue(new InstantCommand(() -> collector.toggleHinge()));
         // driveA.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
-        driveStart.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
-        driveStart.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();}));
+        povDown.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
+        povDown.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();}));
+        povLeft.onTrue(new InstantCommand(() -> limelightAlignLeft.generateAlignCommand().schedule()));
+        povLeft.onFalse(new InstantCommand(() -> {if(limelightAlignLeft.getCommand() != null) limelightAlignLeft.getCommand().cancel();}));
+        povRight.onTrue(new InstantCommand(() -> limelightAlignRight.generateAlignCommand().schedule()));
+        povRight.onFalse(new InstantCommand(() -> {if(limelightAlignRight.getCommand() != null) limelightAlignRight.getCommand().cancel();}));
+        
         driveBack.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
         povUp.whileTrue(autoBalanceWithRoll);
 
 
+        
         //driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
         //driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
         // driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
-
+        opAbutton.onTrue(goToTunableDegree);
+        opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
         /* Operator Buttons */
 
         // if (Constants.competitionRobot) {

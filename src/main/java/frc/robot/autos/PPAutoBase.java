@@ -22,9 +22,9 @@ public class PPAutoBase extends SequentialCommandGroup {
        // thetaController.enableContinuousInput(-Math.PI, Math.PI);
     }
     public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory path1, boolean isFirstPath) {
-        PIDController thetaController = new PIDController(1.0, 0, 0);
-        PIDController xController = new PIDController(1.0, 0, 0);
-        PIDController yController = new PIDController(1.0, 0, 0);
+        PIDController thetaController = new PIDController(1.5, 0, 0);
+        PIDController xController = new PIDController(1.5, 0, 0);
+        PIDController yController = new PIDController(1.5, 0, 0);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         return new SequentialCommandGroup(
              new InstantCommand(() -> {

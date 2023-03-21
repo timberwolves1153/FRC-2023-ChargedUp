@@ -50,6 +50,8 @@ public class PIDPivot extends PIDSubsystem {
         getController().setTolerance(0);
         getController().setSetpoint(getMeasurement());
 
+        SmartDashboard.putNumber("Set Pivot Setpoint", 0.5);
+
         enable();
         
     }

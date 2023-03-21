@@ -30,7 +30,7 @@ public class LimelightAlignLeft {
     private Command currCommand;
 
     // tune this value to change the distance to the left that the robot travels
-    private double distanceOffset = 5;
+    private double distanceOffset = 0.5588;
 
     //Change this value to increase the pid. Total PID constant value will be this value plus the value in Constants
     private double pidConstantIncrease = 2;
