@@ -12,6 +12,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.fasterxml.jackson.databind.deser.std.ContainerDeserializerBase;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,12 +28,15 @@ public class Swerve extends SubsystemBase {
     public Pigeon2 gyro;
     public ADIS16470_IMU driveGyro;
     public double initRoll;
+    public SlewRateLimiter filter;
+    public SlewRateLimiter filter2;
 
     public Swerve() {
         gyro = new WPI_Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         gyro.clearStickyFaults();
-
+        filter = new SlewRateLimiter(10);
+        filter2 = new SlewRateLimiter(10);
         //driveGyro = new ADIS16470_IMU();
         //driveGyro.calibrate();
         
@@ -69,14 +73,14 @@ public class Swerve extends SubsystemBase {
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
+                                    filter.calculate(translation.getX()), 
+                                    filter2.calculate(translation.getY()), 
                                     rotation, 
                                     getYaw()
                                 )
                                 : new ChassisSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
+                                  translation.getX(), 
+                                  translation.getY(), 
                                     rotation)
                                 );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);

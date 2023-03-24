@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -11,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib.util.AxisButton;
 import frc.robot.Constants.GamePiece;
 import frc.robot.autos.CenterScore1AndBalance;
 import frc.robot.autos.LimelightAlign;
@@ -52,6 +55,8 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+    private final SlewRateLimiter filter = new SlewRateLimiter(4);
+
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kLeftStick.value);
     private final JoystickButton driveStart = new JoystickButton(driver, XboxController.Button.kStart.value);
@@ -63,6 +68,8 @@ public class RobotContainer {
     private final JoystickButton driveY = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton driveBack = new JoystickButton(driver, XboxController.Button.kBack.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kRightStick.value);
+    private final AxisButton leftTrigger = new AxisButton(driver, XboxController.Axis.kLeftTrigger.value, .5);
+    private final AxisButton rightTrigger = new AxisButton(driver, XboxController.Axis.kRightTrigger.value, .5);
     private final POVButton povDown = new POVButton(driver, 180);
     private final POVButton povUp = new POVButton(driver, 0);
     private final POVButton povLeft = new POVButton(driver, 270);
@@ -130,7 +137,6 @@ public class RobotContainer {
         () -> adjustedRobotStrafeSpeed(), 
         () -> adjustedRobotRotationSpeed(), 
          robotCentric,
-         driveLeftBumper,
          driveRightBumper,
          driveY,
          driveB,
@@ -138,6 +144,8 @@ public class RobotContainer {
          driveX, 
          pidPivot));
         
+        
+         
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean()); 
         goToTunableDegree = new GoToTunableDegree(pidPivot);
         autoCommandChooser = new SendableChooser<Command>();
@@ -175,42 +183,58 @@ public class RobotContainer {
         robotCentric.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
         // driveBack.onTrue(new InstantCommand(() -> collector.toggleHinge()));
         // driveA.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
-        povDown.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
-        povDown.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();}));
-        povLeft.onTrue(new InstantCommand(() -> limelightAlignLeft.generateAlignCommand().schedule()));
-        povLeft.onFalse(new InstantCommand(() -> {if(limelightAlignLeft.getCommand() != null) limelightAlignLeft.getCommand().cancel();}));
-        povRight.onTrue(new InstantCommand(() -> limelightAlignRight.generateAlignCommand().schedule()));
-        povRight.onFalse(new InstantCommand(() -> {if(limelightAlignRight.getCommand() != null) limelightAlignRight.getCommand().cancel();}));
+        driveLeftBumper.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
+        driveLeftBumper.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();}));
+        // povLeft.onTrue(new InstantCommand(() -> limelightAlignLeft.generateAlignCommand().schedule()));
+        // povLeft.onFalse(new InstantCommand(() -> {if(limelightAlignLeft.getCommand() != null) limelightAlignLeft.getCommand().cancel();}));
+        // povRight.onTrue(new InstantCommand(() -> limelightAlignRight.generateAlignCommand().schedule()));
+        // povRight.onFalse(new InstantCommand(() -> {if(limelightAlignRight.getCommand() != null) limelightAlignRight.getCommand().cancel();}));
+        leftTrigger.onTrue(new InstantCommand(() -> limelightAlignLeft.generateAlignCommand().schedule()));
+        leftTrigger.onFalse(new InstantCommand(() -> {if(limelightAlignLeft.getCommand() != null) limelightAlignLeft.getCommand().cancel();}));
+        rightTrigger.onTrue(new InstantCommand(() -> limelightAlignRight.generateAlignCommand().schedule()));
+        rightTrigger.onFalse(new InstantCommand(() -> {if(limelightAlignRight.getCommand() != null) limelightAlignRight.getCommand().cancel();}));
         
         driveBack.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
         povUp.whileTrue(autoBalanceWithRoll);
 
+        
 
+        // if (leftTrigger > 0.1) {
+        //     new InstantCommand(() -> limelightAlignLeft.generateAlignCommand().schedule());
+        // } else {
+        //     new InstantCommand(() -> {if(limelightAlignLeft.getCommand() != null) limelightAlignLeft.getCommand().cancel();});
+        // }
+
+        // if (rightTrigger > 0.1) {
+        //     new InstantCommand(() -> limelightAlignRight.generateAlignCommand().schedule());
+        // } else {
+        //     new InstantCommand(() -> {if(limelightAlignRight.getCommand() != null) limelightAlignRight.getCommand().cancel();});
+        // }
         
         //driveB.onTrue(new InstantCommand(() -> ledLights.setRGB(218, 165, 0)));
         //driveY.onTrue(new InstantCommand(() -> ledLights.setRGB(128, 0, 128)));
         // driveX.onTrue(new InstantCommand(() -> ledLights.setRGB(0, 255, 0)));
         opAbutton.onTrue(goToTunableDegree);
-        opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
+        opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-2), pidPivot));
         /* Operator Buttons */
 
         // if (Constants.competitionRobot) {
 
             //opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
-            atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-36), pidPivot));
+            atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-35), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
-            atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(16), pidPivot));
+            atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(7.3), pidPivot));
             atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5), pidExtender));
-            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(24.5), pidPivot));
+            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(18.5), pidPivot));
             atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(21.9), pidExtender));
 
-            atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(27.5), pidPivot));
+            atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5), pidPivot));
             atariButton4.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.01), pidExtender));
 
-            atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-53), pidPivot));
+            atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-53.5), pidPivot));
             atariButton5.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5.5), pidExtender));
 
-            atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-35), pidPivot));
+            atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-49), pidPivot));
             atariButton6.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
 
             atariButton7.whileTrue(new CollectGamePiece(collector));
@@ -286,7 +310,7 @@ public class RobotContainer {
     // }
 
     public Double adjustedRobotTranslationSpeed() {
-        double defaultSpeed = -driver.getRawAxis(translationAxis);
+        double defaultSpeed = filter.calculate(-driver.getRawAxis(translationAxis));
         double multiplier = 1;
         double currentAngle = pidPivot.getDegrees();
         return defaultSpeed * multiplier;

@@ -61,10 +61,11 @@ public class LimelightAlignRight {
         Pose2d currRobotPose = swerve.getPose();
 
         double deltaTargetX = -LimelightHelpers.getBotPose_TargetSpace("limelight")[0] + distanceToCenter - distanceOffset;
+        double deltaTargetY = LimelightHelpers.getBotPose_TargetSpace("limelight")[2] + 0.75;
         double rotationRadians = Math.PI;
 
         //Pose2d finalRobotPose = currRobotPose.transformBy(new Transform2d(new Translation2d(0, -deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians())));
-        Pose2d finalRobotPose = horizTransform(currRobotPose, new Translation2d(0, deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians()));
+        Pose2d finalRobotPose = horizTransform(currRobotPose, new Translation2d(deltaTargetY, deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians()));
 
         SmartDashboard.putNumber("Initial Pose X", currRobotPose.getX());
         SmartDashboard.putNumber("Initial Pose Y", currRobotPose.getY());

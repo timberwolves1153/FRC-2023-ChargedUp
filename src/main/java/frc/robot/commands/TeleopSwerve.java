@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.autos.LimelightAlignLeft;
+import frc.robot.autos.LimelightAlignRight;
 import frc.robot.subsystems.PIDPivot;
 import frc.robot.subsystems.Swerve;
 
@@ -23,7 +25,6 @@ public class TeleopSwerve extends CommandBase {
     private BooleanSupplier m_halfSpeed;
     private BooleanSupplier m_quarterSpeed;
     private BooleanSupplier m_90, m_180, m_270, m_0;
-
     private double rotationVal, translationVal, strafeVal;
     double m_angle = 0d;
     private PIDController m_thetaController;
@@ -43,19 +44,20 @@ public class TeleopSwerve extends CommandBase {
      */
     public TeleopSwerve(Swerve swerve, DoubleSupplier xSup, DoubleSupplier ySup, 
                         DoubleSupplier rotationSup, BooleanSupplier robotCentricSup, 
-                        BooleanSupplier halfSpeed, BooleanSupplier quarterSpeed, 
+                        BooleanSupplier quarterSpeed, 
                         BooleanSupplier zero, BooleanSupplier ninety, BooleanSupplier oneEighty, BooleanSupplier twoSeventy, PIDPivot pivot){
         m_Swerve = swerve;
         this.pivot = pivot;
         this.ySup = ySup;
         this.xSup = xSup;
         this.rotationSup = rotationSup;
-        m_halfSpeed = halfSpeed;
+        //m_halfSpeed = halfSpeed;
         m_quarterSpeed = quarterSpeed;
         m_0 = zero;
         m_180 = oneEighty;
         m_90 = ninety;
         m_270 = twoSeventy;
+        
         addRequirements(m_Swerve);
         
         SmartDashboard.putNumber("translation multiplier", 1);
@@ -103,37 +105,57 @@ public class TeleopSwerve extends CommandBase {
         }
 
 
-
-        // if(m_quarterSpeed.getAsBoolean()){
-        //     translationVal = translationVal*0.25;
-        //     strafeVal =strafeVal*0.25;
-        //     if(!rotateWithButton){
-        //         rotationVal = rotationVal *0.25;
-        //     }
-        // }
+        if(m_quarterSpeed.getAsBoolean()){
+            translationVal = translationVal*0.25;
+            strafeVal =strafeVal*0.25;
+            if(!rotateWithButton){
+                rotationVal = rotationVal *0.25;
+            }
+        }
         // else if(m_halfSpeed.getAsBoolean()){
         //     translationVal = translationVal*0.5;
         //     strafeVal =strafeVal*0.5;
         //     if(!rotateWithButton){
         //         rotationVal = rotationVal *0.5;
         //     }
-        // }
-        // else{
-        //     translationVal = translationVal*1.0;
-        //     strafeVal =     strafeVal*1.0;
-        //     if(!rotateWithButton){
-        //         rotationVal = rotationVal *1.0;
-        //     } 
-         //}
-        if(Math.abs(pivot.getDegrees()) < 10) {
-            double translationMultiplier = SmartDashboard.getNumber("translation multiplier", 1);
-            double strafeMultiplier = SmartDashboard.getNumber("strafe multiplier", 1);
-            double rotationMultiplier = SmartDashboard.getNumber("rotation multiplier", 1);
+        //}
+        else{
+            translationVal = translationVal*1.0;
+            strafeVal =     strafeVal*1.0;
+            if(!rotateWithButton){
+                rotationVal = rotationVal *1.0;
+            } 
+         }
 
-            translationVal = translationVal * translationMultiplier;
-            strafeVal = strafeVal * strafeMultiplier;
-            rotationVal = rotationVal * rotationMultiplier;
-        }
+        
+
+        
+        // if(Math.abs(pivot.getDegrees()) < 10) {
+        //     double translationMultiplier = 0.65;
+        //     double strafeMultiplier = 0.7;
+        //     double rotationMultiplier = 1;
+
+        //     translationVal = translationVal * translationMultiplier;
+        //     strafeVal = strafeVal * strafeMultiplier;
+        //     rotationVal = rotationVal * rotationMultiplier;
+        // } else if (pivot.getDegrees() > 10) {
+        //     double translationMultiplier = 0.6;
+        //     double strafeMultiplier = 0.7;
+        //     double rotationMultiplier = 0.9;
+
+        //     translationVal = translationVal * translationMultiplier;
+        //     strafeVal = strafeVal * strafeMultiplier;
+        //     rotationVal = rotationVal * rotationMultiplier;
+        // } else {
+        //     double translationMultiplier = 1;
+        //     double strafeMultiplier = 1;
+        //     double rotationMultiplier = 1;
+
+        //     translationVal = translationVal * translationMultiplier;
+        //     strafeVal = strafeVal * strafeMultiplier;
+        //     rotationVal = rotationVal * rotationMultiplier;
+ 
+        // }
 
         m_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 

@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.lib.util.LimelightHelpers;
@@ -24,7 +25,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
 /** Add your docs here. */
-public class LimelightAlignLeft {
+public class LimelightAlignLeft extends CommandBase{
     private Swerve swerve;
 
     private Command currCommand;
@@ -61,10 +62,11 @@ public class LimelightAlignLeft {
         Pose2d currRobotPose = swerve.getPose();
 
         double deltaTargetX = -LimelightHelpers.getBotPose_TargetSpace("limelight")[0] + distanceToCenter + distanceOffset;
+        double deltaTargetY = LimelightHelpers.getBotPose_TargetSpace("limelight")[2] + 0.75;
         double rotationRadians = Math.PI;
 
         //Pose2d finalRobotPose = currRobotPose.transformBy(new Transform2d(new Translation2d(0, -deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians())));
-        Pose2d finalRobotPose = horizTransform(currRobotPose, new Translation2d(0, deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians()));
+        Pose2d finalRobotPose = horizTransform(currRobotPose, new Translation2d(deltaTargetY, deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians()));
 
         SmartDashboard.putNumber("Initial Pose X", currRobotPose.getX());
         SmartDashboard.putNumber("Initial Pose Y", currRobotPose.getY());

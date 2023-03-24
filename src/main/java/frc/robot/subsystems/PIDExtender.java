@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import frc.robot.Constants;
 
 public class PIDExtender extends PIDSubsystem {
 
@@ -70,12 +71,13 @@ public class PIDExtender extends PIDSubsystem {
     @Override
     public void periodic() {
         super.periodic();
+        if(Constants.tuneExtender) { 
         SmartDashboard.putNumber("Extender setpoint", getSetpoint());
         SmartDashboard.putNumber("Extender Inches Traveled", encoderTicksToDistance());
         SmartDashboard.putNumber("Extender Output", extenderMotor.getAppliedOutput());
         SmartDashboard.putNumber("Extender Encoder Rotations", getMeasurement());
         SmartDashboard.putBoolean("Extender Limit Switch", isExtenderInSwitchPressed());
-
+        }
         // if(isExtenderInSwitchPressed()) {
         //     resetEncoder();
         //     setSetpoint(0);
