@@ -31,8 +31,9 @@ public class LimelightAlign extends CommandBase{
     private Command currCommand;
 
     //Change this value to increase the pid. Total PID constant value will be this value plus the value in Constants
-    private double pidConstantIncrease = 2
-    ;
+    private double pidConstantIncrease = 2;
+
+    private double distanceFromTagMeters = 0.75;
 
     //Change this value to the distance from the center of the Limelight camera to the center of the robot drive base
     private double distanceToCenter = 0.165;
@@ -68,7 +69,7 @@ public class LimelightAlign extends CommandBase{
         Pose2d currRobotPose = swerve.getPose();
         
         double deltaTargetX = -LimelightHelpers.getBotPose_TargetSpace("limelight")[0] + distanceToCenter;
-        double deltaTargetY = LimelightHelpers.getBotPose_TargetSpace("limelight")[2] + 0.75;
+        double deltaTargetY = LimelightHelpers.getBotPose_TargetSpace("limelight")[2] + distanceFromTagMeters;
         double rotationRadians = Math.PI;
 
         //Pose2d finalRobotPose = currRobotPose.transformBy(new Transform2d(new Translation2d(0, -deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians())));

@@ -16,7 +16,9 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "ReadyCubePositionPivot"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -99,16 +101,16 @@
     },
     {
       "anchorPoint": {
-        "x": 7.2,
-        "y": 4.624763095680038
+        "x": 6.85,
+        "y": 4.5
       },
       "prevControl": {
-        "x": 6.997085993262471,
-        "y": 4.6266878550851125
+        "x": 6.64708599326247,
+        "y": 4.501924759405075
       },
       "nextControl": {
-        "x": 8.029736698391854,
-        "y": 4.616892552193944
+        "x": 7.679736698391854,
+        "y": 4.492129456513906
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -174,15 +176,15 @@
     },
     {
       "anchorPoint": {
-        "x": 1.18,
-        "y": 4.247930547143145
+        "x": 1.85,
+        "y": 4.4
       },
       "prevControl": {
-        "x": 2.1392101235484526,
-        "y": 4.898823130979595
+        "x": 2.8092101235484517,
+        "y": 5.0508925838364505
       },
       "nextControl": null,
-      "holonomicAngle": 160.0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -210,7 +212,7 @@
     {
       "position": 4.0,
       "names": [
-        "GroundCubePositionPivot"
+        "GroundCubeExtend"
       ]
     },
     {

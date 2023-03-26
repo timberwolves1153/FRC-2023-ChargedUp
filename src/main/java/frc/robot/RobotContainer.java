@@ -25,6 +25,7 @@ import frc.robot.autos.Score2WithBump;
 import frc.robot.autos.TestBalance;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.CollectGamePiece;
+import frc.robot.commands.DoubleSubstation;
 import frc.robot.commands.ExtendIn;
 import frc.robot.commands.GoToTunableDegree;
 import frc.robot.commands.OuttakeGamePiece;
@@ -119,7 +120,7 @@ public class RobotContainer {
     private final LimelightAlignRight limelightAlignRight = new LimelightAlignRight(s_Swerve);
 
 
-    private final Score2NoBump score2NoBump = new Score2NoBump(s_Swerve, collector, pidExtender, pidPivot);
+    private final Score2NoBump score2NoBump = new Score2NoBump(s_Swerve, collector, pidExtender, pidPivot, limelightAlign);
     private final Score2WithBump score2WithBump = new Score2WithBump(s_Swerve, collector, pidExtender, pidPivot);
     private final Score1AndMove score1AndMove = new Score1AndMove(s_Swerve, collector, pidExtender, pidPivot);
     private final CenterScore1AndBalance centerScore1AndBalance = new CenterScore1AndBalance(s_Swerve, collector, pidExtender, pidPivot);
@@ -223,18 +224,19 @@ public class RobotContainer {
             //opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-35), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
-            atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(7.3), pidPivot));
-            atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5), pidExtender));
-            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(18.5), pidPivot));
-            atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(21.9), pidExtender));
+            atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(16), pidPivot));
+            atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(7), pidExtender));
+            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot));
+            atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(26.5), pidExtender));
 
-            atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(20.5), pidPivot));
-            atariButton4.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.01), pidExtender));
+            // atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(23.5), pidPivot));
+            // atariButton4.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.01), pidExtender));
+            atariButton4.onTrue(new DoubleSubstation(collector, pidExtender, pidPivot));
 
-            atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-53.5), pidPivot));
-            atariButton5.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(5.5), pidExtender));
+            atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-45), pidPivot));
+            atariButton5.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(12), pidExtender));
 
-            atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-49), pidPivot));
+            atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-45), pidPivot));
             atariButton6.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
 
             atariButton7.whileTrue(new CollectGamePiece(collector));
@@ -244,9 +246,11 @@ public class RobotContainer {
             atariButton13.onFalse(new InstantCommand(() -> collector.setCurrentGamePiece(GamePiece.CONE)));
             atariButton13.onFalse(new InstantCommand(() -> lights.setYellow()));
 
+           
             // we need to set an initial game piece
             if (atariButton13.getAsBoolean()) {
                 collector.setCurrentGamePiece(GamePiece.CUBE);
+                
             } else {
                 collector.setCurrentGamePiece(GamePiece.CONE);
             }

@@ -20,23 +20,23 @@ import frc.robot.subsystems.Swerve;
 
 public class Score2NoBump extends PPAutoBase{
 
-    public Score2NoBump(Swerve swerve, Collector collector, PIDExtender pidExtender, PIDPivot pidPivot) {
+    public Score2NoBump(Swerve swerve, Collector collector, PIDExtender pidExtender, PIDPivot pidPivot, LimelightAlign limelightAlign) {
         super(swerve);
 
-        PathPlannerTrajectory Score2Left = PathPlanner.loadPath("Score2WIthNoBump", new PathConstraints(2.0, 2.0));
+        PathPlannerTrajectory Score2Left = PathPlanner.loadPath("Score2WIthNoBump", new PathConstraints(4.0, 3.0));
         //TO DO Auto-generated constructor stub
 
         HashMap<String, Command> eventMap = new HashMap<>();
     
         // eventMap.put("ExtendIn1", Commands.runOnce(() -> pidExtender.setSetpointInches(0), pidExtender));
-         eventMap.put("ReadyCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-25)));
-         eventMap.put("ReadyCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(2.5)));
+         eventMap.put("ReadyCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-45)));
+         eventMap.put("ReadyCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(-1)));
          eventMap.put("ExtendTo0", Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
          eventMap.put("CubeIntake", new InstantCommand(() -> collector.cubeIntake()));
-         eventMap.put("GroundCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-57)));
+         eventMap.put("GroundCubeExtend", Commands.runOnce(() -> pidExtender.setSetpointInches(13)));
          eventMap.put("CubeSlowIntake", new InstantCommand(() -> collector.slowCubeIntake()));
-         eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(25)));
-         eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(25)));
+         eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(26)));
+         eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(27)));
 
 // CHANGE THE EXTENDER SETPOINTS
 // CHANGE THE EXTENDER SETPOINTS
@@ -49,18 +49,15 @@ public class Score2NoBump extends PPAutoBase{
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score2Left, true), Score2Left.getMarkers(), eventMap);
 
         addCommands(
-        Commands.runOnce(() -> pidExtender.setSetpointInches(2), pidExtender),
-        new WaitCommand(0.2),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(-1), pidExtender),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(25), pidExtender),
-        new WaitCommand(1.85),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(29.3), pidExtender),
+        new WaitCommand(1.55),
         new CubeIntake(collector).withTimeout(0.5),
         Commands.runOnce(() -> pidExtender.setSetpointInches(-4), pidExtender),
-        new WaitCommand(1.85),
-        Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),
+        new WaitCommand(1),
+        //Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),
         command,
         new ScoreCube(collector).withTimeout(0.5),
         Commands.runOnce(() -> pidExtender.setSetpointInches(1), pidExtender));

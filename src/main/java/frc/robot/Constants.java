@@ -15,7 +15,7 @@ public final class Constants {
     public static final boolean competitionRobot = true;
 
     public static final boolean tuneSwerve = false;
-    public static final boolean tuneExtender = false;
+    public static final boolean tuneExtender = true;
     public static final boolean tunePivot = true;
     public static final boolean tuneCollector = false;
 

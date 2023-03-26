@@ -42,34 +42,34 @@ public class Collector extends SubsystemBase{
     // }
 
     public void coneIntake(){
-        collector.setVoltage(-12.0);
+        collector.setVoltage(12.0);
     }
 
     public void cubeIntake(){
-        collector.setVoltage(12.0);
+        collector.setVoltage(-12.0);
     }
 
     public void coneOuttake(){
-        collector.setVoltage(12.0);
+        collector.setVoltage(-12.0);
     }
 
     public void cubeOuttake(){
-        collector.setVoltage(-12.0);
+        collector.setVoltage(12.0);
     }
 
     public void slowConeIntake() {
         if(Constants.competitionRobot) {
-            collector.setVoltage(-2.5);
+            collector.setVoltage(3);
         } else {
-            collector.setVoltage(-1.5);
+            collector.setVoltage(1.5);
         }
     }
 
     public void slowCubeIntake() {
         if(Constants.competitionRobot) {
-            collector.setVoltage(2.5);
+            collector.setVoltage(-3);
         } else {
-            collector.setVoltage(1.5);
+            collector.setVoltage(-1.5);
         }
     }
 
