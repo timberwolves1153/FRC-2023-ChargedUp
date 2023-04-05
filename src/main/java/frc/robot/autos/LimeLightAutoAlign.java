@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.lib.util.LimelightHelpers;
@@ -24,19 +25,16 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
 /** Add your docs here. */
-public class LimelightAlignRight {
+public class LimeLightAutoAlign extends CommandBase{
     private Swerve swerve;
 
     private Command currCommand;
 
-    // tune this value to change the distance to the left that the robot travels
-    private double distanceOffset = 0.7;
-
     //Change this value to increase the pid. Total PID constant value will be this value plus the value in Constants
     private double pidConstantIncrease = 2;
-    private double distanceFromTagMeters = 0.75;
+
     //Change this value to the distance from the center of the Limelight camera to the center of the robot drive base
-    private double distanceToCenter = 0.16;
+    private double distanceToCenter = 0.165;
 
     private final ProfiledPIDController thetaController =
         new ProfiledPIDController(
@@ -46,11 +44,15 @@ public class LimelightAlignRight {
             Constants.AutoConstants.kThetaControllerConstraints
         );
 
-    public LimelightAlignRight(Swerve swerve) {
+    public LimeLightAutoAlign(Swerve swerve) {
         this.swerve = swerve;
 
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        
     }
+    
+
+    
 
     public Command generateAlignCommand() {
         if(!LimelightHelpers.getTV("limelight")) {
@@ -58,14 +60,15 @@ public class LimelightAlignRight {
             return new InstantCommand();
         }
 
-        Pose2d currRobotPose = swerve.getPose();
+       
 
-        double deltaTargetX = -LimelightHelpers.getBotPose_TargetSpace("limelight")[0] + distanceToCenter - distanceOffset;
-        double deltaTargetY = LimelightHelpers.getBotPose_TargetSpace("limelight")[2] + distanceFromTagMeters;
+        Pose2d currRobotPose = LimelightHelpers.getBotPose2d("limelight");
+        Pose2d deltaTargetX = LimelightHelpers.getBotPose2d("limelight");
+
         double rotationRadians = Math.PI;
 
         //Pose2d finalRobotPose = currRobotPose.transformBy(new Transform2d(new Translation2d(0, -deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians())));
-        Pose2d finalRobotPose = horizTransform(currRobotPose, new Translation2d(deltaTargetY, deltaTargetX), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians()));
+        Pose2d finalRobotPose = horizTransform(currRobotPose, new Translation2d(-5.63, 0.6), new Rotation2d(Math.PI - currRobotPose.getRotation().getRadians()));
 
         SmartDashboard.putNumber("Initial Pose X", currRobotPose.getX());
         SmartDashboard.putNumber("Initial Pose Y", currRobotPose.getY());
@@ -107,4 +110,6 @@ public class LimelightAlignRight {
     public Command getCommand() {
         return currCommand;
     }
+    
+
 }

@@ -30,30 +30,27 @@ public class Score2WithBump extends PPAutoBase{
 
         HashMap<String, Command> eventMap = new HashMap<>();
     
-        eventMap.put("ReadyCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-25)));
-        eventMap.put("ReadyCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(2.5)));
+        eventMap.put("ReadyCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-45)));
+        eventMap.put("ReadyCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(-1)));
         eventMap.put("ExtendTo0", Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
         eventMap.put("CubeIntake", new InstantCommand(() -> collector.cubeIntake()));
-        eventMap.put("GroundCubePositionPivot", Commands.runOnce(() -> pidPivot.setSetpointDegrees(-57)));
+        eventMap.put("GroundCubePositionExtender", Commands.runOnce(() -> pidExtender.setSetpointInches(15)));
         eventMap.put("CubeSlowIntake", new InstantCommand(() -> collector.slowCubeIntake()));
-        eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(25)));
-        eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(25)));
+        eventMap.put("HighNodePivot2", Commands.runOnce(() -> pidPivot.setSetpointDegrees(26)));
+        eventMap.put("HighNodeExtender2", Commands.runOnce(() -> pidExtender.setSetpointInches(27)));
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score2Right, true), Score2Right.getMarkers(), eventMap);
 
         addCommands(
         
-        Commands.runOnce(() -> pidExtender.setSetpointInches(2), pidExtender),
-        new WaitCommand(0.2),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(-1), pidExtender),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(25), pidExtender),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(28.5), pidExtender),
         new WaitCommand(1.55),
         new CubeIntake(collector).withTimeout(0.5),
         Commands.runOnce(() -> pidExtender.setSetpointInches(-4), pidExtender),
-        new WaitCommand(1.55),
-        Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),
+        new WaitCommand(1),
+        // Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),
         command,
         new WaitCommand(0.5),
         new ScoreCube(collector).withTimeout(0.5),

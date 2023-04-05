@@ -46,7 +46,7 @@ public class Collector extends SubsystemBase{
     }
 
     public void cubeIntake(){
-        collector.setVoltage(-12.0);
+        collector.setVoltage(-12.5);
     }
 
     public void coneOuttake(){
@@ -59,7 +59,7 @@ public class Collector extends SubsystemBase{
 
     public void slowConeIntake() {
         if(Constants.competitionRobot) {
-            collector.setVoltage(3);
+            collector.setVoltage(2.5);
         } else {
             collector.setVoltage(1.5);
         }
@@ -67,7 +67,7 @@ public class Collector extends SubsystemBase{
 
     public void slowCubeIntake() {
         if(Constants.competitionRobot) {
-            collector.setVoltage(-3);
+            collector.setVoltage(-2.5);
         } else {
             collector.setVoltage(-1.5);
         }

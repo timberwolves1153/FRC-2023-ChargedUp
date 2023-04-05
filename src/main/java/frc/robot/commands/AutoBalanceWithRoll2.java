@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class AutoBalanceWithRoll extends CommandBase{
+public class AutoBalanceWithRoll2 extends CommandBase{
     private Swerve swerve;
     
     private DoubleSupplier translationSup;
@@ -23,7 +23,7 @@ public class AutoBalanceWithRoll extends CommandBase{
     private boolean haveTipped = false;
     public static final double rollDeadband = 8;
 
-    public AutoBalanceWithRoll(Swerve swerve, BooleanSupplier robotCentricSup) {
+    public AutoBalanceWithRoll2(Swerve swerve, BooleanSupplier robotCentricSup) {
         this.swerve = swerve;
         addRequirements(swerve);
         this.robotCentricSup =  robotCentricSup;
@@ -36,35 +36,35 @@ public class AutoBalanceWithRoll extends CommandBase{
                 //System.out.println("forwards Balancing With Roll");
                 if (!haveTipped) {
                     swerve.drive(
-                        new Translation2d(-0.54, 0.0), 
+                        new Translation2d(-0.6, 0.0), 
                     0.0, 
-                    !robotCentricSup.getAsBoolean(), 
-                    true
+                    true, 
+                    false
                     );
                 } else {
                     swerve.drive(
-                        new Translation2d(-0.48, 0.0), 
+                        new Translation2d(-0.4, 0.0), 
                     0.0, 
-                    !robotCentricSup.getAsBoolean(), 
-                    true
+                    true, 
+                    false
                     );
                 }
             } else if(swerve.getRoll() > swerve.getInitRoll() + rollDeadband) {
                 //System.out.println("backwards Balancing With Roll");
                 haveTipped = true;
                 swerve.drive(
-                    new Translation2d(0.48, 0.0), 
+                    new Translation2d(0.4, 0.0), 
                 0.0, 
-                !robotCentricSup.getAsBoolean(), 
-                true
+                true, 
+                false
             );
             } else {
                 //System.out.println("flat Balancing With Roll");
                 swerve.drive(
                     new Translation2d(0.0, 0.0), 
                 0.0, 
-                !robotCentricSup.getAsBoolean(), 
-                true
+                true, 
+                false
             );
             }
     }
@@ -74,4 +74,3 @@ public class AutoBalanceWithRoll extends CommandBase{
         swerve.xPosition(true);
     }
 }
-
