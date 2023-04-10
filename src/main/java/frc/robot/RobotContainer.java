@@ -27,6 +27,7 @@ import frc.robot.autos.Score2NoBump;
 import frc.robot.autos.Score2NoBumpLimelight;
 import frc.robot.autos.Score2WithBump;
 import frc.robot.autos.Score3NoBump;
+import frc.robot.autos.ShortCenterScore1AndBalance;
 import frc.robot.autos.TestBalance;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.AutoBalanceWithRoll2;
@@ -135,6 +136,7 @@ public class RobotContainer {
     private final Score2AndBalance score2AndBalance = new Score2AndBalance(s_Swerve, collector, pidExtender, pidPivot);
     private final Score3NoBump score3NoBump = new Score3NoBump(s_Swerve, collector, pidExtender, pidPivot);
     private final Score2AndBalanceBump score2AndBalanceBump = new Score2AndBalanceBump(s_Swerve, collector, pidExtender, pidPivot);
+    private final ShortCenterScore1AndBalance shortCenterScore1AndBalance = new ShortCenterScore1AndBalance(s_Swerve, collector, pidExtender, pidPivot);
 
 
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
@@ -170,6 +172,7 @@ public class RobotContainer {
         autoCommandChooser.addOption("Score 2 Bump", score2WithBump);
         autoCommandChooser.addOption("Score 2 And Balance Bump", score2AndBalanceBump);
         autoCommandChooser.addOption("Score 3 No Bump", score3NoBump);
+        autoCommandChooser.addOption("Short Center Balance", shortCenterScore1AndBalance);
         //autoCommandChooser.addOption("Test Balance", testBalance);
 
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
@@ -232,7 +235,7 @@ public class RobotContainer {
             atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-35), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-1), pidExtender));
             atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(16), pidPivot));
-            atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(7), pidExtender));
+            atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(8), pidExtender));
             atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot));
             atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(27.5), pidExtender));
 
@@ -241,9 +244,9 @@ public class RobotContainer {
             atariButton4.onTrue(new DoubleSubstation(collector, pidExtender, pidPivot));
 
             atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-45), pidPivot));
-            atariButton5.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(16), pidExtender));
+            atariButton5.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(6.5), pidExtender));
 
-            atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-55), pidPivot));
+            atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-50), pidPivot));
             atariButton6.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));
 
             atariButton7.whileTrue(new CollectGamePiece(collector));

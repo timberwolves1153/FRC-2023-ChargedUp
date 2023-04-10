@@ -42,10 +42,10 @@ public class Score2WithBump extends PPAutoBase{
 
         addCommands(
         
-        Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot),
+        Commands.runOnce(() -> pidPivot.setSetpointDegrees(25), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(28.5), pidExtender),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(28), pidExtender),
         new WaitCommand(1.55),
         new CubeIntake(collector).withTimeout(0.5),
         Commands.runOnce(() -> pidExtender.setSetpointInches(-4), pidExtender),

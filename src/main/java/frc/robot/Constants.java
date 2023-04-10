@@ -14,8 +14,8 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static final boolean competitionRobot = true;
 
-    public static final boolean tuneSwerve = false;
-    public static final boolean tuneExtender = false;
+    public static final boolean tuneSwerve = true;
+    public static final boolean tuneExtender = true;
     public static final boolean tunePivot = false;
     public static final boolean tuneCollector = false;
 
@@ -97,7 +97,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 5.7; 
+        public static final double maxSpeed = 9; 
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; 
 

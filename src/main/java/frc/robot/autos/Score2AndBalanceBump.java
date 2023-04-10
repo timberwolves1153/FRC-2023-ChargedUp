@@ -25,7 +25,7 @@ public class Score2AndBalanceBump extends PPAutoBase{
         super(swerve);
 
         PathPlannerTrajectory Score2Left = PathPlanner.loadPath("Score2WithBump", new PathConstraints(2.0, 2.0));
-        PathPlannerTrajectory balance = PathPlanner.loadPath("Score2AndBalanceBump", new PathConstraints(3.5, 3.5));
+        PathPlannerTrajectory balance = PathPlanner.loadPath("Score2AndBalanceBump", new PathConstraints(3.0, 3.0));
         //TO DO Auto-generated constructor stub
 
         HashMap<String, Command> eventMap = new HashMap<>();
@@ -57,7 +57,7 @@ public class Score2AndBalanceBump extends PPAutoBase{
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(29), pidExtender),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(28), pidExtender),
         new WaitCommand(1.55),
         new CubeIntake(collector).withTimeout(0.5),
         Commands.runOnce(() -> pidExtender.setSetpointInches(-4), pidExtender),

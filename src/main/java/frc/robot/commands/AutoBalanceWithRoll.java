@@ -36,14 +36,14 @@ public class AutoBalanceWithRoll extends CommandBase{
                 //System.out.println("forwards Balancing With Roll");
                 if (!haveTipped) {
                     swerve.drive(
-                        new Translation2d(-0.54, 0.0), 
+                        new Translation2d(-0.6, 0.0), 
                     0.0, 
                     !robotCentricSup.getAsBoolean(), 
                     true
                     );
                 } else {
                     swerve.drive(
-                        new Translation2d(-0.48, 0.0), 
+                        new Translation2d(-0.4, 0.0), 
                     0.0, 
                     !robotCentricSup.getAsBoolean(), 
                     true
@@ -53,7 +53,7 @@ public class AutoBalanceWithRoll extends CommandBase{
                 //System.out.println("backwards Balancing With Roll");
                 haveTipped = true;
                 swerve.drive(
-                    new Translation2d(0.48, 0.0), 
+                    new Translation2d(0.4, 0.0), 
                 0.0, 
                 !robotCentricSup.getAsBoolean(), 
                 true

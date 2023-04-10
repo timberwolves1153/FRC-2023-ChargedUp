@@ -165,7 +165,8 @@ public class PIDPivot extends PIDSubsystem {
     }
 
     public boolean isAtMinHeight(){
-        return lowerLimitSwitch.get();
+        //return lowerLimitSwitch.get();
+        return false;
     }
 
     public double ticksToDegrees() {

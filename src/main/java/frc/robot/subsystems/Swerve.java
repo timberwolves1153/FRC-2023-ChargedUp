@@ -35,8 +35,8 @@ public class Swerve extends SubsystemBase {
         gyro = new WPI_Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         gyro.clearStickyFaults();
-        filter = new SlewRateLimiter(10);
-        filter2 = new SlewRateLimiter(10);
+        filter = new SlewRateLimiter(15);
+        filter2 = new SlewRateLimiter(15);
         //driveGyro = new ADIS16470_IMU();
         //driveGyro.calibrate();
         

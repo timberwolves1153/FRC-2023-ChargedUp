@@ -28,10 +28,10 @@ public class DoubleSubstation extends CommandBase{
     public void execute() {
         GamePiece currPiece = collector.getCurrentGamePiece();
         if (GamePiece.CONE.equals(currPiece)) {
-             pivot.setSetpointDegrees(26.5);
+             pivot.setSetpointDegrees(24);
             extender.setSetpointInches(12.8);
         } else if (GamePiece.CUBE.equals(currPiece)) {
-            pivot.setSetpointDegrees(29.5);
+            pivot.setSetpointDegrees(27);
            extender.setSetpointInches(0.01);
         } else {
             //something has gone wrong, just dont run the collector

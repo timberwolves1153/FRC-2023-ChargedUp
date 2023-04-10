@@ -106,10 +106,10 @@ public class TeleopSwerve extends CommandBase {
 
 
         if(m_quarterSpeed.getAsBoolean()){
-            translationVal = translationVal*0.25;
-            strafeVal =strafeVal*0.25;
+            translationVal = translationVal*0.45;
+            strafeVal =strafeVal*0.45;
             if(!rotateWithButton){
-                rotationVal = rotationVal *0.25;
+                rotationVal = rotationVal *0.45;
             }
         }
         // else if(m_halfSpeed.getAsBoolean()){
