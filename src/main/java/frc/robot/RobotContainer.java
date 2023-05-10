@@ -203,16 +203,13 @@ public class RobotContainer {
         // driveA.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
         driveLeftBumper.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
         driveLeftBumper.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();}));
-        // povLeft.onTrue(new InstantCommand(() -> limelightAlignLeft.generateAlignCommand().schedule()));
-        // povLeft.onFalse(new InstantCommand(() -> {if(limelightAlignLeft.getCommand() != null) limelightAlignLeft.getCommand().cancel();}));
-        // povRight.onTrue(new InstantCommand(() -> limelightAlignRight.generateAlignCommand().schedule()));
-        // povRight.onFalse(new InstantCommand(() -> {if(limelightAlignRight.getCommand() != null) limelightAlignRight.getCommand().cancel();}));
+        
         leftTrigger.onTrue(new InstantCommand(() -> limelightAlignLeft.generateAlignCommand().schedule()));
         leftTrigger.onFalse(new InstantCommand(() -> {if(limelightAlignLeft.getCommand() != null) limelightAlignLeft.getCommand().cancel();}));
+        
         rightTrigger.onTrue(new InstantCommand(() -> limelightAlignRight.generateAlignCommand().schedule()));
         rightTrigger.onFalse(new InstantCommand(() -> {if(limelightAlignRight.getCommand() != null) limelightAlignRight.getCommand().cancel();}));
-        //driveStart.onTrue(new LimeLightAutoAlign(s_Swerve));
-       // driveStart.onFalse(new InstantCommand(() -> {if(limeLightAutoAlign.getCommand() != null) limeLightAutoAlign.getCommand().cancel();}));
+        
         povDown.onTrue(new InstantCommand(()-> s_Swerve.zeroGyro()));
         
         driveBack.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
