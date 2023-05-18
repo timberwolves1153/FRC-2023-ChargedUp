@@ -14,8 +14,8 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static final boolean competitionRobot = true;
 
-    public static final boolean tuneSwerve = true;
-    public static final boolean tuneExtender = true;
+    public static final boolean tuneSwerve = false;
+    public static final boolean tuneExtender = false;
     public static final boolean tunePivot = false;
     public static final boolean tuneCollector = false;
 

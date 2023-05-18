@@ -33,6 +33,7 @@ import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.AutoBalanceWithRoll2;
 import frc.robot.commands.CollectGamePiece;
 import frc.robot.commands.DoubleSubstation;
+import frc.robot.commands.DriveForLimelight;
 import frc.robot.commands.ExtendIn;
 import frc.robot.commands.OuttakeGamePiece;
 import frc.robot.commands.PivotDown;
@@ -40,6 +41,7 @@ import frc.robot.commands.PivotUp;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.LEDLights;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.PIDExtender;
 import frc.robot.subsystems.PIDPivot;
 import frc.robot.subsystems.Swerve;
@@ -125,6 +127,8 @@ public class RobotContainer {
     private final LimelightAlignLeft limelightAlignLeft = new LimelightAlignLeft(s_Swerve);
     private final LimelightAlignRight limelightAlignRight = new LimelightAlignRight(s_Swerve);
     private final LimeLightAutoAlign limeLightAutoAlign = new LimeLightAutoAlign(s_Swerve);
+    private final Limelight limelight = new Limelight();
+    private final DriveForLimelight driveForLimelight = new DriveForLimelight(limelight, s_Swerve);
 
 
     private final Score2NoBump score2NoBump = new Score2NoBump(s_Swerve, collector, pidExtender, pidPivot);
@@ -201,8 +205,10 @@ public class RobotContainer {
         robotCentric.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
         // driveBack.onTrue(new InstantCommand(() -> collector.toggleHinge()));
         // driveA.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-2), pidExtender));
-        driveLeftBumper.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
-        driveLeftBumper.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();}));
+        // driveLeftBumper.onTrue(new InstantCommand(() -> limelightAlign.generateAlignCommand().schedule()));
+        // driveLeftBumper.onFalse(new InstantCommand(() -> {if(limelightAlign.getCommand() != null) limelightAlign.getCommand().cancel();}));
+        
+        driveLeftBumper.whileTrue(driveForLimelight);
         
         leftTrigger.onTrue(new InstantCommand(() -> limelightAlignLeft.generateAlignCommand().schedule()));
         leftTrigger.onFalse(new InstantCommand(() -> {if(limelightAlignLeft.getCommand() != null) limelightAlignLeft.getCommand().cancel();}));
@@ -231,6 +237,7 @@ public class RobotContainer {
             //opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-35), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-1), pidExtender));
+
             atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(16), pidPivot));
             atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(8), pidExtender));
             atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot));

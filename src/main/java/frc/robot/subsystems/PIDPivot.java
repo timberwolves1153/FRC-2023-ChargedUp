@@ -108,7 +108,7 @@ public class PIDPivot extends PIDSubsystem {
     public double getCorrectedEncounterTicks() {
         //The absolute encoder ticks adjusted to remove the wrap point
         if (Constants.competitionRobot) {
-            return (pivotEncoder.getAbsolutePosition() + 0.5) % 1 ;
+            return (pivotEncoder.getAbsolutePosition() + 0.5) % 1;
         } else {
             return (pivotEncoder.getAbsolutePosition() + 0.5) % 1;
         }
