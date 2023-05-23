@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -29,6 +31,7 @@ import frc.robot.autos.Score2WithBump;
 import frc.robot.autos.Score3NoBump;
 import frc.robot.autos.ShortCenterScore1AndBalance;
 import frc.robot.autos.TestBalance;
+import frc.robot.autos.TurnAuto;
 import frc.robot.commands.AutoBalanceWithRoll;
 import frc.robot.commands.AutoBalanceWithRoll2;
 import frc.robot.commands.CollectGamePiece;
@@ -54,10 +57,14 @@ import frc.robot.subsystems.Swerve;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    
+    public DoubleSupplier x = () -> 0;
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     //private final Joystick operator = new Joystick(1);
     private final Joystick atari = new Joystick(2);
+
+
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -141,7 +148,7 @@ public class RobotContainer {
     private final Score3NoBump score3NoBump = new Score3NoBump(s_Swerve, collector, pidExtender, pidPivot);
     private final Score2AndBalanceBump score2AndBalanceBump = new Score2AndBalanceBump(s_Swerve, collector, pidExtender, pidPivot);
     private final ShortCenterScore1AndBalance shortCenterScore1AndBalance = new ShortCenterScore1AndBalance(s_Swerve, collector, pidExtender, pidPivot);
-
+    private final TurnAuto turnAuto = new TurnAuto(s_Swerve, limelight, null, driveForLimelight, pidPivot);
 
     private final AutoBalanceWithRoll autoBalanceWithRoll; 
     private final AutoBalanceWithRoll2 autoBalanceWithRoll2;
@@ -167,6 +174,7 @@ public class RobotContainer {
         autoBalanceWithRoll = new AutoBalanceWithRoll(s_Swerve, () -> robotCentric.getAsBoolean()); 
         autoBalanceWithRoll2 = new AutoBalanceWithRoll2(s_Swerve, () -> robotCentric.getAsBoolean());
         
+        
         autoCommandChooser = new SendableChooser<Command>();
         autoCommandChooser.setDefaultOption("Score 1 And Move", score1AndMove);
         autoCommandChooser.addOption("Score 1 And Move", score1AndMove);
@@ -177,6 +185,7 @@ public class RobotContainer {
         autoCommandChooser.addOption("Score 2 And Balance Bump", score2AndBalanceBump);
         autoCommandChooser.addOption("Score 3 No Bump", score3NoBump);
         autoCommandChooser.addOption("Short Center Balance", shortCenterScore1AndBalance);
+        autoCommandChooser.addOption("Turn With Limelight", turnAuto);
         //autoCommandChooser.addOption("Test Balance", testBalance);
 
         SmartDashboard.putData("Auto Command Chooser", autoCommandChooser);
@@ -218,8 +227,10 @@ public class RobotContainer {
         
         povDown.onTrue(new InstantCommand(()-> s_Swerve.zeroGyro()));
         
+        povUp.onTrue(new TeleopSwerve(s_Swerve, () -> 0, () -> 0, () -> 0, robotCentric, () -> false, () -> true, ()-> false, () -> false, () -> false, pidPivot).withTimeout(0.5));
+        
         driveBack.whileTrue(new InstantCommand(() -> s_Swerve.xPosition(true)));
-        povUp.whileTrue(autoBalanceWithRoll);
+        //povUp.whileTrue(autoBalanceWithRoll);
         povDown.whileTrue(autoBalanceWithRoll2);
 
         

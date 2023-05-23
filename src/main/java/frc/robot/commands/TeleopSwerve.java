@@ -68,7 +68,7 @@ public class TeleopSwerve extends CommandBase {
 
     @Override 
     public void initialize(){
-        m_thetaController = new PIDController(0.05, 0, 0);
+        m_thetaController = new PIDController(0.03, 0, 0.0005);
         
         m_thetaController.enableContinuousInput(-180, 180);
     }

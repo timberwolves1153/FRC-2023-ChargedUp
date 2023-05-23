@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
@@ -29,6 +30,7 @@ public class DriveForLimelight extends CommandBase{
 
     @Override
     public void execute() {
+        LimelightHelpers.setPipelineIndex("limelight", 1);
         targetDistance = limelight.getTX();
         if(targetDistance < -1) {
             System.out.println("moving left");
@@ -45,5 +47,7 @@ public class DriveForLimelight extends CommandBase{
     }
 
     
-    public void end(boolean interuppted) {}
+    public void end(boolean interuppted) {
+        
+    }
 }
