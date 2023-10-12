@@ -34,12 +34,12 @@ public class Score1AndMove extends PPAutoBase{
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score1AndMove, true), Score1AndMove.getMarkers(), eventMap);
 
         addCommands(
-        Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot),
+        Commands.runOnce(() -> pidPivot.setSetpointDegrees(31), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
         Commands.runOnce(() -> pidExtender.setSetpointInches(29), pidExtender),
         new WaitCommand(1.75),
-        new CubeIntake(collector).withTimeout(0.5),
+        new CubeIntake(collector).withTimeout(0.65),
         Commands.runOnce(() -> pidExtender.setSetpointInches(0), pidExtender),
         new WaitCommand(1.75),
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),

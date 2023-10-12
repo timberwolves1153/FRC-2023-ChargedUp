@@ -233,7 +233,7 @@ public class RobotContainer {
             atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-1), pidExtender));
             atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(16), pidPivot));
             atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(8), pidExtender));
-            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot));
+            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(27), pidPivot));
             atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(27.5), pidExtender));
 
             // atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(23.5), pidPivot));
