@@ -231,17 +231,17 @@ public class RobotContainer {
             //opYButton.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(0), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-35), pidPivot));
             atariButton1.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(-1), pidExtender));
-            atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(16), pidPivot));
-            atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(8), pidExtender));
-            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(27), pidPivot));
+            atariButton2.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(22), pidPivot));
+            atariButton2.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(9), pidExtender));
+            atariButton3.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(33), pidPivot));
             atariButton3.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(27.5), pidExtender));
 
             // atariButton4.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(23.5), pidPivot));
             // atariButton4.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.01), pidExtender));
             atariButton4.onTrue(new DoubleSubstation(collector, pidExtender, pidPivot));
 
-            atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-45), pidPivot));
-            atariButton5.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(6.5), pidExtender));
+            //atariButton5.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-45), pidPivot));
+           // atariButton5.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(15), pidExtender));
 
             atariButton6.onTrue(Commands.runOnce(() -> pidPivot.setSetpointDegrees(-50), pidPivot));
             atariButton6.onTrue(Commands.runOnce(() -> pidExtender.setSetpointInches(0.5), pidExtender));

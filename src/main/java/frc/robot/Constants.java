@@ -39,7 +39,7 @@ public final class Constants {
         //TODO: This must be tuned 2/27/23
         public static final double comp_mod0Offset = 237.04;//114.43 + 180;
         public static final double comp_mod1Offset = 264.84;//83.58 + 180;
-        public static final double comp_mod2Offset = 176.83;//51.33 + 180;
+        public static final double comp_mod2Offset = 177.30;//51.33 + 180;
         public static final double comp_mod3Offset = 14.06;//193.62 + 180;
 
         /* Swerve Kinematics 
@@ -97,7 +97,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 9; 
+        public static final double maxSpeed = 9.0; 
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; 
 

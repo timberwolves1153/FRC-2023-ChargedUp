@@ -35,10 +35,10 @@ public class CenterScore1AndBalance extends PPAutoBase{
         FollowPathWithEvents command = new FollowPathWithEvents(followTrajectoryCommand(Score1andBalanceCenter, true), Score1andBalanceCenter.getMarkers(), eventMap);
         
         addCommands(
-        Commands.runOnce(() -> pidPivot.setSetpointDegrees(26), pidPivot),
+        Commands.runOnce(() -> pidPivot.setSetpointDegrees(31), pidPivot),
         new InstantCommand(() -> collector.slowConeIntake()),
         new WaitCommand(1),
-        Commands.runOnce(() -> pidExtender.setSetpointInches(27.5), pidExtender),
+        Commands.runOnce(() -> pidExtender.setSetpointInches(29), pidExtender),
         new WaitCommand(1.55),
         new CubeIntake(collector).withTimeout(0.25),
         Commands.runOnce(() -> pidExtender.setSetpointInches(-4), pidExtender),
@@ -46,7 +46,8 @@ public class CenterScore1AndBalance extends PPAutoBase{
         Commands.runOnce(() -> pidPivot.setSetpointDegrees(-40), pidPivot),
         command, 
         new AutoBalanceWithRoll(swerve, () -> true),
-        new InstantCommand(() -> swerve.xPosition(true)));
+        new InstantCommand(() -> swerve.xPosition(true)),
+        new InstantCommand(() -> swerve.reverseZeroGyro()));
     }
     
 }

@@ -36,7 +36,8 @@ public class AutoBalanceWithRoll extends CommandBase{
                 //System.out.println("forwards Balancing With Roll");
                 if (!haveTipped) {
                     swerve.drive(
-                        new Translation2d(-0.6, 0.0), 
+                        new Translation2d(-0.615
+                        , 0.0), 
                     0.0, 
                     !robotCentricSup.getAsBoolean(), 
                     true

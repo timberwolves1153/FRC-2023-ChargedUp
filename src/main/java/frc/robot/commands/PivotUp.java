@@ -22,9 +22,7 @@ public class PivotUp extends CommandBase {
 
     @Override
     public void execute() {  
-        if (!pivot.isAtMaxHeight()) {
             pivot.setSetpoint((pivot.getController().getSetpoint())+0.01);
-        }
     }
 
     @Override

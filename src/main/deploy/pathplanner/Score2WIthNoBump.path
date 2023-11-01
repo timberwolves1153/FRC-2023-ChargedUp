@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.8,
-        "y": 5.0
+        "y": 4.95
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.3709584068740783,
-        "y": 4.8503739451923344
+        "y": 4.800373945192348
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -101,20 +101,20 @@
     },
     {
       "anchorPoint": {
-        "x": 6.69,
-        "y": 4.47
+        "x": 6.85,
+        "y": 4.61
       },
       "prevControl": {
-        "x": 6.487517309999202,
-        "y": 4.483362600012214
+        "x": 6.647517309999201,
+        "y": 4.623362600012214
       },
       "nextControl": {
-        "x": 7.459495602751889,
-        "y": 4.419218069205369
+        "x": 7.619495602751888,
+        "y": 4.55921806920537
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
-      "velOverride": null,
+      "velOverride": 2.0,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -139,7 +139,7 @@
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
-      "velOverride": null,
+      "velOverride": 2.0,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -180,11 +180,36 @@
         "y": 4.35
       },
       "prevControl": {
-        "x": 2.377965781572589,
-        "y": 4.818185893636744
+        "x": 2.312940656331012,
+        "y": 4.8822431636111805
+      },
+      "nextControl": {
+        "x": 1.7841690384235467,
+        "y": 4.270768883418109
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 7.630783124814112,
+        "y": 5.435524033441229
+      },
+      "prevControl": {
+        "x": 7.373851841720777,
+        "y": 5.206789140501358
       },
       "nextControl": null,
-      "holonomicAngle": 180.0,
+      "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -210,7 +235,7 @@
       ]
     },
     {
-      "position": 4.0,
+      "position": 4.03,
       "names": [
         "GroundCubeExtend"
       ]
@@ -228,6 +253,18 @@
       "names": [
         "HighNodePivot2",
         "HighNodeExtender2"
+      ]
+    },
+    {
+      "position": 7.0,
+      "names": [
+        "scoreCube"
+      ]
+    },
+    {
+      "position": 7.214545454545232,
+      "names": [
+        "RetractExtender"
       ]
     }
   ]
